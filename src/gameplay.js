@@ -1,13 +1,18 @@
-function count (m, r, c, prop) {
+function count (prop, m, r, c) {
   return siblings(m, r, c).map((pair) => m[pair.r][pair.c][prop] ? 1 : 0).reduce((m, n) => m + n, 0)
 }
 
+function is (prop, m, r, c) {
+  const el = safeGet(m, r, c)
+  return !!el && el[prop]
+}
+
 export function countFlags (m, r, c) {
-  return count(m, r, c, 'isFlagged')
+  return count('isFlagged', m, r, c)
 }
 
 export function countBombs (m, r, c) {
-  return count(m, r, c, 'isBomb')
+  return count('isBomb', m, r, c)
 }
 
 // TODO: test
@@ -18,7 +23,6 @@ export function initializeMap (w, h, bc) {
     m[r] = []
     for (let c = 0; c < h; c++) {
       m[r][c] = {
-        bombCount: 0,
         isBomb: false,
         isMasked: true,
         isFlagged: false
@@ -30,7 +34,7 @@ export function initializeMap (w, h, bc) {
     let r = Math.floor(Math.random() * w)
     let c = Math.floor(Math.random() * h)
 
-    while (m[r][c].bombCount !== 0) {
+    while (countBombs(m, r, c) !== 0) {
       r = Math.floor(Math.random() * w)
       c = Math.floor(Math.random() * h)
     }
@@ -38,21 +42,19 @@ export function initializeMap (w, h, bc) {
     m[r][c].isBomb = true
   }
 
-  for (let r = 0; r < w; r++) {
-    for (let c = 0; c < h; c++) {
-      siblings(m, r, c).map((pair) => {
-        const v = m[pair.r][pair.c]
-        if (v.isBomb) m[r][c].bombCount++
-      })
-    }
-  }
-
   return m
 }
 
+export function isBomb (m, r, c) {
+  return is('isBomb', m, r, c)
+}
+
+export function isFlagged (m, r, c) {
+  return is('isFlagged', m, r, c)
+}
+
 export function isMasked (m, r, c) {
-  const el = safeGet(m, r, c)
-  return !!el && el.isMasked
+  return is('isMasked', m, r, c)
 }
 
 export function safeGet (m, r, c) {
@@ -86,15 +88,13 @@ export function toggleFlag (m, r, c) {
 }
 
 export function unmask (m, r, c, um = []) {
-  const el = m[r][c]
-  if (!el.isFlagged) um.push({r, c})
-  if (el.isBomb || el.bombCount > 0) return um
+  if (!isFlagged(m, r, c)) um.push({r, c})
+  if (isBomb(m, r, c) || countBombs(m, r, c) > 0) return um
   return unmaskCrawl(m, r, c, um)
 }
 
 export function unmaskAroundFlags (m, r, c) {
-  const flagCount = countFlags(m, r, c)
-  if (!isMasked(m, r, c) && flagCount === m[r][c].bombCount) {
+  if (!isMasked(m, r, c) && countFlags(m, r, c) === countBombs(m, r, c)) {
     return unmaskCrawl(m, r, c, [], true)
   } else {
     return []
@@ -103,14 +103,13 @@ export function unmaskAroundFlags (m, r, c) {
 
 // TODO: test
 export function unmaskCrawl (m, r, c, um = [], unmaskBombs = false) {
-  if (m[r][c].isFlagged) return um
+  if (isFlagged(m, r, c)) return um
 
   return siblings(m, r, c).reduce((memo, pair) => {
     const previouslyUnmasked = memo.some((el) => el.r === pair.r && el.c === pair.c)
-    const v = m[pair.r][pair.c]
-    if (v && v.isFlagged || previouslyUnmasked) return memo
-    else if (v && v.bombCount === 0 && !previouslyUnmasked) return memo.concat(unmask(m, pair.r, pair.c, um))
-    else if (v && (unmaskBombs || !v.isBomb) && v.bombCount && !previouslyUnmasked) return memo.concat([{r: pair.r, c: pair.c}])
+    if (isFlagged(m, pair.r, pair.c) || previouslyUnmasked) return memo
+    else if (countBombs(m, pair.r, pair.c) === 0 && !previouslyUnmasked) return memo.concat(unmask(m, pair.r, pair.c, um))
+    else if ((unmaskBombs || !isBomb(m, pair.r, pair.c)) && countBombs(m, pair.r, pair.c) && !previouslyUnmasked) return memo.concat([{r: pair.r, c: pair.c}])
     else return memo
   }, um)
 }
