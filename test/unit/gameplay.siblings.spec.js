@@ -1,12 +1,12 @@
 import { siblings } from '../../src/gameplay'
 
 describe('siblings', function () {
-  const t = 1
+  const _ = 1
   /* eslint-disable standard/array-bracket-even-spacing */
   const matrix = [
-    [t, t, t],
-    [t, t, t],
-    [t, t, t]
+    [_, _, _],
+    [_, _, _],
+    [_, _, _]
   ]
   /* eslint-enable standard/array-bracket-even-spacing */
 

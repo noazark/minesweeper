@@ -1,22 +1,21 @@
 import { unmask } from '../../src/gameplay'
 
 describe('unmask', function () {
-  const o = { isMasked: true, bombCount: 1, isBomb: false }
-  const z = { isMasked: true, bombCount: 0, isBomb: false }
+  const _ = { isMasked: true, isFlagged: false, isBomb: false }
   const f = { isMasked: true, isFlagged: true, isBomb: false }
-  const b = { isMasked: true, isBomb: true }
+  const b = { isMasked: true, isFlagged: false, isBomb: true }
 
   const matrix = [
-    [z, o, b],
-    [z, o, o],
-    [z, z, f]
+    [_, _, b],
+    [_, _, _],
+    [_, _, f]
   ]
 
   it('is not pathological', function () {
     const matrix = [
-      [z, z, z],
-      [z, z, z],
-      [z, z, z]
+      [_, _, _],
+      [_, _, _],
+      [_, _, _]
     ]
 
     expect(unmask(matrix, 1, 1).length).toEqual(9)

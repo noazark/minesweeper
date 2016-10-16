@@ -1,16 +1,15 @@
 import { unmaskCrawl } from '../../src/gameplay'
 
 describe('unmaskCrawl', function () {
-  const o = { isMasked: true, bombCount: 1, isBomb: false }
-  const z = { isMasked: true, bombCount: 0, isBomb: false }
+  const _ = { isMasked: true, isFlagged: false, isBomb: false }
   const f = { isMasked: true, isFlagged: true, isBomb: false }
-  const b = { isMasked: true, isBomb: true }
+  const b = { isMasked: true, isFlagged: false, isBomb: true }
 
   it('is not pathological', function () {
     const matrix = [
-      [z, z, z],
-      [z, z, z],
-      [z, z, z]
+      [_, _, _],
+      [_, _, _],
+      [_, _, _]
     ]
 
     expect(unmaskCrawl(matrix, 1, 1).length).toEqual(9)
@@ -18,18 +17,18 @@ describe('unmaskCrawl', function () {
 
   it('returns immediately on flagged tile', function () {
     const matrix = [
-      [z, o, b],
-      [z, o, o],
-      [z, z, f]
+      [_, _, b],
+      [_, _, _],
+      [_, _, f]
     ]
     expect(unmaskCrawl(matrix, 2, 2).length).toEqual(0)
   })
 
   it('does not return flagged neighbors', function () {
     const matrix = [
-      [z, o, b],
-      [z, o, o],
-      [z, z, f]
+      [_, _, b],
+      [_, _, _],
+      [_, _, f]
     ]
     expect(unmaskCrawl(matrix, 2, 1)).not.toContain({r: 2, c: 2})
   })
@@ -37,18 +36,18 @@ describe('unmaskCrawl', function () {
   it('does not repeat previously unmasked neighbors', function () {
     const unmasked = {r: 2, c: 0}
     const matrix = [
-      [z, o, b],
-      [z, o, o],
-      [z, z, f]
+      [_, _, b],
+      [_, _, _],
+      [_, _, f]
     ]
     expect(unmaskCrawl(matrix, 2, 1, [unmasked])).not.toContain(unmasked)
   })
 
   it('crawls the whole map if neighbor has no bomb neighbors', function () {
     const matrix = [
-      [z, o, b],
-      [z, o, o],
-      [z, z, f]
+      [_, _, b],
+      [_, _, _],
+      [_, _, f]
     ]
 
     expect(unmaskCrawl(matrix, 2, 0)).not.toContain({r: 2, c: 2})
@@ -62,9 +61,9 @@ describe('unmaskCrawl', function () {
 
   it('includes bombs if bombs should be unmasked', function () {
     const matrix = [
-      [z, z, b],
-      [z, z, z],
-      [z, z, z]
+      [_, _, b],
+      [_, _, _],
+      [_, _, _]
     ]
 
     expect(unmaskCrawl(matrix, 1, 1, [], true)).toContain({r: 0, c: 2})
@@ -72,9 +71,9 @@ describe('unmaskCrawl', function () {
 
   it('does not unmask distant bombs', function () {
     const matrix = [
-      [z, z, b],
-      [z, z, z],
-      [z, z, z]
+      [_, _, b],
+      [_, _, _],
+      [_, _, _]
     ]
 
     expect(unmaskCrawl(matrix, 2, 0, [], true)).not.toContain({r: 0, c: 2})
@@ -82,8 +81,8 @@ describe('unmaskCrawl', function () {
 
   it('returns neighbor if it is not a bomb, but neighbor has bombs', function () {
     const matrix = [
-      [z, o, o],
-      [o, o, o],
+      [_, _, _],
+      [_, _, _],
       [b, b, b]
     ]
 

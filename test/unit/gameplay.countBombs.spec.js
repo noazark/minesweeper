@@ -1,15 +1,15 @@
 import { countBombs } from '../../src/gameplay'
 
 describe('countBombs', function () {
-  const y = { isBomb: true }
-  const n = { isBomb: false }
+  const _ = { isBomb: false }
+  const b = { isBomb: true }
 
   it('returns the number of flags surrounding an tile', function () {
     /* eslint-disable standard/array-bracket-even-spacing */
     const matrix = [
-      [y, n, y],
-      [n, n, n],
-      [n, n, y]
+      [b, _, b],
+      [_, _, _],
+      [_, _, b]
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
@@ -22,9 +22,9 @@ describe('countBombs', function () {
   it('returns just the flag count of the siblings, not including self', function () {
     /* eslint-disable standard/array-bracket-even-spacing */
     const matrix = [
-      [n, n, n],
-      [n, y, n],
-      [y, n, n]
+      [_, _, _],
+      [_, b, _],
+      [b, _, _]
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 

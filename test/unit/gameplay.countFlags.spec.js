@@ -1,15 +1,15 @@
 import { countFlags } from '../../src/gameplay'
 
 describe('countFlags', function () {
-  const y = { isFlagged: true }
-  const n = { isFlagged: false }
+  const _ = { isFlagged: false }
+  const f = { isFlagged: true }
 
   it('returns the number of flags surrounding an tile', function () {
     /* eslint-disable standard/array-bracket-even-spacing */
     const matrix = [
-      [y, n, n],
-      [n, n, y],
-      [n, y, n]
+      [f, _, _],
+      [_, _, f],
+      [_, f, _]
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
@@ -19,9 +19,9 @@ describe('countFlags', function () {
   it('returns just the flag count of the siblings, not including self', function () {
     /* eslint-disable standard/array-bracket-even-spacing */
     const matrix = [
-      [n, n, n],
-      [n, y, n],
-      [y, n, n]
+      [_, _, _],
+      [_, f, _],
+      [f, _, _]
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
