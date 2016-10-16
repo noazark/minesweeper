@@ -1,6 +1,7 @@
 <template>
   <div>
     <timer :time="time"></timer>
+    {{flagCount}}
     <template v-for="(row, r) in matrix">
       <div class="row">
         <div class="col" v-for="(el, c) in row">
@@ -20,7 +21,17 @@
 </template>
 
 <script>
-import {neighboringBombs, isBomb, unmask, unmaskAroundFlags, initializeMap, isMasked, toggleFlag} from './gameplay';
+import {
+  countFlags,
+  initializeMap,
+  isComplete,
+  isPlayable,
+  neighboringBombs,
+  toggleFlag,
+  unmask,
+  unmaskAroundFlags,
+  validFirstPlay,
+} from './gameplay';
 import Tile from './components/Tile.vue'
 import Timer from './components/Timer.vue'
 
@@ -35,6 +46,7 @@ export default {
       gameSize: [30, 16],
       bombCount: 99,
       matrix: [],
+      playing: true,
       startedAt: 0,
       time: 0,
     }
@@ -48,12 +60,29 @@ export default {
     startedAt() {
       const setTimer = () => {
         window.requestIdleCallback(() => {
-          this.time = Date.now() - this.startedAt
-          setTimer()
+          if (this.playing) {
+            this.time = Date.now() - this.startedAt
+            setTimer()
+          }
         })
       }
 
       setTimer()
+    },
+
+    matrix: {
+      handler() {
+        if (this.playing && isComplete(this.matrix) || !isPlayable(this.matrix)) {
+          this.stop()
+        }
+      },
+      deep: true
+    }
+  },
+
+  computed: {
+    flagCount() {
+      return countFlags(this.matrix)
     }
   },
 
@@ -61,27 +90,35 @@ export default {
     neighboringBombs,
 
     start(r, c) {
-      while (neighboringBombs(this.matrix, r, c) > 0 || isBomb(this.matrix, r, c)) {
+      while (!validFirstPlay(this.matrix, r, c)) {
         this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], this.bombCount)
       }
 
+      this.playing = true
       this.startedAt = Date.now()
     },
 
+    stop() {
+      this.playing = false
+    },
+
     flag(r, c) {
+      if (!isPlayable(this.matrix)) return
       if (!this.startedAt) this.start(r, c)
       toggleFlag(this.matrix, r, c)
     },
 
     unmaskAroundFlags(r, c) {
+      if (!isPlayable(this.matrix)) return
       const unmasked = unmaskAroundFlags(this.matrix, r, c)
       unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
     },
 
     unmask(r, c, $event) {
+      if (!isPlayable(this.matrix)) return
       if (!this.startedAt) this.start(r, c)
       const unmasked = unmask(this.matrix, r, c)
-      unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
+      unmasked.forEach((p, i) => this.matrix[p.r][p.c].isMasked = false)
     },
   }
 }

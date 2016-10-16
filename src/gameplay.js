@@ -1,4 +1,5 @@
 import difference from 'lodash/difference'
+import flatten from 'lodash/flatten'
 import times from 'lodash/times'
 
 function buildField (w, h) {
@@ -45,6 +46,10 @@ function placeBombs (m, bc) {
   return bombs
 }
 
+export function countFlags (m) {
+  return flatten(m).map((tile) => tile.isFlagged ? 1 : 0).reduce((m, n) => m + n, 0)
+}
+
 export function initializeMap (w, h, bc) {
   const m = buildField(w, h)
   const bombs = placeBombs(m, bc)
@@ -58,6 +63,16 @@ export function initializeMap (w, h, bc) {
 
 export function isBomb (m, r, c) {
   return is('isBomb', m, r, c)
+}
+
+export function isComplete (m) {
+  return !flatten(m).some((tile) => {
+    return !isPlayable(m) || !tile.isBomb && tile.isFlagged || !tile.isBomb && tile.isMasked
+  })
+}
+
+export function isPlayable (m) {
+  return !flatten(m).some((tile) => tile.isBomb && !tile.isMasked)
 }
 
 export function isFlagged (m, r, c) {
@@ -138,4 +153,8 @@ export function unmaskCrawl (m, r, c, um = [], unmaskBombs = false) {
 
       return memo
     }, [])
+}
+
+export function validFirstPlay (m, r, c) {
+  return !neighboringBombs(m, r, c) > 0 && !isBomb(m, r, c)
 }
