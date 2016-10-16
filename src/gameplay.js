@@ -1,4 +1,21 @@
 import difference from 'lodash/difference'
+import times from 'lodash/times'
+
+function buildField (w, h) {
+  const m = []
+  for (let r = 0; r < h; r++) {
+    m[r] = []
+    for (let c = 0; c < w; c++) {
+      m[r][c] = {
+        isBomb: false,
+        isMasked: true,
+        isFlagged: false
+      }
+    }
+  }
+
+  return m
+}
 
 function count (prop, m, r, c) {
   return neighbors(m, r, c).map((pair) => m[pair.r][pair.c][prop] ? 1 : 0).reduce((m, n) => m + n, 0)
@@ -9,32 +26,32 @@ function is (prop, m, r, c) {
   return !!el && el[prop]
 }
 
-// TODO: test
+function placeBombs (m, bc) {
+  const w = m[0].length
+  const h = m.length
+  const bombs = []
+
+  times(bc, () => {
+    let r, c
+
+    do {
+      r = Math.floor(Math.random() * h)
+      c = Math.floor(Math.random() * w)
+    } while (bombs.some((bomb) => bomb.r === r && bomb.c === c))
+
+    bombs.push({r, c})
+  })
+
+  return bombs
+}
+
 export function initializeMap (w, h, bc) {
-  const m = []
+  const m = buildField(w, h)
+  const bombs = placeBombs(m, bc)
 
-  for (let r = 0; r < w; r++) {
-    m[r] = []
-    for (let c = 0; c < h; c++) {
-      m[r][c] = {
-        isBomb: false,
-        isMasked: true,
-        isFlagged: false
-      }
-    }
-  }
-
-  for (let b = 0; b < bc; b++) {
-    let r = Math.floor(Math.random() * w)
-    let c = Math.floor(Math.random() * h)
-
-    while (neighboringBombs(m, r, c) !== 0) {
-      r = Math.floor(Math.random() * w)
-      c = Math.floor(Math.random() * h)
-    }
-
-    m[r][c].isBomb = true
-  }
+  bombs.forEach((bomb) => {
+    m[bomb.r][bomb.c].isBomb = true
+  })
 
   return m
 }

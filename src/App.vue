@@ -32,7 +32,7 @@ export default {
 
   data() {
     return {
-      gameSize: [16, 30],
+      gameSize: [30, 16],
       bombCount: 99,
       matrix: [],
       startedAt: 0,
