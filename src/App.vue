@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import {countBombs, unmask, unmaskAroundFlags, initializeMap, isMasked, toggleFlag} from './gameplay';
+import {countBombs, isBomb, unmask, unmaskAroundFlags, initializeMap, isMasked, toggleFlag} from './gameplay';
 import Tile from './components/Tile.vue'
 import Timer from './components/Timer.vue'
 
@@ -32,8 +32,8 @@ export default {
 
   data() {
     return {
-      gameSize: [10, 10],
-      bombCount: 10,
+      gameSize: [16, 30],
+      bombCount: 99,
       matrix: [],
       startedAt: 0,
       time: 0,
@@ -60,14 +60,17 @@ export default {
   methods: {
     countBombs,
 
-    start() {
+    start(r, c) {
+      while (countBombs(this.matrix, r, c) > 0 || isBomb(this.matrix, r, c)) {
+        this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], this.bombCount)
+      }
+
       this.startedAt = Date.now()
     },
 
     flag(r, c) {
-      if (this.startedAt) {
-        toggleFlag(this.matrix, r, c)
-      }
+      if (!this.startedAt) this.start(r, c)
+      toggleFlag(this.matrix, r, c)
     },
 
     unmaskAroundFlags(r, c) {
@@ -76,7 +79,7 @@ export default {
     },
 
     unmask(r, c, $event) {
-      if (!this.startedAt) this.start()
+      if (!this.startedAt) this.start(r, c)
       const unmasked = unmask(this.matrix, r, c)
       unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
     },
