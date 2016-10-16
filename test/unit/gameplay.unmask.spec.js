@@ -12,6 +12,16 @@ describe('unmask', function () {
     [z, z, f]
   ]
 
+  it('is not pathological', function () {
+    const matrix = [
+      [z, z, z],
+      [z, z, z],
+      [z, z, z]
+    ]
+
+    expect(unmask(matrix, 1, 1).length).toEqual(9)
+  })
+
   describe('zero adjacent bombs', function () {
     const unmasked = unmask(matrix, 2, 1)
 

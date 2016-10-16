@@ -1,18 +1,18 @@
 <template>
-  <div :class="[
-      'tile',
-      `val-${bombCount}`,
-      {
-        bomb: isBomb,
-        masked: isMasked,
-        unmasked: !isMasked,
-        flagged: isFlagged
-      }
-    ]"
+  <div
+    class="tile"
+    :class="{
+      [`val-${bombCount}`]: !isMasked,
+      debug: debug && !isMasked,
+      bomb: isBomb,
+      masked: isMasked && !debug,
+      unmasked: !isMasked || debug,
+      flagged: isFlagged
+    }"
     @contextmenu.stop.prevent=""
     @mouseup="unmask($event)"
     @mousedown="track($event)">
-    <template v-if="!isMasked && !isBomb && bombCount">
+    <template v-if="debug || !isMasked && !isBomb && bombCount">
       {{bombCount}}
     </template>
   </div>
@@ -21,6 +21,12 @@
 <script>
 export default {
   props: ['isBomb', 'isMasked', 'isFlagged', 'bombCount'],
+
+  data() {
+    return {
+      debug: false
+    }
+  },
 
   methods: {
     track($event) {
@@ -60,7 +66,12 @@ $tile-background-color: #fbfbfb;
 $tile-hover-background-color: #455d71;
 $tile-text-color: white;
 
+.debug {
+  text-decoration: underline;
+}
+
 .tile {
+  cursor: pointer;
   background: $mask-background-color;
   display: flex;
   flex-direction: column;
@@ -73,10 +84,6 @@ $tile-text-color: white;
 
 .masked:hover {
   background: $tile-hover-background-color;
-}
-
-.flagged, .flagged:hover {
-  background: $flag-background-color;
 }
 
 .unmasked {
@@ -93,5 +100,10 @@ $tile-text-color: white;
     background: $bomb-background-color;
     color: white;
   }
+}
+
+.flagged,
+.flagged:hover {
+  background: $flag-background-color;
 }
 </style>
