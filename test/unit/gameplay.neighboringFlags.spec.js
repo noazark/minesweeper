@@ -1,6 +1,6 @@
-import { countFlags } from '../../src/gameplay'
+import { neighboringFlags } from '../../src/gameplay'
 
-describe('countFlags', function () {
+describe('neighboringFlags', function () {
   const _ = { isFlagged: false }
   const f = { isFlagged: true }
 
@@ -13,7 +13,7 @@ describe('countFlags', function () {
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(countFlags(matrix, 1, 1)).toEqual(3)
+    expect(neighboringFlags(matrix, 1, 1)).toEqual(3)
   })
 
   it('returns just the flag count of the siblings, not including self', function () {
@@ -25,6 +25,6 @@ describe('countFlags', function () {
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(countFlags(matrix, 1, 1)).toEqual(1)
+    expect(neighboringFlags(matrix, 1, 1)).toEqual(1)
   })
 })

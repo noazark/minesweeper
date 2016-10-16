@@ -1,6 +1,6 @@
-import { countBombs } from '../../src/gameplay'
+import { neighboringBombs } from '../../src/gameplay'
 
-describe('countBombs', function () {
+describe('neighboringBombs', function () {
   const _ = { isBomb: false }
   const b = { isBomb: true }
 
@@ -13,10 +13,10 @@ describe('countBombs', function () {
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(countBombs(matrix, 1, 1)).toEqual(3)
-    expect(countBombs(matrix, 0, 1)).toEqual(2)
-    expect(countBombs(matrix, 2, 1)).toEqual(1)
-    expect(countBombs(matrix, 2, 0)).toEqual(0)
+    expect(neighboringBombs(matrix, 1, 1)).toEqual(3)
+    expect(neighboringBombs(matrix, 0, 1)).toEqual(2)
+    expect(neighboringBombs(matrix, 2, 1)).toEqual(1)
+    expect(neighboringBombs(matrix, 2, 0)).toEqual(0)
   })
 
   it('returns just the flag count of the siblings, not including self', function () {
@@ -28,6 +28,6 @@ describe('countBombs', function () {
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(countBombs(matrix, 1, 1)).toEqual(1)
+    expect(neighboringBombs(matrix, 1, 1)).toEqual(1)
   })
 })

@@ -8,7 +8,7 @@
             :isBomb="el.isBomb"
             :isMasked="el.isMasked"
             :isFlagged="el.isFlagged"
-            :bombCount="countBombs(matrix, r, c)"
+            :bombCount="neighboringBombs(matrix, r, c)"
             @flag="flag(r, c)"
             @unmaskAroundFlags="unmaskAroundFlags(r, c)"
             @unmask="unmask(r, c)">
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import {countBombs, isBomb, unmask, unmaskAroundFlags, initializeMap, isMasked, toggleFlag} from './gameplay';
+import {neighboringBombs, isBomb, unmask, unmaskAroundFlags, initializeMap, isMasked, toggleFlag} from './gameplay';
 import Tile from './components/Tile.vue'
 import Timer from './components/Timer.vue'
 
@@ -58,10 +58,10 @@ export default {
   },
 
   methods: {
-    countBombs,
+    neighboringBombs,
 
     start(r, c) {
-      while (countBombs(this.matrix, r, c) > 0 || isBomb(this.matrix, r, c)) {
+      while (neighboringBombs(this.matrix, r, c) > 0 || isBomb(this.matrix, r, c)) {
         this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], this.bombCount)
       }
 
