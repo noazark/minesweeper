@@ -1,3 +1,5 @@
+import difference from 'lodash/difference'
+
 function count (prop, m, r, c) {
   return siblings(m, r, c).map((pair) => m[pair.r][pair.c][prop] ? 1 : 0).reduce((m, n) => m + n, 0)
 }
@@ -90,26 +92,31 @@ export function toggleFlag (m, r, c) {
 export function unmask (m, r, c, um = []) {
   if (!isFlagged(m, r, c)) um.push({r, c})
   if (isBomb(m, r, c) || countBombs(m, r, c) > 0) return um
-  return unmaskCrawl(m, r, c, um)
+  return um.concat(unmaskCrawl(m, r, c, um))
 }
 
 export function unmaskAroundFlags (m, r, c) {
-  if (!isMasked(m, r, c) && countFlags(m, r, c) === countBombs(m, r, c)) {
+  if (!isMasked(m, r, c) && countFlags(m, r, c) >= countBombs(m, r, c)) {
     return unmaskCrawl(m, r, c, [], true)
   } else {
     return []
   }
 }
 
-// TODO: test
 export function unmaskCrawl (m, r, c, um = [], unmaskBombs = false) {
-  if (isFlagged(m, r, c)) return um
+  if (isFlagged(m, r, c)) return []
 
-  return siblings(m, r, c).reduce((memo, pair) => {
-    const previouslyUnmasked = memo.some((el) => el.r === pair.r && el.c === pair.c)
-    if (isFlagged(m, pair.r, pair.c) || previouslyUnmasked) return memo
-    else if (countBombs(m, pair.r, pair.c) === 0 && !previouslyUnmasked) return memo.concat(unmask(m, pair.r, pair.c, um))
-    else if ((unmaskBombs || !isBomb(m, pair.r, pair.c)) && countBombs(m, pair.r, pair.c) && !previouslyUnmasked) return memo.concat([{r: pair.r, c: pair.c}])
-    else return memo
-  }, um)
+  return siblings(m, r, c)
+    .reduce((memo, pair) => {
+      const previouslyUnmasked = um.concat(memo).some((pair0) => pair0.r === pair.r && pair0.c === pair.c)
+      if (isFlagged(m, pair.r, pair.c) || previouslyUnmasked) return memo
+
+      const hasBombNeighbors = countBombs(m, pair.r, pair.c) > 0
+      if (!hasBombNeighbors) return difference(unmask(m, pair.r, pair.c, um.concat(memo)), um)
+
+      const isNotBomb = !isBomb(m, pair.r, pair.c)
+      if (unmaskBombs || isNotBomb) return memo.concat([{r: pair.r, c: pair.c}])
+
+      return memo
+    }, [])
 }
