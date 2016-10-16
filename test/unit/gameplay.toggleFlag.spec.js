@@ -1,4 +1,4 @@
-import { toggleFlag } from '../../src/gameplay'
+import { toggleFlag } from '../../lib/gameplay'
 
 describe('toggleFlag', function () {
   it('sets an unflagged tile as flagged', function () {

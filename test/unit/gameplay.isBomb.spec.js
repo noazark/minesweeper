@@ -1,4 +1,4 @@
-import { isBomb } from '../../src/gameplay'
+import { isBomb } from '../../lib/gameplay'
 
 describe('isBomb', function () {
   it('returns true if the tile is masked', function () {

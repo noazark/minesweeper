@@ -1,4 +1,4 @@
-import { unmaskAroundFlags } from '../../src/gameplay'
+import { unmaskAroundFlags } from '../../lib/gameplay'
 
 describe('unmaskAroundFlags', function () {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }

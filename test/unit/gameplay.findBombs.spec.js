@@ -1,4 +1,4 @@
-import { findBombs } from '../../src/gameplay'
+import { findBombs } from '../../lib/gameplay'
 
 describe('findBombs', function () {
   const _ = { isBomb: false }

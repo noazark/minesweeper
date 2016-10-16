@@ -1,4 +1,4 @@
-import { isPlayable } from '../../src/gameplay'
+import { isPlayable } from '../../lib/gameplay'
 
 describe('isPlayable', function () {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }

@@ -1,4 +1,4 @@
-import { initializeMap } from '../../src/gameplay'
+import { initializeMap } from '../../lib/gameplay'
 import flatten from 'lodash/flatten'
 import times from 'lodash/times'
 

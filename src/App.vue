@@ -32,7 +32,7 @@ import {
   unmask,
   unmaskAroundFlags,
   validFirstPlay,
-} from './gameplay';
+} from '../lib/gameplay';
 import Tile from './components/Tile.vue'
 import Timer from './components/Timer.vue'
 

@@ -1,4 +1,4 @@
-import { neighbors } from '../../src/gameplay'
+import { neighbors } from '../../lib/gameplay'
 
 describe('neighbors', function () {
   const _ = 1

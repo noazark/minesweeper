@@ -1,4 +1,4 @@
-import { safeGet } from '../../src/gameplay'
+import { safeGet } from '../../lib/gameplay'
 
 describe('safeGet', function () {
   it('returns the tile for the row and column', function () {

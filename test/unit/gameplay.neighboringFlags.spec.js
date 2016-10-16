@@ -1,4 +1,4 @@
-import { neighboringFlags } from '../../src/gameplay'
+import { neighboringFlags } from '../../lib/gameplay'
 
 describe('neighboringFlags', function () {
   const _ = { isFlagged: false }

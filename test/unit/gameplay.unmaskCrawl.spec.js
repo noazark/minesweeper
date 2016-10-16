@@ -1,4 +1,4 @@
-import { unmaskCrawl } from '../../src/gameplay'
+import { unmaskCrawl } from '../../lib/gameplay'
 
 describe('unmaskCrawl', function () {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }

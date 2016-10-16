@@ -1,4 +1,4 @@
-import { neighboringBombs } from '../../src/gameplay'
+import { neighboringBombs } from '../../lib/gameplay'
 
 describe('neighboringBombs', function () {
   const _ = { isBomb: false }

@@ -1,4 +1,4 @@
-import { countFlags } from '../../src/gameplay'
+import { countFlags } from '../../lib/gameplay'
 
 describe('countFlags', function () {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }

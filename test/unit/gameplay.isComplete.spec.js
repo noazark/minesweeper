@@ -1,4 +1,4 @@
-import { isComplete } from '../../src/gameplay'
+import { isComplete } from '../../lib/gameplay'
 
 describe('isComplete', function () {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }

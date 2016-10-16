@@ -1,4 +1,4 @@
-import { isFlagged } from '../../src/gameplay'
+import { isFlagged } from '../../lib/gameplay'
 
 describe('isFlagged', function () {
   it('returns true if the tile is masked', function () {

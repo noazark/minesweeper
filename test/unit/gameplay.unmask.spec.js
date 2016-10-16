@@ -1,4 +1,4 @@
-import { unmask } from '../../src/gameplay'
+import { unmask } from '../../lib/gameplay'
 
 describe('unmask', function () {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }

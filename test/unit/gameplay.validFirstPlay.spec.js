@@ -1,4 +1,4 @@
-import { validFirstPlay } from '../../src/gameplay'
+import { validFirstPlay } from '../../lib/gameplay'
 
 describe('validFirstPlay', function () {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }
