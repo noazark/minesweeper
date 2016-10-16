@@ -1,7 +1,10 @@
 <template>
   <div>
-    <timer :time="time"></timer>
-    {{flagCount}}
+    <span class='right'>{{flagCount}}</span>
+    :
+    <timer class="left" :time="time"></timer>
+    :
+    <a href="" @click.prevent="restart">restart</a>
     <template v-for="(row, r) in matrix">
       <div class="row">
         <div class="col" v-for="(el, c) in row">
@@ -89,7 +92,7 @@ export default {
 
   computed: {
     flagCount() {
-      return countFlags(this.matrix)
+      return this.bombCount - countFlags(this.matrix)
     }
   },
 
@@ -103,6 +106,13 @@ export default {
 
       this.playing = true
       this.startedAt = Date.now()
+    },
+
+    restart() {
+      this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], this.bombCount)
+      this.playing = false
+      this.startedAt = 0
+      this.time = 0
     },
 
     stop() {
@@ -125,7 +135,7 @@ export default {
       if (!isPlayable(this.matrix)) return
       if (!this.startedAt) this.start(r, c)
       const unmasked = unmask(this.matrix, r, c)
-      unmasked.forEach((p, i) => this.matrix[p.r][p.c].isMasked = false)
+      unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
     },
   }
 }
