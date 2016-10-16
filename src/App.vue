@@ -23,6 +23,7 @@
 <script>
 import {
   countFlags,
+  findBombs,
   initializeMap,
   isComplete,
   isPlayable,
@@ -74,6 +75,12 @@ export default {
       handler() {
         if (this.playing && isComplete(this.matrix) || !isPlayable(this.matrix)) {
           this.stop()
+        }
+
+
+        if (!isComplete(this.matrix) && !isPlayable(this.matrix)) {
+          const unmasked = findBombs(this.matrix)
+          unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
         }
       },
       deep: true

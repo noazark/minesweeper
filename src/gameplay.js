@@ -83,6 +83,15 @@ export function isMasked (m, r, c) {
   return is('isMasked', m, r, c)
 }
 
+export function findBombs (m) {
+  return m.reduce((result, row, r) => result.concat(row.reduce((result, col, c) => {
+    if (col.isBomb) {
+      result.push({ r, c })
+    }
+    return result
+  }, [])), [])
+}
+
 export function neighboringBombs (m, r, c) {
   return count('isBomb', m, r, c)
 }
