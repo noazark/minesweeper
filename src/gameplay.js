@@ -85,7 +85,9 @@ export function safeGet (m, r, c) {
 
 export function toggleFlag (m, r, c) {
   const el = m[r][c]
-  el.isFlagged = !el.isFlagged
+  if (el.isMasked) {
+    el.isFlagged = !el.isFlagged
+  }
   return el.isFlagged
 }
 
