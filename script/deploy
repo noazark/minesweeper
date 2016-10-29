@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# exit on first non-true return value
+set -o errexit
+# exit if a command in a pipeline fails
+set -o pipefail
+
+git config --global user.email "noah@batteredoats.com"
+
+git checkout -b deploy
+git add --all --force ./dist/
+git commit --message "Deploying $CIRCLE_SHA1"
+git push origin deploy:gh-pages --force
