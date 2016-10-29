@@ -4,19 +4,18 @@
 
 <script>
 import Classic from './classic/App.vue'
+import Txt from './text/App.vue'
 
 export default {
   components: {
-    Classic
+    Classic,
+    Txt,
   },
 
   data() {
     return {
-      gameMode: 'classic'
+      gameMode: 'txt'
     }
   }
 }
 </script>
-
-<style lang="css">
-</style>

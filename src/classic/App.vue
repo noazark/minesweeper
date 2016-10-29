@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="classic-app">
     <span class='right'>{{flagCount}}</span>
     :
     <timer class="left" :time="time"></timer>
@@ -141,11 +141,15 @@ export default {
 }
 </script>
 
-<style scoped>
-.app {
+<style lang="scss" scoped>
+.classic-app {
   font-family: -apple-system, sans-serif;
   background: white;
   text-align: center;
+}
+
+.row {
+  line-height: 0;
 }
 
 .col {
