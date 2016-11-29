@@ -14,7 +14,7 @@ export default {
 
   data() {
     return {
-      gameMode: 'txt'
+      gameMode: 'classic'
     }
   }
 }
