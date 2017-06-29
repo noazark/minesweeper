@@ -61,15 +61,15 @@ export default {
       score: 0,
       output: '',
       commands: [
-        [/^move (up|down|left|right)(?: (\d+))?/i, 'move'],
-        [/^flag (up|down|left|right)/i, 'flag'],
-        [/^sweep/i, 'sweep'],
-        [/^\/reset(?: (\d+) (\d+) (\d+))?$/, 'restart'],
-        [/^\/score/, 'showScore'],
-        [/^\/flags/, 'showFlagCount'],
-        [/^\/clear/, 'clear'],
-        [/^\/help/, 'help'],
-        [/^\/howto/, 'howto']
+        [/^move (up|down|left|right)(?: (\d+))?/i, 'move', 'move right 5'],
+        [/^flag (up|down|left|right)/i, 'flag', 'flag down'],
+        [/^sweep/i, 'sweep', 'sweep'],
+        [/^\/reset(?: (\d+) (\d+) (\d+))?$/, 'restart', '/reset 10 10 10'],
+        [/^\/score/, 'showScore', '/score'],
+        [/^\/flags/, 'showFlagCount', '/flags'],
+        [/^\/clear/, 'clear', '/clear'],
+        [/^\/help/, 'help', '/help'],
+        [/^\/howto/, 'howto', '/howto']
       ]
     }
   },
@@ -217,7 +217,7 @@ export default {
     },
 
     help() {
-      return this.commands.map((command) => command[0]).join('\r\n')
+      return this.commands.map((command) => command[2]).join('\r\n')
     },
 
     howto() {
