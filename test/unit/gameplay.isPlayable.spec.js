@@ -1,12 +1,10 @@
-import { isPlayable } from '../../lib/gameplay'
+import { isPlayable, FLAG, MASK, BOMB } from '../../lib/gameplay'
 
 describe('isPlayable', function () {
-  const _ = { isMasked: true, isFlagged: false, isBomb: false }
-  const o = { isMasked: false, isFlagged: false, isBomb: false }
-  const f = { isMasked: true, isFlagged: true, isBomb: false }
-  const b = { isMasked: true, isFlagged: false, isBomb: true }
-  const B = { isMasked: false, isFlagged: true, isBomb: true }
-  const x = { isMasked: false, isFlagged: false, isBomb: true }
+  const o = { [MASK]: false, [FLAG]: false, [BOMB]: false }
+  const b = { [MASK]: true, [FLAG]: false, [BOMB]: true }
+  const B = { [MASK]: false, [FLAG]: true, [BOMB]: true }
+  const x = { [MASK]: false, [FLAG]: false, [BOMB]: true }
 
   it('returns true if no bombs are unmasked', function () {
     const matrix = [

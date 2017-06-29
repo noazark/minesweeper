@@ -1,8 +1,8 @@
-import { neighboringBombs } from '../../lib/gameplay'
+import { neighboringBombs, BOMB } from '../../lib/gameplay'
 
 describe('neighboringBombs', function () {
-  const _ = { isBomb: false }
-  const b = { isBomb: true }
+  const _ = { [BOMB]: false }
+  const b = { [BOMB]: true }
 
   it('returns the number of flags surrounding an tile', function () {
     /* eslint-disable standard/array-bracket-even-spacing */

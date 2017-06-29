@@ -4,11 +4,11 @@
       <template v-for="(row, r) in matrix">
         <template v-for="(col, c) in row">
           <tile
-          :isBomb="col.isBomb"
-          :isMasked="col.isMasked"
-          :isFlagged="col.isFlagged"
+          :isBomb="isBomb(col)"
+          :isMasked="isMasked(col)"
+          :isFlagged="isFlagged(col)"
           :bombCount="neighboringBombs(matrix, r, c)"
-          :isHere="(cursor[0] == r && cursor[1] == c)"></tile>
+          :isActive="(cursor[0] == r && cursor[1] == c)"></tile>
         </template><br>
       </template>
     </code>
@@ -30,12 +30,16 @@ import {
   initializeMap,
   isComplete,
   isPlayable,
+  isTile,
   neighboringBombs,
   safeGet,
   toggleFlag,
   unmask,
   unmaskAroundFlags,
   validFirstPlay,
+  BOMB,
+  FLAG,
+  MASK
 } from '../../lib/gameplay'
 import countBy from 'lodash/countBy'
 import reverse from 'lodash/reverse'
@@ -102,6 +106,18 @@ export default {
 
   methods: {
     neighboringBombs,
+
+    isBomb(tile) {
+      return isTile(BOMB, tile)
+    },
+
+    isMasked(tile) {
+      return isTile(MASK, tile)
+    },
+
+    isFlagged(tile) {
+      return isTile(FLAG, tile)
+    },
 
     start() {
       this.playing = true

@@ -9,9 +9,9 @@
       <div class="row">
         <div class="col" v-for="(el, c) in row">
           <tile
-            :isBomb="el.isBomb"
-            :isMasked="el.isMasked"
-            :isFlagged="el.isFlagged"
+            :isBomb="isTile('isBomb', el)"
+            :isMasked="isTile('isMasked', el)"
+            :isFlagged="isTile('isFlagged', el)"
             :bombCount="neighboringBombs(matrix, r, c)"
             @flag="flag(r, c)"
             @unmaskAroundFlags="unmaskAroundFlags(r, c)"
@@ -30,6 +30,7 @@ import {
   initializeMap,
   isComplete,
   isPlayable,
+  isTile,
   neighboringBombs,
   toggleFlag,
   unmask,
@@ -98,6 +99,7 @@ export default {
 
   methods: {
     neighboringBombs,
+    isTile,
 
     start(r, c) {
       while (!validFirstPlay(this.matrix, r, c)) {

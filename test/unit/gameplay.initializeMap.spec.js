@@ -1,4 +1,4 @@
-import { initializeMap } from '../../lib/gameplay'
+import { initializeMap, BOMB, MASK, FLAG } from '../../lib/gameplay'
 import flatten from 'lodash/flatten'
 import times from 'lodash/times'
 
@@ -25,9 +25,9 @@ describe('initializeMap', function () {
     rows.forEach((column) => {
       column.forEach((tile) => {
         expect(tile).toEqual({
-          isBomb: false,
-          isMasked: true,
-          isFlagged: false
+          [BOMB]: false,
+          [MASK]: true,
+          [FLAG]: false
         })
       })
     })
@@ -39,7 +39,7 @@ describe('initializeMap', function () {
     // run several times to ensure the correct bomb count is created
     times(10, () => {
       const field = initializeMap(10, 10, bombCount)
-      expect(flatten(field).reduce((total, tile) => total + (tile.isBomb ? 1 : 0), 0)).toEqual(bombCount)
+      expect(flatten(field).reduce((total, tile) => total + (tile[BOMB] ? 1 : 0), 0)).toEqual(bombCount)
     })
   })
 })

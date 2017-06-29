@@ -7,14 +7,14 @@
       masked: isMasked,
       unmasked: !isMasked,
       flagged: isFlagged,
-      here: isHere
+      active: isActive
     }" v-html="display">
   </pre>
 </template>
 
 <script>
 export default {
-  props: ['isBomb', 'isMasked', 'isFlagged', 'bombCount', 'isHere'],
+  props: ['isBomb', 'isMasked', 'isFlagged', 'bombCount', 'isActive'],
 
   computed: {
     display() {
@@ -27,7 +27,7 @@ export default {
       } else {
         if (this.bombCount > 0) {
           return this.bombCount
-        } else if (this.isHere) {
+        } else if (this.isActive) {
           return '#'
         } else {
           return '.'
@@ -59,8 +59,8 @@ export default {
   color: blue
 }
 
-.masked.here,
-.unmasked.here {
+.masked.active,
+.unmasked.active {
   color: rgb(83, 233, 52)
 }
 </style>

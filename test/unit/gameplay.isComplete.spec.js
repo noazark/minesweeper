@@ -1,12 +1,12 @@
-import { isComplete } from '../../lib/gameplay'
+import { isComplete, FLAG, MASK, BOMB } from '../../lib/gameplay'
 
 describe('isComplete', function () {
-  const _ = { isMasked: true, isFlagged: false, isBomb: false }
-  const o = { isMasked: false, isFlagged: false, isBomb: false }
-  const f = { isMasked: true, isFlagged: true, isBomb: false }
-  const b = { isMasked: true, isFlagged: false, isBomb: true }
-  const B = { isMasked: true, isFlagged: true, isBomb: true }
-  const x = { isMasked: false, isFlagged: false, isBomb: true }
+  const _ = { [MASK]: true, [FLAG]: false, [BOMB]: false }
+  const o = { [MASK]: false, [FLAG]: false, [BOMB]: false }
+  const f = { [MASK]: true, [FLAG]: true, [BOMB]: false }
+  const b = { [MASK]: true, [FLAG]: false, [BOMB]: true }
+  const B = { [MASK]: true, [FLAG]: true, [BOMB]: true }
+  const x = { [MASK]: false, [FLAG]: false, [BOMB]: true }
 
   it('returns true if only masked bombs are left', function () {
     const matrix = [

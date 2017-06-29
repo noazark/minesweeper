@@ -1,8 +1,8 @@
-import { neighboringFlags } from '../../lib/gameplay'
+import { neighboringFlags, FLAG } from '../../lib/gameplay'
 
 describe('neighboringFlags', function () {
-  const _ = { isFlagged: false }
-  const f = { isFlagged: true }
+  const _ = { [FLAG]: false }
+  const f = { [FLAG]: true }
 
   it('returns the number of flags surrounding an tile', function () {
     /* eslint-disable standard/array-bracket-even-spacing */
