@@ -6,7 +6,7 @@
         @keyup.down="historyPrev"
         @keyup.enter.prevent="submit(next)"
         v-model="next"
-        placeholder="try, /help"
+        placeholder="try, /howto"
         autofocus></input>
   </div>
 </template>
