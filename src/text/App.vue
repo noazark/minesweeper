@@ -65,9 +65,9 @@ export default {
       score: 0,
       output: '',
       commands: [
-        [/^move (up|down|left|right)(?: (\d+))?/i, 'move', 'move right 5'],
-        [/^flag (up|down|left|right)/i, 'flag', 'flag down'],
-        [/^sweep/i, 'sweep', 'sweep'],
+        [/^m(?:ove)? (u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)(?: (\d+))?/i, 'move', 'move right 5'],
+        [/^f(?:lag)? (u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)/i, 'flag', 'flag down'],
+        [/^s(weep)?/i, 'sweep', 'sweep'],
         [/^\/reset(?: (\d+) (\d+) (\d+))?$/, 'restart', '/reset 10 10 10'],
         [/^\/score/, 'showScore', '/score'],
         [/^\/flags/, 'showFlagCount', '/flags'],
@@ -189,10 +189,10 @@ export default {
       const moves = times(step, () => {
         let [r, c] = this.cursor
 
-        if (dir === 'up') r -= 1
-        if (dir === 'down') r += 1
-        if (dir === 'left') c -= 1
-        if (dir === 'right') c += 1
+        if (dir === 'up' || dir === 'u') r -= 1
+        if (dir === 'down' || dir === 'd') r += 1
+        if (dir === 'left' || dir === 'l') c -= 1
+        if (dir === 'right' || dir === 'r') c += 1
 
         if (safeGet(this.matrix, r, c)) {
           this.cursor = [r, c]
@@ -207,10 +207,10 @@ export default {
     flag (cmd, dir) {
       let [r, c] = this.cursor
 
-      if (dir === 'up') r -= 1
-      if (dir === 'down') r += 1
-      if (dir === 'left') c -= 1
-      if (dir === 'right') c += 1
+      if (dir === 'up' || dir === 'u') r -= 1
+      if (dir === 'down' || dir === 'd') r += 1
+      if (dir === 'left' || dir === 'l') c -= 1
+      if (dir === 'right' || dir === 'r') c += 1
 
       if (safeGet(this.matrix, r, c)) {
         return toggleFlag(this.matrix, r, c) ? 'OK' : 'Flag removed'
