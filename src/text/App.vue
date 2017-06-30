@@ -97,7 +97,7 @@ export default {
 
         if (!isComplete(this.matrix) && !isPlayable(this.matrix)) {
           const unmasked = findBombs(this.matrix)
-          unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
+          unmasked.forEach((p) => this.doUnmask(p))
         }
       },
       deep: true
@@ -143,7 +143,7 @@ export default {
       } while (!validFirstPlay(this.matrix, r, c))
 
       const unmasked = unmask(this.matrix, r, c)
-      unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
+      unmasked.forEach((p) => this.doUnmask(p))
 
       this.score = 0
       this.playing = false
