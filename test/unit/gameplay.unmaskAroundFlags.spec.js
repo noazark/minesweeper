@@ -34,9 +34,9 @@ describe('unmaskAroundFlags', function () {
 
   describe('on unmasked tile w/ greater than equal flags', function () {
     const matrix = [
-      [_, o, b],
-      [_, o, _],
-      [_, f, f]
+      [_, o, b, b],
+      [_, o, _, _],
+      [_, f, f, _]
     ]
     const unmasked = unmaskAroundFlags(matrix, 1, 1)
 
@@ -48,12 +48,17 @@ describe('unmaskAroundFlags', function () {
     it('unmasks bombs', function () {
       expect(unmasked).toContain({r: 0, c: 2})
     })
+    
+    it('does not unmask distant bombs', function () {
+      expect(unmasked).not.toContain({r: 0, c: 3})
+    })
 
     it('unmasks adjacent titles', function () {
       expect(unmasked).toContain({r: 0, c: 0})
       expect(unmasked).toContain({r: 0, c: 1})
       expect(unmasked).toContain({r: 1, c: 0})
       expect(unmasked).toContain({r: 1, c: 2})
+      expect(unmasked).toContain({r: 1, c: 3})
     })
   })
 
