@@ -5,6 +5,7 @@
         @keyup.up="historyNext"
         @keyup.down="historyPrev"
         @keyup.enter.prevent="submit(next)"
+        @input="input($event.target.value)"
         v-model="next"
         placeholder="try, /howto"
         autofocus></input>
@@ -57,6 +58,10 @@ export default {
       }
 
       this.reset()
+    },
+
+    input(val) {
+      this.$emit('input', val)
     },
 
     submit(val) {

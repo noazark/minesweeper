@@ -8,13 +8,14 @@
           :isMasked="isMasked(col)"
           :isFlagged="isFlagged(col)"
           :bombCount="neighboringBombs(matrix, r, c)"
-          :isActive="(cursor[0] == r && cursor[1] == c)"></tile>
+          :isActive="(cursor[0] == r && cursor[1] == c)"
+          :isPreview="(preview[0] == r && preview[1] == c)"></tile>
         </template><br>
       </template>
     </code>
 
     <p>
-      <terminal @submit="this.play"></terminal>
+      <terminal @input="this.playPreview" @submit="this.play"></terminal>
     </p>
 
     <code class="history">
@@ -58,6 +59,7 @@ export default {
   data() {
     return {
       cursor: [],
+      preview: [],
       gameSize: [30, 16],
       bombCount: 99,
       matrix: [],
@@ -155,6 +157,8 @@ export default {
 
     play(val) {
       const isSlashCommand = val[0] === '/'
+      
+      this.preview = []
 
       if (!isSlashCommand) {
         if (isComplete(this.matrix) || !isPlayable(this.matrix)) {
@@ -180,7 +184,24 @@ export default {
       if (!validCommand) {
         this.output = 'unknown command'
       }
+    },
 
+    playPreview(val) {
+      const validCommand = this.commands.some((command) => {
+        const [trigger, func] = command
+        const funcPreview = func + 'Preview'
+        const match = val.match(trigger)
+
+        if (match && this.hasOwnProperty(funcPreview)) {
+          this.output = this[funcPreview](...match)
+        }
+
+        return match
+      })
+
+      if (!validCommand) {
+        this.preview = []
+      }
     },
 
     move (cmd, dir, step=1) {
@@ -204,13 +225,40 @@ export default {
       return `${moves.reduce((m, c) => m + c)} cleared`
     },
 
-    flag (cmd, dir) {
+    cmdPreview(cmd, dir, step=1) {
+      step = parseInt(step)
+
       let [r, c] = this.cursor
 
-      if (dir === 'up' || dir === 'u') r -= 1
-      if (dir === 'down' || dir === 'd') r += 1
-      if (dir === 'left' || dir === 'l') c -= 1
-      if (dir === 'right' || dir === 'r') c += 1
+      if (dir === 'up' || dir === 'u') r -= step
+      if (dir === 'down' || dir === 'd') r += step
+      if (dir === 'left' || dir === 'l') c -= step
+      if (dir === 'right' || dir === 'r') c += step
+
+      if (safeGet(this.matrix, r, c)) {
+        this.preview = [r, c]
+      } else {
+        this.preview = []
+      }
+    },
+
+    movePreview(...args) {
+      this.cmdPreview(...args)
+    },
+
+    flagPreview(...args) {
+      this.cmdPreview(...args)
+    },
+
+    flag (cmd, dir, step=1) {
+      step = parseInt(step)
+
+      let [r, c] = this.cursor
+
+      if (dir === 'up' || dir === 'u') r -= step
+      if (dir === 'down' || dir === 'd') r += step
+      if (dir === 'left' || dir === 'l') c -= step
+      if (dir === 'right' || dir === 'r') c += step
 
       if (safeGet(this.matrix, r, c)) {
         return toggleFlag(this.matrix, r, c) ? 'OK' : 'Flag removed'

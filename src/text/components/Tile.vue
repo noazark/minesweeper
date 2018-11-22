@@ -7,14 +7,15 @@
       masked: isMasked,
       unmasked: !isMasked,
       flagged: isFlagged,
-      active: isActive
+      active: isActive,
+      preview: isPreview
     }" v-html="display">
   </pre>
 </template>
 
 <script>
 export default {
-  props: ['isBomb', 'isMasked', 'isFlagged', 'bombCount', 'isActive'],
+  props: ['isBomb', 'isMasked', 'isFlagged', 'bombCount', 'isActive', 'isPreview'],
 
   computed: {
     display() {
@@ -62,5 +63,9 @@ export default {
 .masked.active,
 .unmasked.active {
   color: rgb(83, 233, 52)
+}
+
+.preview {
+  border-bottom: 2px solid #454545;
 }
 </style>
