@@ -8,7 +8,8 @@
         @input="input($event.target.value)"
         v-model="next"
         placeholder="try, /howto"
-        autofocus></input>
+        autofocus
+        @blur="$event.target.focus()"></input>
   </div>
 </template>
 
