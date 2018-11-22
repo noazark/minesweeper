@@ -12,6 +12,11 @@ jobs:
           root: ./
           paths:
             - ./*
+      
+      - restore_cache:
+          keys:
+            - v1-minesweeper-{{ checksum "package.json" }}
+            - v1-minesweeper-
 
       - run:
           command: "npm install"
@@ -33,6 +38,7 @@ jobs:
           keys:
             - v1-minesweeper-{{ checksum "package.json" }}
             - v1-minesweeper-
+
       - run:
           command: "npm run build"
 
