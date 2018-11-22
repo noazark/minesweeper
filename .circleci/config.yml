@@ -68,7 +68,7 @@ jobs:
 
   deploy:
     docker:
-      - image: ubuntu:16.04
+      - image: circleci/node:11.2.0
 
     steps:
       - checkout
