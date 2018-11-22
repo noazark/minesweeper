@@ -77,7 +77,7 @@ jobs:
           at: ./
 
       - run:
-          command: "~/$CIRCLE_PROJECT_REPONAME/script/deploy"
+          command: "./script/deploy"
 
 workflows:
   version: 2
