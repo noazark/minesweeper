@@ -8,11 +8,6 @@ jobs:
     steps:
       - checkout
       
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - ./*
-      
       - restore_cache:
           keys:
             - v1-minesweeper-{{ checksum "package.json" }}
@@ -31,6 +26,8 @@ jobs:
       - image: circleci/node:11.2.0
 
     steps:
+      - checkout
+
       - attach_workspace:
           at: ./
 
@@ -56,6 +53,8 @@ jobs:
       - image: circleci/node:11.2.0
 
     steps:
+      - checkout
+
       - attach_workspace:
           at: ./
 
@@ -72,6 +71,8 @@ jobs:
       - image: ubuntu:16.04
 
     steps:
+      - checkout
+      
       - attach_workspace:
           at: ./
 
