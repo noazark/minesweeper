@@ -67,8 +67,8 @@ export default {
       score: 0,
       output: '',
       commands: [
-        [/^m(?:ove)? (u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)(?: (\d+))?/i, 'move', 'move right 5'],
-        [/^f(?:lag)? (u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)/i, 'flag', 'flag down'],
+        [/^m(?:ove)?\s*?(u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)(?:\s*(\d+))?/i, 'move', 'move right 5'],
+        [/^f(?:lag)?\s*?(u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)(?:\s*(\d+))?/i, 'flag', 'flag down'],
         [/^s(weep)?/i, 'sweep', 'sweep'],
         [/^\/reset(?: (\d+) (\d+) (\d+))?$/, 'restart', '/reset 10 10 10'],
         [/^\/score/, 'showScore', '/score'],
