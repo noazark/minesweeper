@@ -6,8 +6,8 @@
     :
     <a href="" @click.prevent="restart">restart</a>
     <template v-for="(row, r) in matrix">
-      <div class="row">
-        <div class="col" v-for="(el, c) in row">
+      <div class="row" :key="r">
+        <div class="col" v-for="(el, c) in row" :key="c">
           <tile
             :isBomb="isTile('isBomb', el)"
             :isMasked="isTile('isMasked', el)"
@@ -133,7 +133,7 @@ export default {
       unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
     },
 
-    unmask(r, c, $event) {
+    unmask(r, c) {
       if (!isPlayable(this.matrix)) return
       if (!this.startedAt) this.start(r, c)
       const unmasked = unmask(this.matrix, r, c)

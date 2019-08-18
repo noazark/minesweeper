@@ -7,6 +7,7 @@ import Classic from './classic/App.vue'
 import Txt from './text/App.vue'
 
 export default {
+  name: 'app',
   components: {
     Classic,
     Txt,

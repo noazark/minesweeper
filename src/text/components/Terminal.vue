@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    > <input
+    &gt; <input
         class="cli"
         @keyup.up="historyNext"
         @keyup.down="historyPrev"
@@ -9,7 +9,7 @@
         v-model="next"
         placeholder="try, /howto"
         autofocus
-        @blur="$event.target.focus()"></input>
+        @blur="$event.target.focus()" />
   </div>
 </template>
 

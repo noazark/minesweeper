@@ -4,13 +4,14 @@
       <template v-for="(row, r) in matrix">
         <template v-for="(col, c) in row">
           <tile
-          :isBomb="isBomb(col)"
-          :isMasked="isMasked(col)"
-          :isFlagged="isFlagged(col)"
-          :bombCount="neighboringBombs(matrix, r, c)"
-          :isActive="(cursor[0] == r && cursor[1] == c)"
-          :isPreview="(preview[0] == r && preview[1] == c)"></tile>
-        </template><br>
+            :key="`${r}-${c}`"
+            :isBomb="isBomb(col)"
+            :isMasked="isMasked(col)"
+            :isFlagged="isFlagged(col)"
+            :bombCount="neighboringBombs(matrix, r, c)"
+            :isActive="(cursor[0] == r && cursor[1] == c)"
+            :isPreview="(preview[0] == r && preview[1] == c)"></tile>
+        </template><br :key="`${r}-${c}`">
       </template>
     </code>
 
@@ -41,14 +42,11 @@ import {
   BOMB,
   FLAG,
   MASK
-} from '../../lib/gameplay'
-import countBy from 'lodash/countBy'
-import reverse from 'lodash/reverse'
+} from '../../lib/gameplay';
 import Terminal from './components/Terminal.vue'
 import Tile from './components/Tile.vue'
-import times from 'lodash/times'
-import take from 'lodash/take'
-import stripIndent from 'common-tags/lib/stripIndent'
+import {times} from 'lodash'
+import {stripIndent} from 'common-tags'
 
 export default {
   components: {
@@ -157,7 +155,7 @@ export default {
 
     play(val) {
       const isSlashCommand = val[0] === '/'
-      
+
       this.preview = []
 
       if (!isSlashCommand) {
@@ -285,10 +283,6 @@ export default {
     },
 
     howto() {
-      function trimLead() {
-
-      }
-
       return stripIndent`
         Welcome!
 
