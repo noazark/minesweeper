@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath: 'https://noazark.github.io/minesweeper/'
+  publicPath: process.env.NODE_ENV === 'production' ? 'https://noazark.github.io/minesweeper/' : '/'
 }
