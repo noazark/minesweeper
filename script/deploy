@@ -11,4 +11,4 @@ git config user.name "Noah H. Smith"
 git checkout -b deploy
 git add --all --force ./dist/
 git commit --message "Deploying $CIRCLE_SHA1"
-git push origin deploy:gh-pages --force
+git push origin `git subtree split --prefix dist deploy`:gh-pages --force
