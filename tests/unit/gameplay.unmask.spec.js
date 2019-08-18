@@ -25,28 +25,28 @@ describe('unmask', function () {
     const unmasked = unmask(matrix, 2, 1)
 
     it('result includes self', function () {
-      expect(unmasked).toContain({r: 2, c: 1})
+      expect(unmasked).toContainEqual({r: 2, c: 1})
     })
 
     it('result does not include bombs', function () {
-      expect(unmasked).not.toContain({r: 0, c: 2})
+      expect(unmasked).not.toContainEqual({r: 0, c: 2})
     })
 
     it('result includes all adjacent tiles', function () {
-      expect(unmasked).toContain({r: 1, c: 0})
-      expect(unmasked).toContain({r: 1, c: 1})
-      expect(unmasked).toContain({r: 1, c: 2})
-      expect(unmasked).toContain({r: 2, c: 0})
+      expect(unmasked).toContainEqual({r: 1, c: 0})
+      expect(unmasked).toContainEqual({r: 1, c: 1})
+      expect(unmasked).toContainEqual({r: 1, c: 2})
+      expect(unmasked).toContainEqual({r: 2, c: 0})
     })
 
     it('result includes all siblings with 0 neighboring bombs', function () {
-      expect(unmasked).toContain({r: 0, c: 0})
-      expect(unmasked).toContain({r: 1, c: 0})
-      expect(unmasked).toContain({r: 2, c: 0})
+      expect(unmasked).toContainEqual({r: 0, c: 0})
+      expect(unmasked).toContainEqual({r: 1, c: 0})
+      expect(unmasked).toContainEqual({r: 2, c: 0})
     })
 
     it('does not unmask flagged tiles', function () {
-      expect(unmasked).not.toContain({r: 2, c: 2})
+      expect(unmasked).not.toContainEqual({r: 2, c: 2})
     })
   })
 
@@ -54,7 +54,7 @@ describe('unmask', function () {
     const unmasked = unmask(matrix, 0, 1)
 
     it('result only includes self', function () {
-      expect(unmasked).toContain({r: 0, c: 1})
+      expect(unmasked).toContainEqual({r: 0, c: 1})
       expect(unmasked.length).toEqual(1)
     })
   })
@@ -63,7 +63,7 @@ describe('unmask', function () {
     const unmasked = unmask(matrix, 0, 1)
 
     it('result only includes self', function () {
-      expect(unmasked).toContain({r: 0, c: 1})
+      expect(unmasked).toContainEqual({r: 0, c: 1})
       expect(unmasked.length).toEqual(1)
     })
   })

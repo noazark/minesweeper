@@ -16,19 +16,19 @@ describe('unmaskAroundFlags', function () {
     const unmasked = unmaskAroundFlags(matrix, 1, 2)
 
     it('does not unmask flags', function () {
-      expect(unmasked).not.toContain({r: 2, c: 2})
+      expect(unmasked).not.toContainEqual({r: 2, c: 2})
     })
 
     it('unmasks bombs', function () {
-      expect(unmasked).toContain({r: 0, c: 2})
+      expect(unmasked).toContainEqual({r: 0, c: 2})
     })
 
     it('unmasks adjacent titles', function () {
-      expect(unmasked).toContain({r: 0, c: 0})
-      expect(unmasked).toContain({r: 0, c: 1})
-      expect(unmasked).toContain({r: 1, c: 0})
-      expect(unmasked).toContain({r: 1, c: 1})
-      expect(unmasked).toContain({r: 2, c: 1})
+      expect(unmasked).toContainEqual({r: 0, c: 0})
+      expect(unmasked).toContainEqual({r: 0, c: 1})
+      expect(unmasked).toContainEqual({r: 1, c: 0})
+      expect(unmasked).toContainEqual({r: 1, c: 1})
+      expect(unmasked).toContainEqual({r: 2, c: 1})
     })
   })
 
@@ -41,19 +41,19 @@ describe('unmaskAroundFlags', function () {
     const unmasked = unmaskAroundFlags(matrix, 1, 1)
 
     it('does not unmask flags', function () {
-      expect(unmasked).not.toContain({r: 2, c: 1})
-      expect(unmasked).not.toContain({r: 2, c: 2})
+      expect(unmasked).not.toContainEqual({r: 2, c: 1})
+      expect(unmasked).not.toContainEqual({r: 2, c: 2})
     })
 
     it('unmasks bombs', function () {
-      expect(unmasked).toContain({r: 0, c: 2})
+      expect(unmasked).toContainEqual({r: 0, c: 2})
     })
 
     it('unmasks adjacent titles', function () {
-      expect(unmasked).toContain({r: 0, c: 0})
-      expect(unmasked).toContain({r: 0, c: 1})
-      expect(unmasked).toContain({r: 1, c: 0})
-      expect(unmasked).toContain({r: 1, c: 2})
+      expect(unmasked).toContainEqual({r: 0, c: 0})
+      expect(unmasked).toContainEqual({r: 0, c: 1})
+      expect(unmasked).toContainEqual({r: 1, c: 0})
+      expect(unmasked).toContainEqual({r: 1, c: 2})
     })
   })
 
