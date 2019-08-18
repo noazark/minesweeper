@@ -1,13 +1,19 @@
 import { isTile, safeGet, BOMB } from '../../lib/gameplay'
 
 describe('isTile', function () {
+  const _ = {
+    isMasked: false,
+    isBomb: false,
+    isFlagged:  false
+  }
+
   it('returns true if the tile is masked', function () {
-    const tile = { [BOMB]: true }
+    const tile = { ..._, isBomb: true }
     expect(isTile(BOMB, tile)).toBe(true)
   })
 
   it('returns false if the tile not is masked', function () {
-    const tile = { [BOMB]: false }
+    const tile = { ..._ }
     expect(isTile(BOMB, tile)).toBe(false)
   })
 

@@ -1,7 +1,11 @@
 import { neighbors } from '../../lib/gameplay'
 
 describe('neighbors', function () {
-  const _ = 1
+  const _ = {
+    isMasked: false,
+    isBomb: false,
+    isFlagged:  false
+  }
   /* eslint-disable standard/array-bracket-even-spacing */
   const matrix = [
     [_, _, _],

@@ -1,6 +1,5 @@
 import { initializeMap, BOMB, MASK, FLAG } from '../../lib/gameplay'
-import flatten from 'lodash/flatten'
-import times from 'lodash/times'
+import {flatten, times} from 'lodash'
 
 describe('initializeMap', function () {
   it('creates a variable sized minefield', function () {

@@ -17,8 +17,11 @@
     "vue": "^2.6.10"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.17",
+    "@types/lodash": "^4.14.137",
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-plugin-eslint": "^3.10.0",
+    "@vue/cli-plugin-typescript": "^3.10.0",
     "@vue/cli-plugin-unit-jest": "^3.10.0",
     "@vue/cli-service": "^3.10.0",
     "@vue/test-utils": "1.0.0-beta.29",
@@ -30,6 +33,8 @@
     "eslint-plugin-vue": "^5.0.0",
     "postcss-loader": "^3.0.0",
     "sass": "^1.22.10",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.3",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {

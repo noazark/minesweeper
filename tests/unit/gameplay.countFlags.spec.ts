@@ -1,12 +1,17 @@
-import { countFlags, MASK, FLAG, BOMB } from '../../lib/gameplay'
+import { Map, countFlags } from '../../lib/gameplay'
+
 
 describe('countFlags', function () {
-  const _ = { [MASK]: true, [FLAG]: false, [BOMB]: false }
-  const o = { [MASK]: false, [FLAG]: false, [BOMB]: false }
-  const f = { [MASK]: true, [FLAG]: true, [BOMB]: false }
-  const b = { [MASK]: true, [FLAG]: false, [BOMB]: true }
+  const _ = {
+    isMasked: true,
+    isBomb: false,
+    isFlagged:  false
+  }
+  const o = { ..._, isMasked: false }
+  const f = { ..._, isFlagged: true }
+  const b = { ..._, isBomb: true }
 
-  function expectFlags (expected, ...field) {
+  function expectFlags (expected:number, ...field:Map) {
     expect(countFlags([...field])).toEqual(expected)
   }
 
