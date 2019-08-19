@@ -10,13 +10,13 @@ jobs:
 
       - restore_cache:
           keys:
-            - v4-minesweeper-{{ checksum "package.json" }}
+            - v5-minesweeper-{{ checksum "package.json" }}
 
       - run:
           command: "npm install"
 
       - save_cache:
-          key: v4-minesweeper-{{ checksum "package.json" }}
+          key: v5-minesweeper-{{ checksum "package.json" }}
           paths:
             - './node_modules'
 
@@ -32,7 +32,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v4-minesweeper-{{ checksum "package.json" }}
+            - v5-minesweeper-{{ checksum "package.json" }}
 
       - run:
           command: "npm run build"
@@ -58,7 +58,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v4-minesweeper-{{ checksum "package.json" }}
+            - v5-minesweeper-{{ checksum "package.json" }}
 
       - run:
           command: "npm run test"
