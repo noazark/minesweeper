@@ -35,7 +35,7 @@ jobs:
             - v5-minesweeper-{{ checksum "package.json" }}
 
       - run:
-          command: "npm run build"
+          command: "NODE_ENV=production npm run build"
 
       - store_artifacts:
           path: ./dist
@@ -74,7 +74,7 @@ jobs:
           at: ./
 
       - run:
-          command: "NODE_ENV=production ./script/deploy"
+          command: "./script/deploy"
 
 workflows:
   version: 2
