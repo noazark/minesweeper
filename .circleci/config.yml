@@ -74,7 +74,7 @@ jobs:
           at: ./
 
       - run:
-          command: "./script/deploy"
+          command: "NODE_ENV=production ./script/deploy"
 
 workflows:
   version: 2
