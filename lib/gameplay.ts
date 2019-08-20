@@ -39,7 +39,7 @@ function buildField (w:number, h:number):Map {
 }
 
 function count (map:Map, p:MapPoint, prop:PROPS):number {
-  return neighbors(map, p).map((pair) => get(map[pair.r][pair.c], prop) ? 1 : 0).reduce((m:number, n:number) => m + n, 0)
+  return neighbors(map, p).map((pair) => get(safeGet(map, pair), prop) ? 1 : 0).reduce((m:number, n:number) => m + n, 0)
 }
 
 function placeBombs (map:Map, bc:number) {
@@ -136,12 +136,26 @@ export function neighbors (map:Map, p:MapPoint):Neighbors {
   }, [])
 }
 
+export function getCell (map:Map, p:MapPoint) {
+  if (p.r >= 0 && p.c >= 0  && p.r < map.length && p.c < map[0].length) {
+    return map[p.r][p.c]
+  } else {
+    throw new Error('requested cell does not exist')
+  }
+}
+
 export function safeGet (map:Map, p:MapPoint) {
-  if (map[p.r] != null && map[p.r][p.c] != null) return map[p.r][p.c]
+  try {
+    return getCell(map, p)
+  } catch (e) {
+    if (e.message === 'requested cell does not exist') {
+      return undefined
+    }
+  }
 }
 
 export function toggleFlag (map:Map, p:MapPoint) {
-  const el = map[p.r][p.c]
+  const el = getCell(map, p)
   if (isTile(PROPS.MASK, el)) {
     el.isFlagged = !isTile(PROPS.FLAG, el)
   }

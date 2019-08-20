@@ -25,6 +25,7 @@
 
 <script>
 import {
+  getCell,
   countFlags,
   findBombs,
   initializeMap,
@@ -84,7 +85,7 @@ export default {
 
         if (!isComplete(this.matrix) && !isPlayable(this.matrix)) {
           const unmasked = findBombs(this.matrix)
-          unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
+          unmasked.forEach((p) => getCell(this.matrix, p).isMasked = false)
         }
       },
       deep: true
@@ -130,14 +131,14 @@ export default {
     unmaskAroundFlags(r, c) {
       if (!isPlayable(this.matrix)) return
       const unmasked = unmaskAroundFlags(this.matrix, {r, c})
-      unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
+      unmasked.forEach((p) => getCell(this.matrix, p).isMasked = false)
     },
 
     unmask(r, c) {
       if (!isPlayable(this.matrix)) return
       if (!this.startedAt) this.start(r, c)
       const unmasked = unmask(this.matrix, {r, c})
-      unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
+      unmasked.forEach((p) => getCell(this.matrix, p).isMasked = false)
     },
   }
 }

@@ -27,6 +27,7 @@
 
 <script>
 import {
+  getCell,
   countFlags,
   findBombs,
   initializeMap,
@@ -302,7 +303,7 @@ export default {
     },
 
     doUnmask (p) {
-      const tile = this.matrix[p.r][p.c]
+      const tile = getCell(this.matrix, p)
       if (tile.isMasked) {
         tile.isMasked = false
         return true
