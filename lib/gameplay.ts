@@ -141,8 +141,8 @@ export function safeGet (map:Map, p:MapPoint) {
   if (map[p.r] != null && map[p.r][p.c] != null) return map[p.r][p.c]
 }
 
-export function toggleFlag (map:Map, r:number, c:number) {
-  const el = map[r][c]
+export function toggleFlag (map:Map, p:MapPoint) {
+  const el = map[p.r][p.c]
   if (isTile(PROPS.MASK, el)) {
     el.isFlagged = !isTile(PROPS.FLAG, el)
   }

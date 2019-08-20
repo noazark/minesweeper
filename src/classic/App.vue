@@ -124,7 +124,7 @@ export default {
     flag(r, c) {
       if (!isPlayable(this.matrix)) return
       if (!this.startedAt) this.start(r, c)
-      toggleFlag(this.matrix, r, c)
+      toggleFlag(this.matrix, {r, c})
     },
 
     unmaskAroundFlags(r, c) {

@@ -257,7 +257,7 @@ export default {
       if (dir === 'right' || dir === 'r') c += step
 
       if (safeGet(this.matrix, {r, c})) {
-        return toggleFlag(this.matrix, r, c) ? 'OK' : 'Flag removed'
+        return toggleFlag(this.matrix, {r, c}) ? 'OK' : 'Flag removed'
       }
     },
 
