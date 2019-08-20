@@ -12,7 +12,7 @@
             :isBomb="isTile('isBomb', el)"
             :isMasked="isTile('isMasked', el)"
             :isFlagged="isTile('isFlagged', el)"
-            :bombCount="neighboringBombs(matrix, r, c)"
+            :bombCount="neighboringBombs(matrix, {r, c})"
             @flag="flag(r, c)"
             @unmaskAroundFlags="unmaskAroundFlags(r, c)"
             @unmask="unmask(r, c)">

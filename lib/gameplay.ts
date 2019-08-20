@@ -108,8 +108,8 @@ export function findBombs (map:Map):Neighbors {
     []));
 }
 
-export function neighboringBombs (map:Map, r:number, c:number) {
-  return count(PROPS.BOMB, map, {r, c})
+export function neighboringBombs (map:Map, p:MapPoint) {
+  return count(PROPS.BOMB, map, p)
 }
 
 export function neighboringFlags (map:Map, r:number, c:number) {
@@ -151,13 +151,13 @@ export function toggleFlag (map:Map, r:number, c:number) {
 export function unmask (map:Map, r:number, c:number, um:Neighbors = []) {
   const el = safeGet(map, r, c)
   if (!isTile(PROPS.FLAG, el)) um.push({r, c})
-  if (isTile(PROPS.BOMB, el) || neighboringBombs(map, r, c) > 0) return um
+  if (isTile(PROPS.BOMB, el) || neighboringBombs(map, {r, c}) > 0) return um
   return um.concat(unmaskCrawl(map, r, c, um))
 }
 
 export function unmaskAroundFlags (map:Map, r:number, c:number) {
   const el = safeGet(map, r, c)
-  if (!isTile(PROPS.MASK, el) && neighboringFlags(map, r, c) >= neighboringBombs(map, r, c)) {
+  if (!isTile(PROPS.MASK, el) && neighboringFlags(map, r, c) >= neighboringBombs(map, {r, c})) {
     return unmaskCrawl(map, r, c, [], true)
   } else {
     return []
@@ -174,7 +174,7 @@ export function unmaskCrawl (map:Map, r:number, c:number, um:Neighbors = [], unm
       const previouslyUnmasked = um.concat(memo).some((pair0) => pair0.r === pair.r && pair0.c === pair.c)
       if (isTile(PROPS.FLAG, safeGet(map, pair.r, pair.c)) || previouslyUnmasked) return memo
 
-      const hasBombNeighbors = neighboringBombs(map, pair.r, pair.c) > 0
+      const hasBombNeighbors = neighboringBombs(map, pair) > 0
       if (!hasBombNeighbors) return difference(unmask(map, pair.r, pair.c, um.concat(memo)), um)
 
       const isNotBomb = !isTile(PROPS.BOMB, safeGet(map, pair.r, pair.c))
@@ -186,5 +186,5 @@ export function unmaskCrawl (map:Map, r:number, c:number, um:Neighbors = [], unm
 
 export function validFirstPlay (map:Map, r:number, c:number) {
   const el = safeGet(map, r, c)
-  return !(neighboringBombs(map, r, c) > 0) && !isTile(PROPS.BOMB, el)
+  return !(neighboringBombs(map, {r, c}) > 0) && !isTile(PROPS.BOMB, el)
 }

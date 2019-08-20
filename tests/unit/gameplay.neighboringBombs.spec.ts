@@ -17,10 +17,10 @@ describe('neighboringBombs', function () {
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(neighboringBombs(matrix, 1, 1)).toEqual(3)
-    expect(neighboringBombs(matrix, 0, 1)).toEqual(2)
-    expect(neighboringBombs(matrix, 2, 1)).toEqual(1)
-    expect(neighboringBombs(matrix, 2, 0)).toEqual(0)
+    expect(neighboringBombs(matrix, {r: 1, c: 1})).toEqual(3)
+    expect(neighboringBombs(matrix, {r: 0, c: 1})).toEqual(2)
+    expect(neighboringBombs(matrix, {r: 2, c: 1})).toEqual(1)
+    expect(neighboringBombs(matrix, {r: 2, c: 0})).toEqual(0)
   })
 
   it('returns just the flag count of the siblings, not including self', function () {
@@ -32,6 +32,6 @@ describe('neighboringBombs', function () {
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(neighboringBombs(matrix, 1, 1)).toEqual(1)
+    expect(neighboringBombs(matrix, {r: 1, c: 1})).toEqual(1)
   })
 })

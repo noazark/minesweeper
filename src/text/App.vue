@@ -8,7 +8,7 @@
             :isBomb="isBomb(col)"
             :isMasked="isMasked(col)"
             :isFlagged="isFlagged(col)"
-            :bombCount="neighboringBombs(matrix, r, c)"
+            :bombCount="neighboringBombs(matrix, {r, c})"
             :isActive="(cursor[0] == r && cursor[1] == c)"
             :isPreview="(preview[0] == r && preview[1] == c)"></tile>
         </template><br :key="`${r}-${c}`">
