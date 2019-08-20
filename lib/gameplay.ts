@@ -38,7 +38,7 @@ function buildField (w:number, h:number):Map {
   return map
 }
 
-function count (map:Map, p:MapPoint, prop:PROPS):number {
+function countNeighbors (map:Map, p:MapPoint, prop:PROPS):number {
   return neighbors(map, p).map((pair) => get(safeGet(map, pair), prop) ? 1 : 0).reduce((m:number, n:number) => m + n, 0)
 }
 
@@ -108,11 +108,11 @@ export function findBombs (map:Map):Neighbors {
 }
 
 export function neighboringBombs (map:Map, p:MapPoint) {
-  return count(map, p, PROPS.BOMB)
+  return countNeighbors(map, p, PROPS.BOMB)
 }
 
 export function neighboringFlags (map:Map, p:MapPoint) {
-  return count(map, p, PROPS.FLAG)
+  return countNeighbors(map, p, PROPS.FLAG)
 }
 
 export function neighbors (map:Map, p:MapPoint):Neighbors {
