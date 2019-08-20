@@ -40,7 +40,7 @@ function buildField (w:number, h:number):Map {
 }
 
 function count (prop:PROPS, map:Map, p:MapPoint):number {
-  return neighbors(map, p.r, p.c).map((pair) => get(map[pair.r][pair.c], prop) ? 1 : 0).reduce((m:number, n:number) => m + n, 0)
+  return neighbors(map, p).map((pair) => get(map[pair.r][pair.c], prop) ? 1 : 0).reduce((m:number, n:number) => m + n, 0)
 }
 
 function placeBombs (map:Map, bc:number) {
@@ -116,7 +116,7 @@ export function neighboringFlags (map:Map, r:number, c:number) {
   return count(PROPS.FLAG, map, {r, c})
 }
 
-export function neighbors (map:Map, r:number, c:number):Neighbors {
+export function neighbors (map:Map, p:MapPoint):Neighbors {
   /* eslint-disable standard/array-bracket-even-spacing */
   const neighbors = [
     [-1, -1], [-1, 0], [-1, +1],
@@ -128,8 +128,8 @@ export function neighbors (map:Map, r:number, c:number):Neighbors {
   return neighbors.reduce((neighbors:Neighbors, neighbor) => {
     const [rd, cd] = neighbor
 
-    if (safeGet(map, r + rd, c + cd)) {
-      neighbors.push({r: r + rd, c: c + cd})
+    if (safeGet(map, p.r + rd, p.c + cd)) {
+      neighbors.push({r: p.r + rd, c: p.c + cd})
     }
 
     return neighbors
@@ -169,7 +169,7 @@ export function unmaskCrawl (map:Map, r:number, c:number, um:Neighbors = [], unm
 
   if (isTile(PROPS.FLAG, el)) return []
 
-  return neighbors(map, r, c)
+  return neighbors(map, {r, c})
     .reduce((memo:Neighbors, pair:Neighbor) => {
       const previouslyUnmasked = um.concat(memo).some((pair0) => pair0.r === pair.r && pair0.c === pair.c)
       if (isTile(PROPS.FLAG, safeGet(map, pair.r, pair.c)) || previouslyUnmasked) return memo
