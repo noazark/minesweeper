@@ -156,10 +156,10 @@ export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {
   return um.concat(unmaskCrawl(map, p.r, p.c, um))
 }
 
-export function unmaskAroundFlags (map:Map, r:number, c:number) {
-  const el = safeGet(map, {r, c})
-  if (!isTile(PROPS.MASK, el) && neighboringFlags(map, {r, c}) >= neighboringBombs(map, {r, c})) {
-    return unmaskCrawl(map, r, c, [], true)
+export function unmaskAroundFlags (map:Map, p:MapPoint) {
+  const el = safeGet(map, p)
+  if (!isTile(PROPS.MASK, el) && neighboringFlags(map, p) >= neighboringBombs(map, p)) {
+    return unmaskCrawl(map, p.r, p.c, [], true)
   } else {
     return []
   }

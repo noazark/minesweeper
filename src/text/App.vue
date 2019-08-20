@@ -272,7 +272,7 @@ export default {
     sweep () {
       let [r, c] = this.cursor
 
-      const unmasked = unmaskAroundFlags(this.matrix, r, c).filter(this.doUnmask)
+      const unmasked = unmaskAroundFlags(this.matrix, {r, c}).filter(this.doUnmask)
       return `${unmasked.length} cleared`
     },
 
