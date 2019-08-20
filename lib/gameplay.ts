@@ -11,8 +11,7 @@ interface MapPoint {
   c: number
 }
 
-type Neighbor = MapPoint
-type Neighbors = Array<Neighbor>
+type Neighbors = Array<MapPoint>
 
 interface Cell {
   [PROPS.BOMB]: boolean,
@@ -171,7 +170,7 @@ export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs
   if (isTile(PROPS.FLAG, el)) return []
 
   return neighbors(map, p)
-    .reduce((memo:Neighbors, pair:Neighbor) => {
+    .reduce((memo:Neighbors, pair:MapPoint) => {
       const previouslyUnmasked = um.concat(memo).some((pair0) => pair0.r === pair.r && pair0.c === pair.c)
       if (isTile(PROPS.FLAG, safeGet(map, pair)) || previouslyUnmasked) return memo
 
