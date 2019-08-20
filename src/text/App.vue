@@ -138,7 +138,7 @@ export default {
 
       do {
         this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], this.bombCount)
-      } while (!validFirstPlay(this.matrix, r, c))
+      } while (!validFirstPlay(this.matrix, {r, c}))
 
       const unmasked = unmask(this.matrix, {r, c})
       unmasked.forEach((p) => this.doUnmask(p))

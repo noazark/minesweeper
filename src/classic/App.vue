@@ -102,7 +102,7 @@ export default {
     isTile,
 
     start(r, c) {
-      while (!validFirstPlay(this.matrix, r, c)) {
+      while (!validFirstPlay(this.matrix, {r, c})) {
         this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], this.bombCount)
       }
 

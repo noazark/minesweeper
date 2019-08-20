@@ -185,7 +185,7 @@ export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs
     }, [])
 }
 
-export function validFirstPlay (map:Map, r:number, c:number) {
-  const el = safeGet(map, {r, c})
-  return !(neighboringBombs(map, {r, c}) > 0) && !isTile(PROPS.BOMB, el)
+export function validFirstPlay (map:Map, p:MapPoint) {
+  const el = safeGet(map, p)
+  return !(neighboringBombs(map, p) > 0) && !isTile(PROPS.BOMB, el)
 }
