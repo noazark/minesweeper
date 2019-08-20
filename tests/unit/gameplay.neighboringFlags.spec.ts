@@ -17,7 +17,7 @@ describe('neighboringFlags', function () {
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(neighboringFlags(matrix, 1, 1)).toEqual(3)
+    expect(neighboringFlags(matrix, {r: 1, c: 1})).toEqual(3)
   })
 
   it('returns just the flag count of the siblings, not including self', function () {
@@ -29,6 +29,6 @@ describe('neighboringFlags', function () {
     ]
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(neighboringFlags(matrix, 1, 1)).toEqual(1)
+    expect(neighboringFlags(matrix, {r: 1, c: 1})).toEqual(1)
   })
 })

@@ -112,8 +112,8 @@ export function neighboringBombs (map:Map, p:MapPoint) {
   return count(PROPS.BOMB, map, p)
 }
 
-export function neighboringFlags (map:Map, r:number, c:number) {
-  return count(PROPS.FLAG, map, {r, c})
+export function neighboringFlags (map:Map, p:MapPoint) {
+  return count(PROPS.FLAG, map, p)
 }
 
 export function neighbors (map:Map, p:MapPoint):Neighbors {
@@ -157,7 +157,7 @@ export function unmask (map:Map, r:number, c:number, um:Neighbors = []) {
 
 export function unmaskAroundFlags (map:Map, r:number, c:number) {
   const el = safeGet(map, r, c)
-  if (!isTile(PROPS.MASK, el) && neighboringFlags(map, r, c) >= neighboringBombs(map, {r, c})) {
+  if (!isTile(PROPS.MASK, el) && neighboringFlags(map, {r, c}) >= neighboringBombs(map, {r, c})) {
     return unmaskCrawl(map, r, c, [], true)
   } else {
     return []
