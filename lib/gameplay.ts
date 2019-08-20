@@ -22,7 +22,7 @@ interface Cell {
 export type Map = Array<Row>
 type Row = Array<Cell>
 
-function buildField (w:number, h:number):Map {
+function buildField (w:number, h:number) {
   const map:Map = []
   for (let r = 0; r < h; r++) {
     map[r] = []
@@ -38,7 +38,7 @@ function buildField (w:number, h:number):Map {
   return map
 }
 
-function countNeighbors (map:Map, p:MapPoint, prop:PROPS):number {
+function countNeighbors (map:Map, p:MapPoint, prop:PROPS) {
   return neighbors(map, p).map((pair) => get(safeGet(map, pair), prop) ? 1 : 0).reduce((m:number, n:number) => m + n, 0)
 }
 
@@ -69,7 +69,7 @@ export function countFlags (map:Map) {
   return flatten(map).map((tile) => isTile(PROPS.FLAG, tile) ? 1 : 0).reduce((m:number, n) => m + n, 0)
 }
 
-export function initializeMap (w:number, h:number, bc:number):Map {
+export function initializeMap (w:number, h:number, bc:number) {
   const m = buildField(w, h)
   const bombs = placeBombs(m, bc)
 
@@ -90,7 +90,7 @@ export function isPlayable (map:Map) {
   return !flatten(map).some((tile) => isTile(PROPS.BOMB, tile) && !isTile(PROPS.MASK, tile))
 }
 
-export function findBombs (map:Map):Neighbors {
+export function findBombs (map:Map) {
   return flatten(map.reduce(
     (result:Neighbors, row, r) =>
       [
@@ -115,7 +115,7 @@ export function neighboringFlags (map:Map, p:MapPoint) {
   return countNeighbors(map, p, PROPS.FLAG)
 }
 
-export function neighbors (map:Map, p:MapPoint):Neighbors {
+export function neighbors (map:Map, p:MapPoint) {
   /* eslint-disable standard/array-bracket-even-spacing */
   const neighbors = [
     [-1, -1], [-1, 0], [-1, +1],
