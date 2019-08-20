@@ -18,11 +18,11 @@ describe('unmask', function () {
       [_, _, _]
     ]
 
-    expect(unmask(matrix, 1, 1).length).toEqual(9)
+    expect(unmask(matrix, {r: 1, c: 1}).length).toEqual(9)
   })
 
   describe('zero adjacent bombs', function () {
-    const unmasked = unmask(matrix, 2, 1)
+    const unmasked = unmask(matrix, {r: 2, c: 1})
 
     it('result includes self', function () {
       expect(unmasked).toContainEqual({r: 2, c: 1})
@@ -51,7 +51,7 @@ describe('unmask', function () {
   })
 
   describe('with adjacent bombs', function () {
-    const unmasked = unmask(matrix, 0, 1)
+    const unmasked = unmask(matrix, {r: 0, c: 1})
 
     it('result only includes self', function () {
       expect(unmasked).toContainEqual({r: 0, c: 1})
@@ -60,7 +60,7 @@ describe('unmask', function () {
   })
 
   describe('bomb', function () {
-    const unmasked = unmask(matrix, 0, 1)
+    const unmasked = unmask(matrix, {r: 0, c: 1})
 
     it('result only includes self', function () {
       expect(unmasked).toContainEqual({r: 0, c: 1})
@@ -69,7 +69,7 @@ describe('unmask', function () {
   })
 
   describe('flag', function () {
-    const unmasked = unmask(matrix, 2, 2)
+    const unmasked = unmask(matrix, {r: 2, c: 2})
 
     it('result is empty', function () {
       expect(unmasked.length).toEqual(0)

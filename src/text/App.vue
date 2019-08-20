@@ -140,7 +140,7 @@ export default {
         this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], this.bombCount)
       } while (!validFirstPlay(this.matrix, r, c))
 
-      const unmasked = unmask(this.matrix, r, c)
+      const unmasked = unmask(this.matrix, {r, c})
       unmasked.forEach((p) => this.doUnmask(p))
 
       this.score = 0
@@ -213,7 +213,7 @@ export default {
 
         if (safeGet(this.matrix, {r, c})) {
           this.cursor = [r, c]
-          const unmasked = unmask(this.matrix, r, c).filter(this.doUnmask)
+          const unmasked = unmask(this.matrix, {r, c}).filter(this.doUnmask)
           return unmasked.length
         }
       })

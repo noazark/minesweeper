@@ -149,11 +149,11 @@ export function toggleFlag (map:Map, p:MapPoint) {
   return el.isFlagged
 }
 
-export function unmask (map:Map, r:number, c:number, um:Neighbors = []) {
-  const el = safeGet(map, {r, c})
-  if (!isTile(PROPS.FLAG, el)) um.push({r, c})
-  if (isTile(PROPS.BOMB, el) || neighboringBombs(map, {r, c}) > 0) return um
-  return um.concat(unmaskCrawl(map, r, c, um))
+export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {
+  const el = safeGet(map, p)
+  if (!isTile(PROPS.FLAG, el)) um.push(p)
+  if (isTile(PROPS.BOMB, el) || neighboringBombs(map, p) > 0) return um
+  return um.concat(unmaskCrawl(map, p.r, p.c, um))
 }
 
 export function unmaskAroundFlags (map:Map, r:number, c:number) {
@@ -176,7 +176,7 @@ export function unmaskCrawl (map:Map, r:number, c:number, um:Neighbors = [], unm
       if (isTile(PROPS.FLAG, safeGet(map, pair)) || previouslyUnmasked) return memo
 
       const hasBombNeighbors = neighboringBombs(map, pair) > 0
-      if (!hasBombNeighbors) return difference(unmask(map, pair.r, pair.c, um.concat(memo)), um)
+      if (!hasBombNeighbors) return difference(unmask(map, pair, um.concat(memo)), um)
 
       const isNotBomb = !isTile(PROPS.BOMB, safeGet(map, pair))
       if (unmaskBombs || isNotBomb) return memo.concat([{r: pair.r, c: pair.c}])

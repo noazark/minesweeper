@@ -136,7 +136,7 @@ export default {
     unmask(r, c) {
       if (!isPlayable(this.matrix)) return
       if (!this.startedAt) this.start(r, c)
-      const unmasked = unmask(this.matrix, r, c)
+      const unmasked = unmask(this.matrix, {r, c})
       unmasked.forEach((p) => this.matrix[p.r][p.c].isMasked = false)
     },
   }
