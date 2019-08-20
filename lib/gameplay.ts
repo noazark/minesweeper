@@ -70,14 +70,14 @@ export function countFlags (map:Map) {
 }
 
 export function initializeMap (w:number, h:number, bc:number) {
-  const m = buildField(w, h)
-  const bombs = placeBombs(m, bc)
+  const map = buildField(w, h)
+  const bombs = placeBombs(map, bc)
 
   bombs.forEach((bomb) => {
-    m[bomb.r][bomb.c].isBomb = true
+    getCell(map, bomb).isBomb = true
   })
 
-  return m
+  return map
 }
 
 export function isComplete (map:Map) {
