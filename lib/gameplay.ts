@@ -6,11 +6,12 @@ export enum PROPS {
   MASK = 'isMasked'
 }
 
-interface Neighbor {
+interface MapPoint {
   r: number,
   c: number
 }
 
+type Neighbor = MapPoint
 type Neighbors = Array<Neighbor>
 
 interface Cell {
@@ -38,8 +39,8 @@ function buildField (w:number, h:number):Map {
   return map
 }
 
-function count (prop:PROPS, map:Map, r:number, c:number):number {
-  return neighbors(map, r, c).map((pair) => get(map[pair.r][pair.c], prop) ? 1 : 0).reduce((m:number, n:number) => m + n, 0)
+function count (prop:PROPS, map:Map, p:MapPoint):number {
+  return neighbors(map, p.r, p.c).map((pair) => get(map[pair.r][pair.c], prop) ? 1 : 0).reduce((m:number, n:number) => m + n, 0)
 }
 
 function placeBombs (map:Map, bc:number) {
@@ -108,11 +109,11 @@ export function findBombs (map:Map):Neighbors {
 }
 
 export function neighboringBombs (map:Map, r:number, c:number) {
-  return count(PROPS.BOMB, map, r, c)
+  return count(PROPS.BOMB, map, {r, c})
 }
 
 export function neighboringFlags (map:Map, r:number, c:number) {
-  return count(PROPS.FLAG, map, r, c)
+  return count(PROPS.FLAG, map, {r, c})
 }
 
 export function neighbors (map:Map, r:number, c:number):Neighbors {
