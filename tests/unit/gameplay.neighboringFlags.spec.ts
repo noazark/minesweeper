@@ -1,4 +1,4 @@
-import { neighboringFlags, FLAG } from '../../lib/gameplay'
+import { neighboringFlags } from '../../lib/gameplay'
 
 describe('neighboringFlags', function () {
   const _ = {

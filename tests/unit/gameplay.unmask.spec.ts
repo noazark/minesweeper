@@ -1,9 +1,9 @@
-import { unmask, MASK, FLAG, BOMB } from '../../lib/gameplay'
+import { unmask} from '../../lib/gameplay'
 
 describe('unmask', function () {
-  const _ = { [MASK]: true, [FLAG]: false, [BOMB]: false }
-  const f = { [MASK]: true, [FLAG]: true, [BOMB]: false }
-  const b = { [MASK]: true, [FLAG]: false, [BOMB]: true }
+  const _ = { isMasked: true, isFlagged: false, isBomb: false }
+  const f = { isMasked: true, isFlagged: true, isBomb: false }
+  const b = { isMasked: true, isFlagged: false, isBomb: true }
 
   const matrix = [
     [_, _, b],

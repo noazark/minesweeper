@@ -1,9 +1,9 @@
-import { unmaskCrawl, MASK, FLAG, BOMB } from '../../lib/gameplay'
+import { unmaskCrawl } from '../../lib/gameplay'
 
 describe('unmaskCrawl', function () {
-  const _ = { [MASK]: true, [FLAG]: false, [BOMB]: false }
-  const f = { [MASK]: true, [FLAG]: true, [BOMB]: false }
-  const b = { [MASK]: true, [FLAG]: false, [BOMB]: true }
+  const _ = { isMasked: true, isFlagged: false, isBomb: false }
+  const f = { isMasked: true, isFlagged: true, isBomb: false }
+  const b = { isMasked: true, isFlagged: false, isBomb: true }
 
   it('is not pathological', function () {
     const matrix = [

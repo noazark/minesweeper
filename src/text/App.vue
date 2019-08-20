@@ -39,9 +39,7 @@ import {
   unmask,
   unmaskAroundFlags,
   validFirstPlay,
-  BOMB,
-  FLAG,
-  MASK
+  PROPS
 } from '../../lib/gameplay';
 import Terminal from './components/Terminal.vue'
 import Tile from './components/Tile.vue'
@@ -108,15 +106,15 @@ export default {
     neighboringBombs,
 
     isBomb(tile) {
-      return isTile(BOMB, tile)
+      return isTile(PROPS.BOMB, tile)
     },
 
     isMasked(tile) {
-      return isTile(MASK, tile)
+      return isTile(PROPS.MASK, tile)
     },
 
     isFlagged(tile) {
-      return isTile(FLAG, tile)
+      return isTile(PROPS.FLAG, tile)
     },
 
     start() {
