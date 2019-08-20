@@ -179,7 +179,7 @@ export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs
       if (!hasBombNeighbors) return difference(unmask(map, pair, um.concat(memo)), um)
 
       const isNotBomb = !isTile(PROPS.BOMB, safeGet(map, pair))
-      if (unmaskBombs || isNotBomb) return memo.concat([{r: pair.r, c: pair.c}])
+      if (unmaskBombs || isNotBomb) return [...memo, pair]
 
       return memo
     }, [])

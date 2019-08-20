@@ -9,9 +9,9 @@
             :isMasked="isMasked(col)"
             :isFlagged="isFlagged(col)"
             :bombCount="neighboringBombs(matrix, {r, c})"
-            :isActive="(cursor[0] == r && cursor[1] == c)"
-            :isPreview="(preview[0] == r && preview[1] == c)"></tile>
-        </template><br :key="`${r}-${c}`">
+            :isActive="(cursor.r == r && cursor.c == c)"
+            :isPreview="(preview.r == r && preview.c == c)"></tile>
+        </template><br :key="`${r}`">
       </template>
     </code>
 
@@ -54,8 +54,8 @@ export default {
 
   data() {
     return {
-      cursor: [],
-      preview: [],
+      cursor: {r: 0, c: 0},
+      preview: {r: 0, c: 0},
       gameSize: [30, 16],
       bombCount: 99,
       matrix: [],
@@ -134,13 +134,13 @@ export default {
         this.bombCount = parseInt(bombCount)
       }
 
-      const [r, c] = this.cursor = [0, 0]
+      this.cursor = {r: 0, c: 0}
 
       do {
         this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], this.bombCount)
-      } while (!validFirstPlay(this.matrix, {r, c}))
+      } while (!validFirstPlay(this.matrix, this.cursor))
 
-      const unmasked = unmask(this.matrix, {r, c})
+      const unmasked = unmask(this.matrix, this.cursor)
       unmasked.forEach((p) => this.doUnmask(p))
 
       this.score = 0
@@ -154,7 +154,7 @@ export default {
     play(val) {
       const isSlashCommand = val[0] === '/'
 
-      this.preview = []
+      this.preview = {r: null, c: null}
 
       if (!isSlashCommand) {
         if (isComplete(this.matrix) || !isPlayable(this.matrix)) {
@@ -196,7 +196,7 @@ export default {
       })
 
       if (!validCommand) {
-        this.preview = []
+        this.preview = {r: null, c: null}
       }
     },
 
@@ -204,7 +204,7 @@ export default {
       step = parseInt(step)
 
       const moves = times(step, () => {
-        let [r, c] = this.cursor
+        let {r, c} = this.cursor
 
         if (dir === 'up' || dir === 'u') r -= 1
         if (dir === 'down' || dir === 'd') r += 1
@@ -212,7 +212,7 @@ export default {
         if (dir === 'right' || dir === 'r') c += 1
 
         if (safeGet(this.matrix, {r, c})) {
-          this.cursor = [r, c]
+          this.cursor = {r, c}
           const unmasked = unmask(this.matrix, {r, c}).filter(this.doUnmask)
           return unmasked.length
         }
@@ -223,8 +223,7 @@ export default {
 
     cmdPreview(cmd, dir, step=1) {
       step = parseInt(step)
-
-      let [r, c] = this.cursor
+      let {r, c} = this.cursor
 
       if (dir === 'up' || dir === 'u') r -= step
       if (dir === 'down' || dir === 'd') r += step
@@ -232,9 +231,9 @@ export default {
       if (dir === 'right' || dir === 'r') c += step
 
       if (safeGet(this.matrix, {r, c})) {
-        this.preview = [r, c]
+        this.preview = {r, c}
       } else {
-        this.preview = []
+        this.preview = {r: null, c: null}
       }
     },
 
@@ -248,8 +247,7 @@ export default {
 
     flag (cmd, dir, step=1) {
       step = parseInt(step)
-
-      let [r, c] = this.cursor
+      let {r, c} = this.cursor
 
       if (dir === 'up' || dir === 'u') r -= step
       if (dir === 'down' || dir === 'd') r += step
@@ -270,9 +268,7 @@ export default {
     },
 
     sweep () {
-      let [r, c] = this.cursor
-
-      const unmasked = unmaskAroundFlags(this.matrix, {r, c}).filter(this.doUnmask)
+      const unmasked = unmaskAroundFlags(this.matrix, this.cursor).filter(this.doUnmask)
       return `${unmasked.length} cleared`
     },
 
