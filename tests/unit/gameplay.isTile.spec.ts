@@ -19,7 +19,7 @@ describe('isTile', function () {
 
   it('returns false if the tile is undefined', function () {
     const matrix = [[]]
-    const el = safeGet(matrix, 0, 0)
+    const el = safeGet(matrix, {r: 0, c: 0})
     expect(isTile(PROPS.BOMB, el)).toBe(false)
   })
 })
