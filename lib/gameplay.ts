@@ -313,9 +313,8 @@ export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs
     }, [])
 }
 
-// TODO: convert to offset to unbind datamodel from rectangular grids
-export function validFirstPlay (map:Map, p:MapPoint) {
-  const offset = pointToIndex(map, p)
+export function validFirstPlay (map:Map, offset:number) {
+  const p = indexToPoint(map, offset)
 
   return !(countNeighbors(map, offset, PROPS.BOMB) > 0) && !isCell(map, p, PROPS.BOMB)
 }

@@ -9,14 +9,14 @@ describe('validFirstPlay', () => {
   ])
 
   it('returns true if tile is alone', () => {
-    expect(validFirstPlay(matrix, {r: 0, c: 0})).toBe(true)
+    expect(validFirstPlay(matrix, 0)).toBe(true)
   })
 
   it('returns false if tile has neighboring bombs', () => {
-    expect(validFirstPlay(matrix, {r: 0, c: 1})).toBe(false)
+    expect(validFirstPlay(matrix, 1)).toBe(false)
   })
 
   it('returns false if tile is a bomb', () => {
-    expect(validFirstPlay(matrix, {r: 0, c: 2})).toBe(false)
+    expect(validFirstPlay(matrix, 2)).toBe(false)
   })
 })

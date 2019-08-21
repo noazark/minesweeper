@@ -143,13 +143,12 @@ export default {
       }
 
       this.cursor = 0
-      let cursorPoint
 
       do {
         this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], bombCount)
-        cursorPoint = indexToPoint(this.matrix, this.cursor)
-      } while (!validFirstPlay(this.matrix, cursorPoint))
+      } while (!validFirstPlay(this.matrix, this.cursor))
 
+      const cursorPoint = indexToPoint(this.matrix, this.cursor)
       const unmasked = unmask(this.matrix, cursorPoint)
       unmasked.forEach((p) => this.doUnmask(p))
 
