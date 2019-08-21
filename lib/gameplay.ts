@@ -175,6 +175,13 @@ export function safeGet (map:Map, p:MapPoint) {
   }
 }
 
+export function toggle (map:Map, p:MapPoint, prop:PROPS, val?:boolean) {
+  const el = getCell(map, p)
+  const newVal = val != null ? val : !isTile(prop, el)
+  el[prop] = newVal
+  return newVal
+}
+
 export function toggleFlag (map:Map, p:MapPoint) {
   const el = getCell(map, p)
   if (isTile(PROPS.MASK, el)) {

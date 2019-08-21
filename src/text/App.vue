@@ -25,6 +25,7 @@
 
 <script>
 import {
+  toggle,
   toArray,
   indexToPoint,
   getCell,
@@ -59,7 +60,7 @@ export default {
       preview: {r: 0, c: 0},
       gameSize: [30, 16],
       bombCount: 99,
-      matrix: null,
+      matrix: {},
       playing: true,
       score: 0,
       output: '',
@@ -305,11 +306,8 @@ export default {
     },
 
     doUnmask (p) {
-      const tile = getCell(this.matrix, p)
-      if (tile.isMasked) {
-        tile.isMasked = false
-        return true
-      }
+      toggle(this.matrix, p, PROPS.MASK, false)
+      return true
     }
   }
 }
