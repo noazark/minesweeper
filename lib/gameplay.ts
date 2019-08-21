@@ -75,7 +75,7 @@ export function toggleBit(num:Uint32Array, bit:number, val?:boolean){
 
 function countNeighbors (map:Map, p:MapPoint, prop:PROPS) {
   return neighbors(map, p)
-    .map((pair) => get(getCell(map, pair), prop) ? 1 : 0)
+    .map((pair) => isCell(map, pair, prop) ? 1 : 0)
     .reduce((m:number, n:number) => m + n, 0)
 }
 
