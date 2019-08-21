@@ -1,6 +1,6 @@
 import { neighboringBombs, createMap } from '../../lib/gameplay'
 
-describe('neighboringBombs', function () {
+describe('neighboringBombs', () => {
   const _ = {
     isMasked: false,
     isBomb: false,
@@ -8,7 +8,7 @@ describe('neighboringBombs', function () {
   }
   const b = { ..._, isBomb: true }
 
-  it('returns the number of flags surrounding an tile', function () {
+  it('returns the number of flags surrounding an tile', () => {
     /* eslint-disable standard/array-bracket-even-spacing */
     const matrix = createMap([
       [b, _, b],
@@ -23,7 +23,7 @@ describe('neighboringBombs', function () {
     expect(neighboringBombs(matrix, {r: 2, c: 0})).toEqual(0)
   })
 
-  it('returns just the flag count of the siblings, not including self', function () {
+  it('returns just the flag count of the siblings, not including self', () => {
     /* eslint-disable standard/array-bracket-even-spacing */
     const matrix = createMap([
       [_, _, _],

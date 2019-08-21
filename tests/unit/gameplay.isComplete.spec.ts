@@ -1,6 +1,6 @@
 import { isComplete, createMap } from '../../lib/gameplay'
 
-describe('isComplete', function () {
+describe('isComplete', () => {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }
   const o = { ..._, isMasked: false }
   const f = { ..._, isFlagged: true }
@@ -8,7 +8,7 @@ describe('isComplete', function () {
   const B = { ..._, isFlagged: true, isBomb: true }
   const x = { ..._, isMasked: false, isBomb: true }
 
-  it('returns true if only masked bombs are left', function () {
+  it('returns true if only masked bombs are left', () => {
     const matrix = createMap([
       [o, o, b],
       [o, o, o],
@@ -18,7 +18,7 @@ describe('isComplete', function () {
     expect(isComplete(matrix)).toBe(true)
   })
 
-  it('returns true if only masked bombs or flagged bombs are left', function () {
+  it('returns true if only masked bombs or flagged bombs are left', () => {
     const matrix = createMap([
       [o, o, b],
       [o, o, o],
@@ -28,7 +28,7 @@ describe('isComplete', function () {
     expect(isComplete(matrix)).toBe(true)
   })
 
-  it('returns false if any bombs are unmasked', function () {
+  it('returns false if any bombs are unmasked', () => {
     const matrix = createMap([
       [o, o, b],
       [o, x, o],
@@ -38,7 +38,7 @@ describe('isComplete', function () {
     expect(isComplete(matrix)).toBe(false)
   })
 
-  it('returns false if a tile is incorrectly flagged', function () {
+  it('returns false if a tile is incorrectly flagged', () => {
     const matrix = createMap([
       [o, o, b],
       [o, o, o],
@@ -48,7 +48,7 @@ describe('isComplete', function () {
     expect(isComplete(matrix)).toBe(false)
   })
 
-  it('returns false if a tile is left masked', function () {
+  it('returns false if a tile is left masked', () => {
     const matrix = createMap([
       [_, o, b],
       [o, o, o],

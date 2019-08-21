@@ -1,6 +1,6 @@
 import { neighboringFlags, createMap } from '../../lib/gameplay'
 
-describe('neighboringFlags', function () {
+describe('neighboringFlags', () => {
   const _ = {
     isMasked: false,
     isBomb: false,
@@ -8,7 +8,7 @@ describe('neighboringFlags', function () {
   }
   const f = { ..._, isFlagged: true }
 
-  it('returns the number of flags surrounding an tile', function () {
+  it('returns the number of flags surrounding an tile', () => {
     /* eslint-disable standard/array-bracket-even-spacing */
     const matrix = createMap([
       [f, _, _],
@@ -20,7 +20,7 @@ describe('neighboringFlags', function () {
     expect(neighboringFlags(matrix, {r: 1, c: 1})).toEqual(3)
   })
 
-  it('returns just the flag count of the siblings, not including self', function () {
+  it('returns just the flag count of the siblings, not including self', () => {
     /* eslint-disable standard/array-bracket-even-spacing */
     const matrix = createMap([
       [_, _, _],

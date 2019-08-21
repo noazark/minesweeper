@@ -1,11 +1,11 @@
 import { unmaskCrawl, createMap } from '../../lib/gameplay'
 
-describe('unmaskCrawl', function () {
+describe('unmaskCrawl', () => {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }
   const f = { ..._, isFlagged: true }
   const b = { ..._, isBomb: true }
 
-  it('is not pathological', function () {
+  it('is not pathological', () => {
     const matrix = createMap([
       [_, _, _],
       [_, _, _],
@@ -15,7 +15,7 @@ describe('unmaskCrawl', function () {
     expect(unmaskCrawl(matrix, {r: 1, c: 1}).length).toEqual(9)
   })
 
-  it('returns immediately on flagged tile', function () {
+  it('returns immediately on flagged tile', () => {
     const matrix = createMap([
       [_, _, b],
       [_, _, _],
@@ -24,7 +24,7 @@ describe('unmaskCrawl', function () {
     expect(unmaskCrawl(matrix, {r: 2, c: 2}).length).toEqual(0)
   })
 
-  it('does not return flagged neighbors', function () {
+  it('does not return flagged neighbors', () => {
     const matrix = createMap([
       [_, _, b],
       [_, _, _],
@@ -33,7 +33,7 @@ describe('unmaskCrawl', function () {
     expect(unmaskCrawl(matrix, {r: 2, c: 1})).not.toContainEqual({r: 2, c: 2})
   })
 
-  it('does not repeat previously unmasked neighbors', function () {
+  it('does not repeat previously unmasked neighbors', () => {
     const unmasked = {r: 2, c: 0}
     const matrix = createMap([
       [_, _, b],
@@ -43,7 +43,7 @@ describe('unmaskCrawl', function () {
     expect(unmaskCrawl(matrix, {r: 2, c: 1}, [unmasked])).not.toContainEqual(unmasked)
   })
 
-  it('crawls the whole map if neighbor has no bomb neighbors', function () {
+  it('crawls the whole map if neighbor has no bomb neighbors', () => {
     const matrix = createMap([
       [_, _, b],
       [_, _, _],
@@ -59,7 +59,7 @@ describe('unmaskCrawl', function () {
     expect(unmaskCrawl(matrix, {r: 2, c: 0})).toContainEqual({r: 2, c: 1})
   })
 
-  it('includes bombs if bombs should be unmasked', function () {
+  it('includes bombs if bombs should be unmasked', () => {
     const matrix = createMap([
       [_, _, b],
       [_, _, _],
@@ -69,7 +69,7 @@ describe('unmaskCrawl', function () {
     expect(unmaskCrawl(matrix, {r: 1, c: 1}, [], true)).toContainEqual({r: 0, c: 2})
   })
 
-  it('does not unmask distant bombs', function () {
+  it('does not unmask distant bombs', () => {
     const matrix = createMap([
       [_, _, b],
       [_, _, _],
@@ -79,7 +79,7 @@ describe('unmaskCrawl', function () {
     expect(unmaskCrawl(matrix, {r: 2, c: 0}, [], true)).not.toContainEqual({r: 0, c: 2})
   })
 
-  it('returns neighbor if it is not a bomb, but neighbor has bombs', function () {
+  it('returns neighbor if it is not a bomb, but neighbor has bombs', () => {
     const matrix = createMap([
       [_, _, _],
       [_, _, _],

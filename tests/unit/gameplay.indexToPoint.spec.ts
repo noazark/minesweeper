@@ -1,6 +1,6 @@
 import { indexToPoint, createMap } from '../../lib/gameplay'
 
-describe('indexToPoint', function () {
+describe('indexToPoint', () => {
   const t = {
     isMasked: false,
     isBomb: false,
@@ -13,7 +13,7 @@ describe('indexToPoint', function () {
     [t, t, t, t, t],
   ])
 
-  it('returns the point for any given index', function () {
+  it('returns the point for any given index', () => {
     expect(indexToPoint(matrix, 0)).toEqual({r: 0, c: 0})
     expect(indexToPoint(matrix, 1)).toEqual({r: 0, c: 1})
     expect(indexToPoint(matrix, 2)).toEqual({r: 0, c: 2})

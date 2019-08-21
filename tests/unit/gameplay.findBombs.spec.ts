@@ -1,6 +1,6 @@
 import { findBombs, createMap } from '../../lib/gameplay'
 
-describe('findBombs', function () {
+describe('findBombs', () => {
   const _ = {
     isBomb: false,
     isFlagged: false,
@@ -8,7 +8,7 @@ describe('findBombs', function () {
   }
   const b = { ..._, isBomb: true }
 
-  it('returns all bomb coords', function () {
+  it('returns all bomb coords', () => {
     const matrix = createMap([
       [_, _, b],
       [_, b, _],
