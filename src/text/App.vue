@@ -8,8 +8,8 @@
           :isMasked="isMasked(matrix, i)"
           :isFlagged="isFlagged(matrix, i)"
           :bombCount="neighboringBombs(matrix, i)"
-          :isActive="(cursor.r == indexToPoint(matrix, i).r && cursor.c == indexToPoint(matrix, i).c)"
-          :isPreview="(preview.r == indexToPoint(matrix, i).r && preview.c == indexToPoint(matrix, i).c)"></tile>
+          :isActive="cursor === i"
+          :isPreview="preview != null && preview === i"></tile>
       </template>
     </code>
 
@@ -39,7 +39,8 @@ import {
   unmask,
   unmaskAroundFlags,
   validFirstPlay,
-  PROPS
+  PROPS,
+  pointToIndex
 } from '../../lib/gameplay';
 import Terminal from './components/Terminal.vue'
 import Tile from './components/Tile.vue'
@@ -54,8 +55,8 @@ export default {
 
   data() {
     return {
-      cursor: {r: 0, c: 0},
-      preview: {r: 0, c: 0},
+      cursor: 0,
+      preview: null,
       gameSize: [10, 10],
       matrix: {},
       playing: true,
@@ -142,13 +143,15 @@ export default {
         bombCount = parseInt(bombCount)
       }
 
-      this.cursor = {r: 0, c: 0}
+      this.cursor = 0
+      let cursorPoint
 
       do {
         this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], bombCount)
-      } while (!validFirstPlay(this.matrix, this.cursor))
+        cursorPoint = indexToPoint(this.matrix, this.cursor)
+      } while (!validFirstPlay(this.matrix, cursorPoint))
 
-      const unmasked = unmask(this.matrix, this.cursor)
+      const unmasked = unmask(this.matrix, cursorPoint)
       unmasked.forEach((p) => this.doUnmask(p))
 
       this.score = 0
@@ -162,7 +165,7 @@ export default {
     play(val) {
       const isSlashCommand = val[0] === '/'
 
-      this.preview = {r: null, c: null}
+      this.preview = null
 
       if (!isSlashCommand) {
         if (isComplete(this.matrix) || !isPlayable(this.matrix)) {
@@ -204,7 +207,7 @@ export default {
       })
 
       if (!validCommand) {
-        this.preview = {r: null, c: null}
+        this.preview = null
       }
     },
 
@@ -212,7 +215,7 @@ export default {
       step = parseInt(step)
 
       const moves = times(step, () => {
-        let {r, c} = this.cursor
+        let {r, c} = indexToPoint(this.matrix, this.cursor)
 
         if (dir === 'up' || dir === 'u') r -= 1
         if (dir === 'down' || dir === 'd') r += 1
@@ -220,7 +223,7 @@ export default {
         if (dir === 'right' || dir === 'r') c += 1
 
         if (isValidPoint(this.matrix, {r, c})) {
-          this.cursor = {r, c}
+          this.cursor = pointToIndex(this.matrix, {r, c})
           const unmasked = unmask(this.matrix, {r, c}).filter(this.doUnmask)
           return unmasked.length
         }
@@ -231,7 +234,7 @@ export default {
 
     cmdPreview(cmd, dir, step=1) {
       step = parseInt(step)
-      let {r, c} = this.cursor
+      let {r, c} = indexToPoint(this.matrix, this.cursor)
 
       if (dir === 'up' || dir === 'u') r -= step
       if (dir === 'down' || dir === 'd') r += step
@@ -239,9 +242,9 @@ export default {
       if (dir === 'right' || dir === 'r') c += step
 
       if (isValidPoint(this.matrix, {r, c})) {
-        this.preview = {r, c}
+        this.preview = pointToIndex(this.matrix, {r, c})
       } else {
-        this.preview = {r: null, c: null}
+        this.preview = null
       }
     },
 
@@ -255,7 +258,7 @@ export default {
 
     flag (cmd, dir, step=1) {
       step = parseInt(step)
-      let {r, c} = this.cursor
+      let {r, c} = indexToPoint(this.matrix, this.cursor)
 
       if (dir === 'up' || dir === 'u') r -= step
       if (dir === 'down' || dir === 'd') r += step
@@ -276,7 +279,8 @@ export default {
     },
 
     sweep () {
-      const unmasked = unmaskAroundFlags(this.matrix, this.cursor).filter(this.doUnmask)
+      const p = indexToPoint(this.matrix, this.cursor)
+      const unmasked = unmaskAroundFlags(this.matrix, p).filter(this.doUnmask)
       return `${unmasked.length} cleared`
     },
 
@@ -310,7 +314,8 @@ export default {
     },
 
     doUnmask (p) {
-      toggle(this.matrix, p, PROPS.MASK, false)
+      const offset = pointToIndex(this.matrix, p)
+      toggle(this.matrix, offset, PROPS.MASK, false)
       return true
     }
   }

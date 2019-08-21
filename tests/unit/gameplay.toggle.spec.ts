@@ -1,4 +1,4 @@
-import { toggle, PROPS, isCell } from '../../lib/gameplay'
+import { toggle, PROPS, isCell, indexToPoint } from '../../lib/gameplay'
 import { createMap, _} from './util'
 
 describe('toggle', () => {
@@ -6,13 +6,14 @@ describe('toggle', () => {
     const matrix = createMap([
       [_],
     ])
-    const p = {r: 0, c: 0}
+    const offset = 0
+    const p = indexToPoint(matrix, offset)
     const prop = PROPS.MASK
 
-    expect(toggle(matrix, p, prop)).toBeFalsy()
+    expect(toggle(matrix, offset, prop)).toBeFalsy()
     expect(isCell(matrix, p, prop)).toBeFalsy()
 
-    expect(toggle(matrix, p, prop)).toBeTruthy()
+    expect(toggle(matrix, offset, prop)).toBeTruthy()
     expect(isCell(matrix, p, prop)).toBeTruthy()
   })
 
@@ -20,19 +21,20 @@ describe('toggle', () => {
     const matrix = createMap([
       [_, _],
     ])
-    const p = {r: 0, c: 0}
+    const offset = 0
+    const p = indexToPoint(matrix, offset)
     const prop = PROPS.MASK
 
-    expect(toggle(matrix, p, prop, true)).toBeTruthy()
+    expect(toggle(matrix, offset, prop, true)).toBeTruthy()
     expect(isCell(matrix, p, prop)).toBeTruthy()
 
-    expect(toggle(matrix, p, prop, true)).toBeTruthy()
+    expect(toggle(matrix, offset, prop, true)).toBeTruthy()
     expect(isCell(matrix, p, prop)).toBeTruthy()
 
-    expect(toggle(matrix, p, prop, false)).toBeFalsy()
+    expect(toggle(matrix, offset, prop, false)).toBeFalsy()
     expect(isCell(matrix, p, prop)).toBeFalsy()
 
-    expect(toggle(matrix, p, prop, false)).toBeFalsy()
+    expect(toggle(matrix, offset, prop, false)).toBeFalsy()
     expect(isCell(matrix, p, prop)).toBeFalsy()
   })
 })

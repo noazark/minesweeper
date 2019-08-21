@@ -41,10 +41,10 @@ export function initializeMap (w:number, h:number, bc?:number) {
   }
 
   const map = buildField(w, h)
-  const bombs = placeBombs(map, bc)
+  const bombs = _placeBombs(map, bc)
 
-  bombs.forEach((bomb) => {
-    toggle(map, bomb, PROPS.BOMB, true)
+  bombs.forEach((offset) => {
+    toggle(map, offset, PROPS.BOMB, true)
   })
 
   return map
@@ -69,19 +69,18 @@ export function buildField (w:number, h:number) {
   return map
 }
 
-function placeBombs (map:Map, bc:number) {
+function _placeBombs (map:Map, bc:number) {
   const {w, h} = map
-  const bombs:Neighbors = []
+  const bombs:number[] = []
 
   times(bc, () => {
-    let r:number, c:number
+    let i:number
 
     do {
-      r = Math.floor(Math.random() * h)
-      c = Math.floor(Math.random() * w)
-    } while (bombs.some((bomb) => bomb.r === r && bomb.c === c))
+      i = Math.floor(Math.random() * w * h)
+    } while (bombs.indexOf(i) >= 0)
 
-    bombs.push({r, c})
+    bombs.push(i)
   })
 
   return bombs
@@ -138,11 +137,9 @@ export function toggleBit(num:Uint32Array, offset:number, val?:boolean){
   }
 }
 
-export function toggle (map:Map, p:MapPoint, prop:PROPS, val?:boolean) {
-  const i = pointToIndex(map, p)
-
-  toggleBit(map[prop], i, val)
-  return testBit(map[prop], i)
+export function toggle (map:Map, offset:number, prop:PROPS, val?:boolean) {
+  toggleBit(map[prop], offset, val)
+  return testBit(map[prop], offset)
 }
 
 export function toggleFlag (map:Map, p:MapPoint) {
