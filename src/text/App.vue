@@ -57,7 +57,6 @@ export default {
       cursor: {r: 0, c: 0},
       preview: {r: 0, c: 0},
       gameSize: [10, 10],
-      bombCount: 10,
       matrix: {},
       playing: true,
       score: 0,
@@ -66,7 +65,7 @@ export default {
         [/^m(?:ove)?\s*?(u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)(?:\s*(\d+))?/i, 'move', 'move right 5'],
         [/^f(?:lag)?\s*?(u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)(?:\s*(\d+))?/i, 'flag', 'flag down'],
         [/^s(weep)?/i, 'sweep', 'sweep'],
-        [/^\/reset(?: (\d+) (\d+) (\d+))?$/, 'restart', '/reset 10 10 10'],
+        [/^\/reset(?: (\d+) (\d+)(?: (\d+))?)?$/, 'restart', '/reset 10 10 10'],
         [/^\/score/, 'showScore', '/score'],
         [/^\/flags/, 'showFlagCount', '/flags'],
         [/^\/clear/, 'clear', '/clear'],
@@ -140,13 +139,13 @@ export default {
       }
 
       if (bombCount) {
-        this.bombCount = parseInt(bombCount)
+        bombCount = parseInt(bombCount)
       }
 
       this.cursor = {r: 0, c: 0}
 
       do {
-        this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], this.bombCount)
+        this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], bombCount)
       } while (!validFirstPlay(this.matrix, this.cursor))
 
       const unmasked = unmask(this.matrix, this.cursor)
@@ -273,7 +272,7 @@ export default {
     },
 
     showFlagCount() {
-      return `${countFlags(this.matrix)} of ${this.bombCount}`
+      return `${countFlags(this.matrix)} of ${findBombs(this.matrix).length}`
     },
 
     sweep () {
@@ -292,7 +291,7 @@ export default {
         This game is not timed, so have fun and explore. The goal is to
         uncover all the bombs, "*", hidden underneith the masked tiles, "o".
 
-        There are currently ${this.bombCount} bombs randomly placed underneith ${this.gameSize[0] * this.gameSize[1]}
+        There are currently ${findBombs(this.matrix).length} bombs randomly placed underneith ${this.gameSize[0] * this.gameSize[1]}
         tiles. You are welcome to change the size of the game by typing something like:
 
           /reset 15 10 20

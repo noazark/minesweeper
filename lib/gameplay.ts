@@ -28,9 +28,18 @@ export interface Map {
  *
  * @param w Map width
  * @param h Map height
- * @param bc Number of bombs to place in map.
+ * @param bc Number of bombs to place in map. Defaults to 20% the size of the
+ *           map.
  */
-export function initializeMap (w:number, h:number, bc:number) {
+export function initializeMap (w:number, h:number, bc?:number) {
+  if (bc == null) {
+    bc = Math.floor(w * h * 0.2)
+  }
+
+  if (w * h <= bc || bc < 0) {
+    throw new Error('invalid map')
+  }
+
   const map = buildField(w, h)
   const bombs = placeBombs(map, bc)
 
