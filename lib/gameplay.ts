@@ -1,4 +1,4 @@
-import {difference, flatten, times, get} from 'lodash'
+import {difference, times} from 'lodash'
 
 const HUNK_SIZE = 32
 
@@ -183,7 +183,7 @@ export function toArray (map:Map) {
 }
 
 export function getCell (map:Map, p:MapPoint) {
-  if (p.r >= 0 && p.c >= 0  && p.r < map.h && p.c < map.w) {
+  if (isValidPoint(map, p)) {
     const i = pointToIndex(map, p)
     return {
       [PROPS.BOMB]: testBit(map[PROPS.BOMB], i),
@@ -217,14 +217,12 @@ export function toggleFlag (map:Map, p:MapPoint) {
 }
 
 export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {
-  const el = isValidPoint(map, p)
   if (!isCell(map, p, PROPS.FLAG)) um.push(p)
   if (isCell(map, p, PROPS.BOMB) || countNeighbors(map, p, PROPS.BOMB) > 0) return um
   return um.concat(unmaskCrawl(map, p, um))
 }
 
 export function unmaskAroundFlags (map:Map, p:MapPoint) {
-  const el = isValidPoint(map, p)
   if (!isCell(map, p, PROPS.MASK) && countNeighbors(map, p, PROPS.FLAG) >= countNeighbors(map, p, PROPS.BOMB)) {
     return unmaskCrawl(map, p, [], true)
   } else {
@@ -233,8 +231,6 @@ export function unmaskAroundFlags (map:Map, p:MapPoint) {
 }
 
 export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs = false):Neighbors {
-  const el = isValidPoint(map, p)
-
   if (isCell(map, p, PROPS.FLAG)) return []
 
   return neighbors(map, p)
@@ -253,6 +249,5 @@ export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs
 }
 
 export function validFirstPlay (map:Map, p:MapPoint) {
-  const el = isValidPoint(map, p)
   return !(countNeighbors(map, p, PROPS.BOMB) > 0) && !isCell(map, p, PROPS.BOMB)
 }
