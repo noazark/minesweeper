@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test": "vue-cli-service test:unit"
+    "test": "vue-cli-service test:unit",
+    "memperf": "ts-node -O '{\"module\":\"commonjs\", \"types\": [\"node\"]}' memperf.ts"
   },
   "dependencies": {
     "common-tags": "^1.8.0",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.17",
     "@types/lodash": "^4.14.137",
+    "@types/node": "^12.7.2",
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-plugin-eslint": "^3.10.0",
     "@vue/cli-plugin-typescript": "^3.10.0",
@@ -34,6 +36,7 @@
     "postcss-loader": "^3.0.0",
     "sass": "^1.22.10",
     "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0",
     "typescript": "^3.5.3",
     "vue-template-compiler": "^2.6.10"
   },
