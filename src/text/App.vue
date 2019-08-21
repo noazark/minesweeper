@@ -265,8 +265,11 @@ export default {
       if (dir === 'left' || dir === 'l') c -= step
       if (dir === 'right' || dir === 'r') c += step
 
-      if (isValidPoint(this.matrix, {r, c})) {
-        return toggleFlag(this.matrix, {r, c}) ? 'OK' : 'Flag removed'
+      const flagP = {r, c}
+      const flagOffset = pointToIndex(this.matrix, flagP)
+
+      if (isValidPoint(this.matrix, flagP)) {
+        return toggleFlag(this.matrix, flagOffset) ? 'OK' : 'Flag removed'
       }
     },
 

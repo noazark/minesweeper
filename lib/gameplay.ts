@@ -142,14 +142,18 @@ export function toggle (map:Map, offset:number, prop:PROPS, val?:boolean) {
   return testBit(map[prop], offset)
 }
 
-export function toggleFlag (map:Map, p:MapPoint) {
-  const i = pointToIndex(map, p)
-
-  if (testBit(map[PROPS.MASK], i)) {
-    toggleBit(map[PROPS.FLAG], i)
+/**
+ * A special toggle case where you are not allowed to flag unmasked cells.
+ *
+ * @param map
+ * @param offset
+ */
+export function toggleFlag (map:Map, offset:number) {
+  if (testBit(map[PROPS.MASK], offset)) {
+    toggleBit(map[PROPS.FLAG], offset)
   }
 
-  return testBit(map[PROPS.FLAG], i)
+  return testBit(map[PROPS.FLAG], offset)
 }
 
 export function isCell (map:Map, p:MapPoint, prop:PROPS) {
