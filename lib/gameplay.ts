@@ -25,8 +25,8 @@ export interface Map {
   [PROPS.BOMB]: Uint32Array
   [PROPS.FLAG]: Uint32Array
   [PROPS.MASK]: Uint32Array
-  w: number
-  h: number
+  readonly w: number
+  readonly h: number
 }
 
 export function initializeMap (w:number, h:number, bc:number) {
