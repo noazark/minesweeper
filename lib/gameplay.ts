@@ -97,12 +97,12 @@ function placeBombs (map:Map, bc:number) {
   return bombs
 }
 
-export function isCell (prop:PROPS, el:Cell|undefined) {
-  return !!el && get(el, prop)
+export function isCell (map:Map, p:MapPoint, prop:PROPS) {
+  return testBit(map[prop], pointToIndex(map, p))
 }
 
 export function countFlags (map:Map) {
-  return toArray(map).map((cell) => isCell(PROPS.FLAG, cell) ? 1 : 0).reduce((m:number, n) => m + n, 0)
+  return times(map.w*map.h, Number).map((i) => isCell(map, indexToPoint(map, i), PROPS.FLAG) ? 1 : 0).reduce((m:number, n) => m + n, 0)
 }
 
 export function createMap (arr: Array<Array<Cell>>):Map {
@@ -132,19 +132,19 @@ export function initializeMap (w:number, h:number, bc:number) {
 }
 
 export function isComplete (map:Map) {
-  return !toArray(map).some((cell) => {
-    return !isPlayable(map) || !isCell(PROPS.BOMB, cell) && isCell(PROPS.FLAG, cell) || !isCell(PROPS.BOMB, cell) && isCell(PROPS.MASK, cell)
+  return !times(map.w*map.h, Number).some((i) => {
+    return !isPlayable(map) || !isCell(map, indexToPoint(map, i), PROPS.BOMB) && isCell(map, indexToPoint(map, i), PROPS.FLAG) || !isCell(map, indexToPoint(map, i), PROPS.BOMB) && isCell(map, indexToPoint(map, i), PROPS.MASK)
   })
 }
 
 export function isPlayable (map:Map) {
-  return !toArray(map).some((cell) => isCell(PROPS.BOMB, cell) && !isCell(PROPS.MASK, cell))
+  return !times(map.w*map.h, Number).some((i) => isCell(map, indexToPoint(map, i), PROPS.BOMB) && !isCell(map, indexToPoint(map, i), PROPS.MASK))
 }
 
 export function findBombs (map:Map) {
-  return toArray(map).reduce(
-    (result:Neighbors, el, i) => {
-      if (isCell(PROPS.BOMB, el)) {
+  return times(map.w*map.h, Number).reduce(
+    (result:Neighbors, i) => {
+      if (isCell(map, indexToPoint(map, i), PROPS.BOMB)) {
         result.push(indexToPoint(map, i))
       }
       return result
@@ -172,7 +172,7 @@ export function neighbors (map:Map, p:MapPoint) {
     const [rd, cd] = neighbor
     const point = {r: p.r + rd, c: p.c + cd}
 
-    if (safeGet(map, point)) {
+    if (isValidPoint(map, point)) {
       neighbors = [...neighbors, point]
     }
 
@@ -218,14 +218,8 @@ export function getCell (map:Map, p:MapPoint) {
   }
 }
 
-export function safeGet (map:Map, p:MapPoint) {
-  try {
-    return getCell(map, p)
-  } catch (e) {
-    if (e.message === 'requested cell does not exist') {
-      return undefined
-    }
-  }
+export function isValidPoint (map:Map, p:MapPoint) {
+  return p.r >= 0 && p.c >= 0  && p.r < map.h && p.c < map.w
 }
 
 export function toggle (map:Map, p:MapPoint, prop:PROPS, val?:boolean) {
@@ -246,15 +240,15 @@ export function toggleFlag (map:Map, p:MapPoint) {
 }
 
 export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {
-  const el = safeGet(map, p)
-  if (!isCell(PROPS.FLAG, el)) um.push(p)
-  if (isCell(PROPS.BOMB, el) || neighboringBombs(map, p) > 0) return um
+  const el = isValidPoint(map, p)
+  if (!isCell(map, p, PROPS.FLAG)) um.push(p)
+  if (isCell(map, p, PROPS.BOMB) || neighboringBombs(map, p) > 0) return um
   return um.concat(unmaskCrawl(map, p, um))
 }
 
 export function unmaskAroundFlags (map:Map, p:MapPoint) {
-  const el = safeGet(map, p)
-  if (!isCell(PROPS.MASK, el) && neighboringFlags(map, p) >= neighboringBombs(map, p)) {
+  const el = isValidPoint(map, p)
+  if (!isCell(map, p, PROPS.MASK) && neighboringFlags(map, p) >= neighboringBombs(map, p)) {
     return unmaskCrawl(map, p, [], true)
   } else {
     return []
@@ -262,19 +256,19 @@ export function unmaskAroundFlags (map:Map, p:MapPoint) {
 }
 
 export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs = false):Neighbors {
-  const el = safeGet(map, p)
+  const el = isValidPoint(map, p)
 
-  if (isCell(PROPS.FLAG, el)) return []
+  if (isCell(map, p, PROPS.FLAG)) return []
 
   return neighbors(map, p)
     .reduce((memo:Neighbors, pair:MapPoint) => {
       const previouslyUnmasked = um.concat(memo).some((pair0) => pair0.r === pair.r && pair0.c === pair.c)
-      if (isCell(PROPS.FLAG, safeGet(map, pair)) || previouslyUnmasked) return memo
+      if (isCell(map, pair, PROPS.FLAG) || previouslyUnmasked) return memo
 
       const hasBombNeighbors = neighboringBombs(map, pair) > 0
       if (!hasBombNeighbors) return difference(unmask(map, pair, um.concat(memo)), um)
 
-      const isNotBomb = !isCell(PROPS.BOMB, safeGet(map, pair))
+      const isNotBomb = !isCell(map, pair, PROPS.BOMB)
       if (unmaskBombs || isNotBomb) return [...memo, pair]
 
       return memo
@@ -282,6 +276,6 @@ export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs
 }
 
 export function validFirstPlay (map:Map, p:MapPoint) {
-  const el = safeGet(map, p)
-  return !(neighboringBombs(map, p) > 0) && !isCell(PROPS.BOMB, el)
+  const el = isValidPoint(map, p)
+  return !(neighboringBombs(map, p) > 0) && !isCell(map, p, PROPS.BOMB)
 }

@@ -1,13 +1,13 @@
 <template>
   <div class="txt-app">
     <code class="map">
-      <template v-for="(el, i) in toArray(matrix)" >
+      <template v-for="(el, i) in times(matrix.w*matrix.h, Number)" >
         <tile
           :key="i"
-          :isBomb="isBomb(el)"
-          :isMasked="isMasked(el)"
-          :isFlagged="isFlagged(el)"
-          :bombCount="neighboringBombs(matrix, indexToPoint(matrix, i))"
+          :isBomb="isBomb(matrix, i)"
+          :isMasked="isMasked(matrix, i)"
+          :isFlagged="isFlagged(matrix, i)"
+          :bombCount="neighboringBombs(matrix, i)"
           :isActive="(cursor.r == indexToPoint(matrix, i).r && cursor.c == indexToPoint(matrix, i).c)"
           :isPreview="(preview.r == indexToPoint(matrix, i).r && preview.c == indexToPoint(matrix, i).c)"></tile>
       </template>
@@ -26,7 +26,6 @@
 <script>
 import {
   toggle,
-  toArray,
   indexToPoint,
   countFlags,
   findBombs,
@@ -57,7 +56,7 @@ export default {
     return {
       cursor: {r: 0, c: 0},
       preview: {r: 0, c: 0},
-      gameSize: [128, 64],
+      gameSize: [32, 64],
       bombCount: 1024,
       matrix: {},
       playing: true,
@@ -104,20 +103,27 @@ export default {
   },
 
   methods: {
-    toArray,
+    times,
     indexToPoint,
-    neighboringBombs,
 
-    isBomb(tile) {
-      return isCell(PROPS.BOMB, tile)
+    neighboringBombs(map, i) {
+      const p = indexToPoint(map, i)
+      return countNeighbors(map, p, PROPS.BOMB)
     },
 
-    isMasked(tile) {
-      return isCell(PROPS.MASK, tile)
+    isBomb(map, i) {
+      const p = indexToPoint(map, i)
+      return isCell(map, p, PROPS.BOMB)
     },
 
-    isFlagged(tile) {
-      return isCell(PROPS.FLAG, tile)
+    isMasked(map, i) {
+      const p = indexToPoint(map, i)
+      return isCell(map, p, PROPS.MASK)
+    },
+
+    isFlagged(map, i) {
+      const p = indexToPoint(map, i)
+      return isCell(map, p, PROPS.FLAG)
     },
 
     start() {
@@ -323,7 +329,7 @@ export default {
 .map {
   // letter-spacing: .5rem;
   display: grid;
-  grid-template-columns: repeat(128, 20px [col-start]);
+  grid-template-columns: repeat(32, 20px [col-start]);
 }
 
 .history {
