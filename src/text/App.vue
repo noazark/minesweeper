@@ -57,8 +57,8 @@ export default {
     return {
       cursor: {r: 0, c: 0},
       preview: {r: 0, c: 0},
-      gameSize: [8, 8],
-      bombCount: 10,
+      gameSize: [128, 64],
+      bombCount: 1024,
       matrix: {},
       playing: true,
       score: 0,
@@ -82,7 +82,7 @@ export default {
   },
 
   watch: {
-    matrix: {
+    score: {
       handler() {
         if (isComplete(this.matrix)) {
           this.output = 'you win!\n\n/reset to play again'
@@ -323,8 +323,7 @@ export default {
 .map {
   // letter-spacing: .5rem;
   display: grid;
-  grid-template-columns: repeat(8, 20px [col-start]);
-  grid-template-rows: repeat(8, 20px [col-start]);
+  grid-template-columns: repeat(128, 20px [col-start]);
 }
 
 .history {
