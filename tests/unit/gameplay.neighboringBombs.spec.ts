@@ -1,12 +1,8 @@
-import { neighboringBombs, createMap } from '../../lib/gameplay'
+import { neighboringBombs, createMap, PROPS } from '../../lib/gameplay'
 
 describe('neighboringBombs', () => {
-  const _ = {
-    isMasked: false,
-    isBomb: false,
-    isFlagged:  false
-  }
-  const b = { ..._, isBomb: true }
+  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
+  const b = { ..._, [PROPS.BOMB]: true }
 
   it('returns the number of flags surrounding an tile', () => {
     /* eslint-disable standard/array-bracket-even-spacing */

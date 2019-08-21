@@ -1,11 +1,8 @@
-import { neighbors, createMap } from '../../lib/gameplay'
+import { neighbors, createMap, PROPS } from '../../lib/gameplay'
 
 describe('neighbors', () => {
-  const _ = {
-    isMasked: false,
-    isBomb: false,
-    isFlagged:  false
-  }
+  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
+
   /* eslint-disable standard/array-bracket-even-spacing */
   const matrix = createMap([
     [_, _, _],

@@ -1,10 +1,10 @@
-import { unmaskAroundFlags, createMap } from '../../lib/gameplay'
+import { unmaskAroundFlags, createMap, PROPS } from '../../lib/gameplay'
 
 describe('unmaskAroundFlags', () => {
-  const _ = { isMasked: true, isFlagged: false, isBomb: false }
-  const o = { ..._, isMasked: false }
-  const f = { ..._, isFlagged: true }
-  const b = { ..._, isBomb: true }
+  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
+  const o = { ..._, [PROPS.MASK]: false }
+  const f = { ..._, [PROPS.FLAG]: true }
+  const b = { ..._, [PROPS.BOMB]: true }
 
   const matrix = createMap([
     [_, o, b],

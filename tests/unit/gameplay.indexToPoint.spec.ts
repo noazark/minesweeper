@@ -1,10 +1,10 @@
-import { indexToPoint, createMap } from '../../lib/gameplay'
+import { indexToPoint, createMap, PROPS } from '../../lib/gameplay'
 
 describe('indexToPoint', () => {
   const t = {
-    isMasked: false,
-    isBomb: false,
-    isFlagged:  false
+    [PROPS.MASK]: true,
+    [PROPS.BOMB]: false,
+    [PROPS.FLAG]:  false
   }
 
   const matrix = createMap([

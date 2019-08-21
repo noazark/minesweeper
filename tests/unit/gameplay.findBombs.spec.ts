@@ -1,12 +1,12 @@
-import { findBombs, createMap } from '../../lib/gameplay'
+import { findBombs, createMap, PROPS } from '../../lib/gameplay'
 
 describe('findBombs', () => {
   const _ = {
-    isBomb: false,
-    isFlagged: false,
-    isMasked: false
+    [PROPS.MASK]: true,
+    [PROPS.BOMB]: false,
+    [PROPS.FLAG]:  false
   }
-  const b = { ..._, isBomb: true }
+  const b = { ..._, [PROPS.BOMB]: true }
 
   it('returns all bomb coords', () => {
     const matrix = createMap([

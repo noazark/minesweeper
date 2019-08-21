@@ -1,13 +1,13 @@
-import { getCell, createMap } from '../../lib/gameplay'
+import { getCell, createMap, PROPS } from '../../lib/gameplay'
 
 describe('getCell', () => {
   const t = {
-    isMasked: false,
-    isBomb: false,
-    isFlagged:  false
+    [PROPS.MASK]: true,
+    [PROPS.BOMB]: false,
+    [PROPS.FLAG]:  false
   }
-  const a = {...t}
-  const b = {...t}
+  const a = { ...t, [PROPS.FLAG]: true }
+  const b = { ...t, [PROPS.BOMB]: true }
 
   const matrix = createMap([
     [a, t, t, t, t],
@@ -16,8 +16,8 @@ describe('getCell', () => {
   ])
 
   it('returns the tile for the row and column', () => {
-    expect(getCell(matrix, {r: 0, c: 0})).toBe(a)
-    expect(getCell(matrix, {r: 1, c: 4})).toBe(b)
+    expect(getCell(matrix, {r: 0, c: 0})).toEqual(a)
+    expect(getCell(matrix, {r: 1, c: 4})).toEqual(b)
   })
 
   it('throws if the column does not exist', () => {

@@ -1,14 +1,10 @@
 import { isTile, safeGet, PROPS, createMap } from '../../lib/gameplay'
 
 describe('isTile', () => {
-  const _ = {
-    isMasked: false,
-    isBomb: false,
-    isFlagged:  false
-  }
+  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
 
   it('returns true if the tile is masked', () => {
-    const tile = { ..._, isBomb: true }
+    const tile = { ..._, [PROPS.BOMB]: true }
     expect(isTile(PROPS.BOMB, tile)).toBe(true)
   })
 

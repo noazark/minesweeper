@@ -9,9 +9,9 @@
       <div class="row" :key="r">
         <div class="col" v-for="(el, c) in row" :key="c">
           <tile
-            :isBomb="isTile('isBomb', el)"
-            :isMasked="isTile('isMasked', el)"
-            :isFlagged="isTile('isFlagged', el)"
+            :isBomb="isTile(PROPS.BOMB, el)"
+            :isMasked="isTile(PROPS.MASK, el)"
+            :isFlagged="isTile(PROPS.FLAG, el)"
             :bombCount="neighboringBombs(matrix, {r, c})"
             @flag="flag(r, c)"
             @unmaskAroundFlags="unmaskAroundFlags(r, c)"
@@ -37,6 +37,7 @@ import {
   unmask,
   unmaskAroundFlags,
   validFirstPlay,
+  PROPS,
 } from '../../lib/gameplay';
 import Tile from './components/Tile.vue'
 import Timer from './components/Timer.vue'

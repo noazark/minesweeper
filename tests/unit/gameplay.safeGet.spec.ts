@@ -1,15 +1,11 @@
-import { safeGet, createMap } from '../../lib/gameplay'
+import { safeGet, createMap, PROPS } from '../../lib/gameplay'
 
 describe('safeGet', () => {
-  const tile = {
-    isMasked: false,
-    isBomb: false,
-    isFlagged:  false
-  }
+  const tile = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
 
   it('returns the tile for the row and column', () => {
     const matrix = createMap([[tile]])
-    expect(safeGet(matrix, {r: 0, c: 0})).toBe(tile)
+    expect(safeGet(matrix, {r: 0, c: 0})).toEqual(tile)
   })
 
   it('returns undefined if the column does not exist', () => {

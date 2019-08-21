@@ -28,7 +28,6 @@ import {
   toggle,
   toArray,
   indexToPoint,
-  getCell,
   countFlags,
   findBombs,
   initializeMap,
@@ -58,8 +57,8 @@ export default {
     return {
       cursor: {r: 0, c: 0},
       preview: {r: 0, c: 0},
-      gameSize: [30, 16],
-      bombCount: 99,
+      gameSize: [8, 8],
+      bombCount: 10,
       matrix: {},
       playing: true,
       score: 0,
@@ -324,8 +323,8 @@ export default {
 .map {
   // letter-spacing: .5rem;
   display: grid;
-  grid-template-columns: repeat(30, 20px [col-start]);
-  grid-template-rows: repeat(16, 20px [col-start]);
+  grid-template-columns: repeat(8, 20px [col-start]);
+  grid-template-rows: repeat(8, 20px [col-start]);
 }
 
 .history {
