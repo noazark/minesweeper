@@ -1,7 +1,7 @@
 <template>
   <div class="txt-app">
     <code class="map">
-      <template v-for="(el, i) in matrix.data" >
+      <template v-for="(el, i) in toArray(matrix)" >
         <tile
           :key="i"
           :isBomb="isBomb(el)"
@@ -25,6 +25,7 @@
 
 <script>
 import {
+  toArray,
   indexToPoint,
   getCell,
   countFlags,
@@ -103,6 +104,7 @@ export default {
   },
 
   methods: {
+    toArray,
     indexToPoint,
     neighboringBombs,
 

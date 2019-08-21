@@ -71,7 +71,7 @@ export function isTile (prop:PROPS, el:Cell|undefined) {
 }
 
 export function countFlags (map:Map) {
-  return flatten(map.data).map((tile) => isTile(PROPS.FLAG, tile) ? 1 : 0).reduce((m:number, n) => m + n, 0)
+  return toArray(map).map((tile) => isTile(PROPS.FLAG, tile) ? 1 : 0).reduce((m:number, n) => m + n, 0)
 }
 
 export function createMap (arr: Array<Array<Cell>>):Map {
@@ -94,17 +94,17 @@ export function initializeMap (w:number, h:number, bc:number) {
 }
 
 export function isComplete (map:Map) {
-  return !map.data.some((tile) => {
+  return !toArray(map).some((tile) => {
     return !isPlayable(map) || !isTile(PROPS.BOMB, tile) && isTile(PROPS.FLAG, tile) || !isTile(PROPS.BOMB, tile) && isTile(PROPS.MASK, tile)
   })
 }
 
 export function isPlayable (map:Map) {
-  return !map.data.some((tile) => isTile(PROPS.BOMB, tile) && !isTile(PROPS.MASK, tile))
+  return !toArray(map).some((tile) => isTile(PROPS.BOMB, tile) && !isTile(PROPS.MASK, tile))
 }
 
 export function findBombs (map:Map) {
-  return map.data.reduce(
+  return toArray(map).reduce(
     (result:Neighbors, el, i) => {
       if (isTile(PROPS.BOMB, el)) {
         result.push(indexToPoint(map, i))
@@ -143,7 +143,7 @@ export function neighbors (map:Map, p:MapPoint) {
 }
 
 export function indexToPoint(map:Map, i: number) {
-  if (i > map.data.length - 1) {
+  if (i > toArray(map).length - 1) {
     throw new Error('index is out of range')
   }
 
@@ -153,9 +153,13 @@ export function indexToPoint(map:Map, i: number) {
   return {r, c}
 }
 
+export function toArray (map:Map) {
+  return [...map.data]
+}
+
 export function getCell (map:Map, p:MapPoint) {
   if (p.r >= 0 && p.c >= 0  && p.r < map.h && p.c < map.w) {
-    return map.data[(p.r*map.w)+p.c]
+    return toArray(map)[(p.r*map.w)+p.c]
   } else {
     throw new Error('requested cell does not exist')
   }
