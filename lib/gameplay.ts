@@ -97,12 +97,12 @@ function placeBombs (map:Map, bc:number) {
   return bombs
 }
 
-export function isTile (prop:PROPS, el:Cell|undefined) {
+export function isCell (prop:PROPS, el:Cell|undefined) {
   return !!el && get(el, prop)
 }
 
 export function countFlags (map:Map) {
-  return toArray(map).map((tile) => isTile(PROPS.FLAG, tile) ? 1 : 0).reduce((m:number, n) => m + n, 0)
+  return toArray(map).map((cell) => isCell(PROPS.FLAG, cell) ? 1 : 0).reduce((m:number, n) => m + n, 0)
 }
 
 export function createMap (arr: Array<Array<Cell>>):Map {
@@ -138,19 +138,19 @@ export function initializeMap (w:number, h:number, bc:number) {
 }
 
 export function isComplete (map:Map) {
-  return !toArray(map).some((tile) => {
-    return !isPlayable(map) || !isTile(PROPS.BOMB, tile) && isTile(PROPS.FLAG, tile) || !isTile(PROPS.BOMB, tile) && isTile(PROPS.MASK, tile)
+  return !toArray(map).some((cell) => {
+    return !isPlayable(map) || !isCell(PROPS.BOMB, cell) && isCell(PROPS.FLAG, cell) || !isCell(PROPS.BOMB, cell) && isCell(PROPS.MASK, cell)
   })
 }
 
 export function isPlayable (map:Map) {
-  return !toArray(map).some((tile) => isTile(PROPS.BOMB, tile) && !isTile(PROPS.MASK, tile))
+  return !toArray(map).some((cell) => isCell(PROPS.BOMB, cell) && !isCell(PROPS.MASK, cell))
 }
 
 export function findBombs (map:Map) {
   return toArray(map).reduce(
     (result:Neighbors, el, i) => {
-      if (isTile(PROPS.BOMB, el)) {
+      if (isCell(PROPS.BOMB, el)) {
         result.push(indexToPoint(map, i))
       }
       return result
@@ -261,14 +261,14 @@ export function toggleFlag (map:Map, p:MapPoint) {
 
 export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {
   const el = safeGet(map, p)
-  if (!isTile(PROPS.FLAG, el)) um.push(p)
-  if (isTile(PROPS.BOMB, el) || neighboringBombs(map, p) > 0) return um
+  if (!isCell(PROPS.FLAG, el)) um.push(p)
+  if (isCell(PROPS.BOMB, el) || neighboringBombs(map, p) > 0) return um
   return um.concat(unmaskCrawl(map, p, um))
 }
 
 export function unmaskAroundFlags (map:Map, p:MapPoint) {
   const el = safeGet(map, p)
-  if (!isTile(PROPS.MASK, el) && neighboringFlags(map, p) >= neighboringBombs(map, p)) {
+  if (!isCell(PROPS.MASK, el) && neighboringFlags(map, p) >= neighboringBombs(map, p)) {
     return unmaskCrawl(map, p, [], true)
   } else {
     return []
@@ -278,17 +278,17 @@ export function unmaskAroundFlags (map:Map, p:MapPoint) {
 export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs = false):Neighbors {
   const el = safeGet(map, p)
 
-  if (isTile(PROPS.FLAG, el)) return []
+  if (isCell(PROPS.FLAG, el)) return []
 
   return neighbors(map, p)
     .reduce((memo:Neighbors, pair:MapPoint) => {
       const previouslyUnmasked = um.concat(memo).some((pair0) => pair0.r === pair.r && pair0.c === pair.c)
-      if (isTile(PROPS.FLAG, safeGet(map, pair)) || previouslyUnmasked) return memo
+      if (isCell(PROPS.FLAG, safeGet(map, pair)) || previouslyUnmasked) return memo
 
       const hasBombNeighbors = neighboringBombs(map, pair) > 0
       if (!hasBombNeighbors) return difference(unmask(map, pair, um.concat(memo)), um)
 
-      const isNotBomb = !isTile(PROPS.BOMB, safeGet(map, pair))
+      const isNotBomb = !isCell(PROPS.BOMB, safeGet(map, pair))
       if (unmaskBombs || isNotBomb) return [...memo, pair]
 
       return memo
@@ -297,5 +297,5 @@ export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs
 
 export function validFirstPlay (map:Map, p:MapPoint) {
   const el = safeGet(map, p)
-  return !(neighboringBombs(map, p) > 0) && !isTile(PROPS.BOMB, el)
+  return !(neighboringBombs(map, p) > 0) && !isCell(PROPS.BOMB, el)
 }

@@ -1,4 +1,4 @@
-import { isTile, getCell, toggleFlag, createMap, PROPS } from '../../lib/gameplay'
+import { isCell, getCell, toggleFlag, createMap, PROPS } from '../../lib/gameplay'
 
 describe('toggleFlag', () => {
   const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
@@ -7,7 +7,7 @@ describe('toggleFlag', () => {
     const tile = { ..._ }
     const matrix = createMap([[tile]])
     expect(toggleFlag(matrix, {r: 0, c: 0})).toBe(true)
-    expect(isTile(PROPS.FLAG, getCell(matrix, {r: 0, c: 0}))).toBe(true)
+    expect(isCell(PROPS.FLAG, getCell(matrix, {r: 0, c: 0}))).toBe(true)
   })
 
   it('sets an flagged tile as unflagged', () => {
@@ -15,13 +15,13 @@ describe('toggleFlag', () => {
     const matrix = createMap([[tile]])
 
     expect(toggleFlag(matrix, {r: 0, c: 0})).toBe(false)
-    expect(isTile(PROPS.FLAG, getCell(matrix, {r: 0, c: 0}))).toBe(false)
+    expect(isCell(PROPS.FLAG, getCell(matrix, {r: 0, c: 0}))).toBe(false)
   })
 
   it('cannot set an unmasked tile as flagged', () => {
     const tile = { ..._, [PROPS.MASK]: false }
     const matrix = createMap([[tile]])
     expect(toggleFlag(matrix, {r: 0, c: 0})).toBe(false)
-    expect(isTile(PROPS.FLAG, getCell(matrix, {r: 0, c: 0}))).toBe(false)
+    expect(isCell(PROPS.FLAG, getCell(matrix, {r: 0, c: 0}))).toBe(false)
   })
 })

@@ -1,4 +1,4 @@
-import { toggle, createMap, PROPS, getCell, isTile } from '../../lib/gameplay'
+import { toggle, createMap, PROPS, getCell, isCell } from '../../lib/gameplay'
 
 describe('toggle', () => {
   const t = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
@@ -11,10 +11,10 @@ describe('toggle', () => {
     const prop = PROPS.MASK
 
     expect(toggle(matrix, p, prop)).toBeFalsy()
-    expect(isTile(prop, getCell(matrix, p))).toBeFalsy()
+    expect(isCell(prop, getCell(matrix, p))).toBeFalsy()
 
     expect(toggle(matrix, p, prop)).toBeTruthy()
-    expect(isTile(prop, getCell(matrix, p))).toBeTruthy()
+    expect(isCell(prop, getCell(matrix, p))).toBeTruthy()
   })
 
   it('can set a tile property explicitly', () => {
@@ -25,15 +25,15 @@ describe('toggle', () => {
     const prop = PROPS.MASK
 
     expect(toggle(matrix, p, prop, true)).toBeTruthy()
-    expect(isTile(prop, getCell(matrix, p))).toBeTruthy()
+    expect(isCell(prop, getCell(matrix, p))).toBeTruthy()
 
     expect(toggle(matrix, p, prop, true)).toBeTruthy()
-    expect(isTile(prop, getCell(matrix, p))).toBeTruthy()
+    expect(isCell(prop, getCell(matrix, p))).toBeTruthy()
 
     expect(toggle(matrix, p, prop, false)).toBeFalsy()
-    expect(isTile(prop, getCell(matrix, p))).toBeFalsy()
+    expect(isCell(prop, getCell(matrix, p))).toBeFalsy()
 
     expect(toggle(matrix, p, prop, false)).toBeFalsy()
-    expect(isTile(prop, getCell(matrix, p))).toBeFalsy()
+    expect(isCell(prop, getCell(matrix, p))).toBeFalsy()
   })
 })

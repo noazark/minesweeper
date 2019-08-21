@@ -33,7 +33,7 @@ import {
   initializeMap,
   isComplete,
   isPlayable,
-  isTile,
+  isCell,
   neighboringBombs,
   safeGet,
   toggleFlag,
@@ -109,15 +109,15 @@ export default {
     neighboringBombs,
 
     isBomb(tile) {
-      return isTile(PROPS.BOMB, tile)
+      return isCell(PROPS.BOMB, tile)
     },
 
     isMasked(tile) {
-      return isTile(PROPS.MASK, tile)
+      return isCell(PROPS.MASK, tile)
     },
 
     isFlagged(tile) {
-      return isTile(PROPS.FLAG, tile)
+      return isCell(PROPS.FLAG, tile)
     },
 
     start() {
