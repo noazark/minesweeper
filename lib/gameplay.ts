@@ -157,6 +157,14 @@ export function neighbors (map:Map, p:MapPoint) {
   }, [])
 }
 
+/**
+ * Converts the index of a cell on a map to it's row and column coordinates.
+ *
+ * The inverse of `pointToIndex`.
+ *
+ * @param map
+ * @param i
+ */
 export function indexToPoint(map:Map, i: number) {
   if (i > (map.w * map.h) - 1) {
     throw new Error('index is out of range')
@@ -168,31 +176,16 @@ export function indexToPoint(map:Map, i: number) {
   return {r, c}
 }
 
+/**
+ * Converts a row and column coordinate pair to an index for a cell on a map.
+ *
+ * The inverse of `indexToPoint`.
+ *
+ * @param map
+ * @param i
+ */
 export function pointToIndex(map:Map, p:MapPoint) {
   return (p.r*map.w)+p.c
-}
-
-export function toArray (map:Map) {
-  const data = []
-
-  for (let i = 0; i < map.w*map.h; i++) {
-    data[i] = getCell(map, indexToPoint(map, i))
-  }
-
-  return data
-}
-
-export function getCell (map:Map, p:MapPoint) {
-  if (isValidPoint(map, p)) {
-    const i = pointToIndex(map, p)
-    return {
-      [PROPS.BOMB]: testBit(map[PROPS.BOMB], i),
-      [PROPS.MASK]: testBit(map[PROPS.MASK], i),
-      [PROPS.FLAG]: testBit(map[PROPS.FLAG], i)
-    }
-  } else {
-    throw new Error('requested cell does not exist')
-  }
 }
 
 export function isValidPoint (map:Map, p:MapPoint) {
