@@ -9,7 +9,7 @@ describe('unmaskAroundFlags', () => {
   ])
 
   describe('on unmasked tile w/ equal flags', () => {
-    const unmasked = unmaskAroundFlags(matrix, {r: 1, c: 2})
+    const unmasked = unmaskAroundFlags(matrix, 5)
 
     it('does not unmask flags', () => {
       expect(unmasked).not.toContainEqual({r: 2, c: 2})
@@ -34,7 +34,7 @@ describe('unmaskAroundFlags', () => {
       [_, o, _],
       [_, f, f]
     ])
-    const unmasked = unmaskAroundFlags(matrix, {r: 1, c: 1})
+    const unmasked = unmaskAroundFlags(matrix, 4)
 
     it('does not unmask flags', () => {
       expect(unmasked).not.toContainEqual({r: 2, c: 1})
@@ -55,19 +55,19 @@ describe('unmaskAroundFlags', () => {
 
   describe('on unmasked tile w/ missing flags', () => {
     it('unmasks nothing', () => {
-      expect(unmaskAroundFlags(matrix, {r: 0, c: 1}).length).toEqual(0)
+      expect(unmaskAroundFlags(matrix, 1).length).toEqual(0)
     })
   })
 
   describe('on unmasked tile w/ zero flags', () => {
     it('unmasks nothing', () => {
-      expect(unmaskAroundFlags(matrix, {r: 2, c: 2}).length).toEqual(0)
+      expect(unmaskAroundFlags(matrix, 8).length).toEqual(0)
     })
   })
 
   describe('on masked tile w/ equal flags', () => {
     it('unmasks nothing', () => {
-      expect(unmaskAroundFlags(matrix, {r: 1, c: 1}).length).toEqual(0)
+      expect(unmaskAroundFlags(matrix, 4).length).toEqual(0)
     })
   })
 })

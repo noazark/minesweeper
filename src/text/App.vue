@@ -277,8 +277,7 @@ export default {
     },
 
     sweep () {
-      const p = indexToPoint(this.matrix, this.cursor)
-      const unmasked = unmaskAroundFlags(this.matrix, p).filter(this.doUnmask)
+      const unmasked = unmaskAroundFlags(this.matrix, this.cursor).filter(this.doUnmask)
       return `${unmasked.length} cleared`
     },
 

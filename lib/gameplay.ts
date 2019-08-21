@@ -280,9 +280,7 @@ export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {
   return um.concat(unmaskCrawl(map, offset, um))
 }
 
-// TODO: convert to offset to unbind datamodel from rectangular grids
-export function unmaskAroundFlags (map:Map, p:MapPoint) {
-  const offset = pointToIndex(map, p)
+export function unmaskAroundFlags (map:Map, offset:number) {
   if (!isCell(map, offset, PROPS.MASK) && countNeighbors(map, offset, PROPS.FLAG) >= countNeighbors(map, offset, PROPS.BOMB)) {
     return unmaskCrawl(map, offset, [], true)
   } else {
