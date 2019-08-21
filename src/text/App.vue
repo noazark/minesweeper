@@ -1,6 +1,6 @@
 <template>
   <div class="txt-app">
-    <code class="map">
+    <code class="map" :style="{ '--columns': gameSize[0] }">
       <template v-for="(el, i) in times(matrix.w*matrix.h, Number)" >
         <tile
           :key="i"
@@ -56,8 +56,8 @@ export default {
     return {
       cursor: {r: 0, c: 0},
       preview: {r: 0, c: 0},
-      gameSize: [32, 64],
-      bombCount: 1024,
+      gameSize: [10, 10],
+      bombCount: 10,
       matrix: {},
       playing: true,
       score: 0,
@@ -327,9 +327,8 @@ export default {
 }
 
 .map {
-  // letter-spacing: .5rem;
   display: grid;
-  grid-template-columns: repeat(32, 20px [col-start]);
+  grid-template-columns: repeat(var(--columns), 20px [col-start]);
 }
 
 .history {
