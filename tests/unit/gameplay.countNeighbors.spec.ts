@@ -1,9 +1,7 @@
-import { countNeighbors, createMap, PROPS } from '../../lib/gameplay'
+import { countNeighbors, PROPS } from '../../lib/gameplay'
+import { createMap, _, b } from './util'
 
 describe('countNeighbors bombs', () => {
-  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
-  const b = { ..._, [PROPS.BOMB]: true }
-
   it('returns the number of flags surrounding an tile', () => {
     /* eslint-disable standard/array-bracket-even-spacing */
     const matrix = createMap([

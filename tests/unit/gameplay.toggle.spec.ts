@@ -1,11 +1,10 @@
-import { toggle, createMap, PROPS, isCell } from '../../lib/gameplay'
+import { toggle, PROPS, isCell } from '../../lib/gameplay'
+import { createMap, _} from './util'
 
 describe('toggle', () => {
-  const t = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
-
   it('toggles a tile property between true and false', () => {
     const matrix = createMap([
-      [t],
+      [_],
     ])
     const p = {r: 0, c: 0}
     const prop = PROPS.MASK
@@ -19,7 +18,7 @@ describe('toggle', () => {
 
   it('can set a tile property explicitly', () => {
     const matrix = createMap([
-      [t, t],
+      [_, _],
     ])
     const p = {r: 0, c: 0}
     const prop = PROPS.MASK

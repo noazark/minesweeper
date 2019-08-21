@@ -15,7 +15,7 @@ interface MapPoint {
 
 type Neighbors = Array<MapPoint>
 
-interface Cell {
+export interface Cell {
   [PROPS.BOMB]: boolean,
   [PROPS.FLAG]: boolean,
   [PROPS.MASK]: boolean
@@ -29,7 +29,18 @@ export interface Map {
   h: number
 }
 
-function buildField (w:number, h:number) {
+export function initializeMap (w:number, h:number, bc:number) {
+  const map = buildField(w, h)
+  const bombs = placeBombs(map, bc)
+
+  bombs.forEach((bomb) => {
+    toggle(map, bomb, PROPS.BOMB, true)
+  })
+
+  return map
+}
+
+export function buildField (w:number, h:number) {
   const map:Map = {
     [PROPS.BOMB]: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
     [PROPS.MASK]: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
@@ -45,6 +56,24 @@ function buildField (w:number, h:number) {
   }
 
   return map
+}
+
+function placeBombs (map:Map, bc:number) {
+  const {w, h} = map
+  const bombs:Neighbors = []
+
+  times(bc, () => {
+    let r:number, c:number
+
+    do {
+      r = Math.floor(Math.random() * h)
+      c = Math.floor(Math.random() * w)
+    } while (bombs.some((bomb) => bomb.r === r && bomb.c === c))
+
+    bombs.push({r, c})
+  })
+
+  return bombs
 }
 
 export function testBit(num:Uint32Array, bit:number) {
@@ -79,56 +108,12 @@ export function countNeighbors (map:Map, p:MapPoint, prop:PROPS) {
     .reduce((m:number, n:number) => m + n, 0)
 }
 
-function placeBombs (map:Map, bc:number) {
-  const {w, h} = map
-  const bombs:Neighbors = []
-
-  times(bc, () => {
-    let r:number, c:number
-
-    do {
-      r = Math.floor(Math.random() * h)
-      c = Math.floor(Math.random() * w)
-    } while (bombs.some((bomb) => bomb.r === r && bomb.c === c))
-
-    bombs.push({r, c})
-  })
-
-  return bombs
-}
-
 export function isCell (map:Map, p:MapPoint, prop:PROPS) {
   return testBit(map[prop], pointToIndex(map, p))
 }
 
 export function countFlags (map:Map) {
   return times(map.w*map.h, Number).map((i) => isCell(map, indexToPoint(map, i), PROPS.FLAG) ? 1 : 0).reduce((m:number, n) => m + n, 0)
-}
-
-export function createMap (arr: Array<Array<Cell>>):Map {
-  const w = arr[0].length
-  const h = arr.length
-
-  const map = buildField(w, h)
-
-  flatten(arr).forEach((el, i) => {
-    toggleBit(map[PROPS.BOMB], i, el[PROPS.BOMB])
-    toggleBit(map[PROPS.MASK], i, el[PROPS.MASK])
-    toggleBit(map[PROPS.FLAG], i, el[PROPS.FLAG])
-  })
-
-  return map
-}
-
-export function initializeMap (w:number, h:number, bc:number) {
-  const map = buildField(w, h)
-  const bombs = placeBombs(map, bc)
-
-  bombs.forEach((bomb) => {
-    toggle(map, bomb, PROPS.BOMB, true)
-  })
-
-  return map
 }
 
 export function isComplete (map:Map) {

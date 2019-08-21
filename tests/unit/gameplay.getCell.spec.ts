@@ -1,18 +1,14 @@
-import { getCell, createMap, PROPS } from '../../lib/gameplay'
+import { getCell, PROPS } from '../../lib/gameplay'
+import { createMap, _ } from './util'
 
 describe('getCell', () => {
-  const t = {
-    [PROPS.MASK]: true,
-    [PROPS.BOMB]: false,
-    [PROPS.FLAG]:  false
-  }
-  const a = { ...t, [PROPS.FLAG]: true }
-  const b = { ...t, [PROPS.BOMB]: true }
+  const a = { ..._, [PROPS.FLAG]: true }
+  const b = { ..._, [PROPS.BOMB]: true }
 
   const matrix = createMap([
-    [a, t, t, t, t],
-    [t, t, t, t, b],
-    [t, t, t, t, t],
+    [a, _, _, _, _],
+    [_, _, _, _, b],
+    [_, _, _, _, _],
   ])
 
   it('returns the tile for the row and column', () => {

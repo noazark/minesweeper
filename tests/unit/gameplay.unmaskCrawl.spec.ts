@@ -1,10 +1,7 @@
-import { unmaskCrawl, createMap, PROPS } from '../../lib/gameplay'
+import { unmaskCrawl } from '../../lib/gameplay'
+import { createMap, _, f, b } from './util'
 
 describe('unmaskCrawl', () => {
-  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
-  const f = { ..._, [PROPS.FLAG]: true }
-  const b = { ..._, [PROPS.BOMB]: true }
-
   it('is not pathological', () => {
     const matrix = createMap([
       [_, _, _],

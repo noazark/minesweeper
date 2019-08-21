@@ -1,8 +1,7 @@
-import { isCell, toggleFlag, createMap, PROPS } from '../../lib/gameplay'
+import { isCell, toggleFlag, PROPS } from '../../lib/gameplay'
+import { createMap, _ } from './util'
 
 describe('toggleFlag', () => {
-  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
-
   it('sets an unflagged tile as flagged', () => {
     const tile = { ..._ }
     const matrix = createMap([[tile]])

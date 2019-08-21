@@ -1,8 +1,7 @@
-import { isCell, PROPS, createMap } from '../../lib/gameplay'
+import { isCell, PROPS } from '../../lib/gameplay'
+import { createMap, _ } from './util'
 
 describe('isCell', () => {
-  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
-
   it('returns true if the cell is masked', () => {
     const map = createMap([[{ ..._, [PROPS.BOMB]: true }]])
     expect(isCell(map, {r:0, c:0}, PROPS.BOMB)).toBe(true)

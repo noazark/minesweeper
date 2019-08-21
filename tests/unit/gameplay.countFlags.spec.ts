@@ -1,16 +1,8 @@
-import { createMap, Map, countFlags, PROPS } from '../../lib/gameplay'
+import { Map, countFlags } from '../../lib/gameplay'
+import { createMap, _, f, o, b } from './util'
 
 
 describe('countFlags', () => {
-  const _ = {
-    [PROPS.MASK]: true,
-    [PROPS.BOMB]: false,
-    [PROPS.FLAG]:  false
-  }
-  const o = { ..._, [PROPS.MASK]: false }
-  const f = { ..._, [PROPS.FLAG]: true }
-  const b = { ..._, [PROPS.BOMB]: true }
-
   function expectFlags (expected:number, map:Map) {
     expect(countFlags(map)).toEqual(expected)
   }

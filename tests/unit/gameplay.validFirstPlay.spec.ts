@@ -1,10 +1,7 @@
-import { validFirstPlay, createMap, PROPS } from '../../lib/gameplay'
+import { validFirstPlay } from '../../lib/gameplay'
+import { createMap, _, f, b } from './util'
 
 describe('validFirstPlay', () => {
-  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
-  const f = { ..._, [PROPS.FLAG]: true }
-  const b = { ..._, [PROPS.BOMB]: true }
-
   const matrix = createMap([
     [_, _, b],
     [_, _, _],

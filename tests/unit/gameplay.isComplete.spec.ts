@@ -1,13 +1,7 @@
-import { isComplete, createMap, PROPS } from '../../lib/gameplay'
+import { isComplete } from '../../lib/gameplay'
+import { createMap, _, f, o, b, B, x } from './util'
 
 describe('isComplete', () => {
-  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
-  const o = { ..._, [PROPS.MASK]: false }
-  const f = { ..._, [PROPS.FLAG]: true }
-  const b = { ..._, [PROPS.BOMB]: true }
-  const B = { ..._, [PROPS.FLAG]: true, [PROPS.BOMB]: true }
-  const x = { ..._, [PROPS.MASK]: false, [PROPS.BOMB]: true }
-
   it('returns true if only masked bombs are left', () => {
     const matrix = createMap([
       [o, o, b],

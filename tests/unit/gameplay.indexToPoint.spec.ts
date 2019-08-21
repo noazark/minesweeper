@@ -1,16 +1,11 @@
-import { indexToPoint, createMap, PROPS } from '../../lib/gameplay'
+import { indexToPoint } from '../../lib/gameplay'
+import { createMap, _ } from './util'
 
 describe('indexToPoint', () => {
-  const t = {
-    [PROPS.MASK]: true,
-    [PROPS.BOMB]: false,
-    [PROPS.FLAG]:  false
-  }
-
   const matrix = createMap([
-    [t, t, t, t, t],
-    [t, t, t, t, t],
-    [t, t, t, t, t],
+    [_, _, _, _, _],
+    [_, _, _, _, _],
+    [_, _, _, _, _],
   ])
 
   it('returns the point for any given index', () => {

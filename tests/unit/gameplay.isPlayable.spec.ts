@@ -1,12 +1,7 @@
-import { isPlayable, createMap, PROPS } from '../../lib/gameplay'
+import { isPlayable } from '../../lib/gameplay'
+import { createMap, _, o, b, x, I } from './util'
 
 describe('isPlayable', () => {
-  const _ = { [PROPS.MASK]: true, [PROPS.FLAG]: false, [PROPS.BOMB]: false }
-  const o = { ..._, [PROPS.MASK]: false }
-  const b = { ..._, [PROPS.BOMB]: true }
-  const x = { ..._, [PROPS.MASK]: false, [PROPS.BOMB]: true }
-  const I = { ..._, [PROPS.MASK]: false, [PROPS.FLAG]: true, [PROPS.BOMB]: true }
-
   it('returns true if no bombs are unmasked', () => {
     const matrix = createMap([
       [o, o, b],
