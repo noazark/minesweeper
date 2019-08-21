@@ -272,9 +272,8 @@ export function countNeighbors (map:Map, offset:number, prop:PROPS) {
     .reduce((m:number, n:number) => m + n, 0)
 }
 
-// TODO: convert to offset to unbind datamodel from rectangular grids
-export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {
-  const offset = pointToIndex(map, p)
+export function unmask (map:Map, offset:number, um:Neighbors = []) {
+  const p = indexToPoint(map, offset)
   if (!isCell(map, offset, PROPS.FLAG)) um.push(p)
   if (isCell(map, offset, PROPS.BOMB) || countNeighbors(map, offset, PROPS.BOMB) > 0) return um
   return um.concat(unmaskCrawl(map, offset, um))
@@ -300,7 +299,7 @@ export function unmaskCrawl (map:Map, offset:number, um:Neighbors = [], unmaskBo
       if (isCell(map, offset, PROPS.FLAG) || previouslyUnmasked) return memo
 
       const hasBombNeighbors = countNeighbors(map, offset, PROPS.BOMB) > 0
-      if (!hasBombNeighbors) return difference(unmask(map, pair, um.concat(memo)), um)
+      if (!hasBombNeighbors) return difference(unmask(map, offset, um.concat(memo)), um)
 
       const isNotBomb = !isCell(map, offset, PROPS.BOMB)
       if (unmaskBombs || isNotBomb) return [...memo, pair]
