@@ -22,26 +22,26 @@ interface Cell {
 }
 
 export interface Map {
-  bombs: Uint32Array
-  masks: Uint32Array
-  flags: Uint32Array
+  [PROPS.BOMB]: Uint32Array
+  [PROPS.FLAG]: Uint32Array
+  [PROPS.MASK]: Uint32Array
   w: number
   h: number
 }
 
 function buildField (w:number, h:number) {
   const map:Map = {
-    bombs: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
-    masks: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
-    flags: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
+    [PROPS.BOMB]: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
+    [PROPS.MASK]: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
+    [PROPS.FLAG]: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
     w,
     h
   }
 
   for (let i = 0; i < w*h; i++) {
-    setBit(map.masks, i)
-    clearBit(map.bombs, i)
-    clearBit(map.flags, i)
+    setBit(map[PROPS.MASK], i)
+    clearBit(map[PROPS.BOMB], i)
+    clearBit(map[PROPS.FLAG], i)
   }
 
   return map
@@ -109,18 +109,12 @@ export function createMap (arr: Array<Array<Cell>>):Map {
   const w = arr[0].length
   const h = arr.length
 
-  const map = {
-    bombs: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
-    masks: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
-    flags: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
-    w,
-    h,
-  }
+  const map = buildField(w, h)
 
   flatten(arr).forEach((el, i) => {
-    if (el[PROPS.BOMB]) setBit(map.bombs, i)
-    if (el[PROPS.MASK]) setBit(map.masks, i)
-    if (el[PROPS.FLAG]) setBit(map.flags, i)
+    toggleBit(map[PROPS.BOMB], i, el[PROPS.BOMB])
+    toggleBit(map[PROPS.MASK], i, el[PROPS.MASK])
+    toggleBit(map[PROPS.FLAG], i, el[PROPS.FLAG])
   })
 
   return map
@@ -215,9 +209,9 @@ export function getCell (map:Map, p:MapPoint) {
   if (p.r >= 0 && p.c >= 0  && p.r < map.h && p.c < map.w) {
     const i = pointToIndex(map, p)
     return {
-      [PROPS.BOMB]: testBit(map.bombs, i),
-      [PROPS.MASK]: testBit(map.masks, i),
-      [PROPS.FLAG]: testBit(map.flags, i)
+      [PROPS.BOMB]: testBit(map[PROPS.BOMB], i),
+      [PROPS.MASK]: testBit(map[PROPS.MASK], i),
+      [PROPS.FLAG]: testBit(map[PROPS.FLAG], i)
     }
   } else {
     throw new Error('requested cell does not exist')
@@ -237,26 +231,18 @@ export function safeGet (map:Map, p:MapPoint) {
 export function toggle (map:Map, p:MapPoint, prop:PROPS, val?:boolean) {
   const i = pointToIndex(map, p)
 
-  if (prop === PROPS.FLAG) {
-    toggleBit(map.flags, i, val)
-    return testBit(map.flags, i)
-  } else if (prop === PROPS.MASK) {
-    toggleBit(map.masks, i, val)
-    return testBit(map.masks, i)
-  } else if (prop === PROPS.BOMB) {
-    toggleBit(map.bombs, i, val)
-    return testBit(map.bombs, i)
-  }
+  toggleBit(map[prop], i, val)
+  return testBit(map[prop], i)
 }
 
 export function toggleFlag (map:Map, p:MapPoint) {
   const i = pointToIndex(map, p)
 
-  if (testBit(map.masks, i)) {
-    toggle(map, p, PROPS.FLAG)
+  if (testBit(map[PROPS.MASK], i)) {
+    toggleBit(map[PROPS.FLAG], i)
   }
 
-  return testBit(map.flags, i)
+  return testBit(map[PROPS.FLAG], i)
 }
 
 export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {

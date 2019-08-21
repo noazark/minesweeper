@@ -50,6 +50,7 @@ export default {
 
   data() {
     return {
+      PROPS,
       gameSize: [30, 16],
       bombCount: 99,
       matrix: [],
