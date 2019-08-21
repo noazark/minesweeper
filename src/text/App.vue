@@ -111,18 +111,15 @@ export default {
     },
 
     isBomb(map, i) {
-      const p = indexToPoint(map, i)
-      return isCell(map, p, PROPS.BOMB)
+      return isCell(map, i, PROPS.BOMB)
     },
 
     isMasked(map, i) {
-      const p = indexToPoint(map, i)
-      return isCell(map, p, PROPS.MASK)
+      return isCell(map, i, PROPS.MASK)
     },
 
     isFlagged(map, i) {
-      const p = indexToPoint(map, i)
-      return isCell(map, p, PROPS.FLAG)
+      return isCell(map, i, PROPS.FLAG)
     },
 
     start() {

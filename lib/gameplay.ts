@@ -156,9 +156,8 @@ export function toggleFlag (map:Map, offset:number) {
   return testBit(map[PROPS.FLAG], offset)
 }
 
-// TODO: convert to offset to unbind datamodel from rectangular grids
-export function isCell (map:Map, p:MapPoint, prop:PROPS) {
-  return testBit(map[prop], pointToIndex(map, p))
+export function isCell (map:Map, offset:number, prop:PROPS) {
+  return testBit(map[prop], offset)
 }
 
 // TODO: convert to offset to unbind datamodel from rectangular grids
@@ -180,26 +179,25 @@ export function isPlayable (map:Map) {
 
 // not an unmasked bomb; BOOM
 function _cellBoom (map:Map, i:number) {
-  const p = indexToPoint(map, i)
-  return isCell(map, p, PROPS.BOMB) && !isCell(map, p, PROPS.MASK)
+  return isCell(map, i, PROPS.BOMB) && !isCell(map, i, PROPS.MASK)
 }
 
 // not a bomb, but has a flag; liar
 function _cellFalseFlag (map:Map, i:number) {
   const p = indexToPoint(map, i)
-  return !isCell(map, p, PROPS.BOMB) && isCell(map, p, PROPS.FLAG)
+  return !isCell(map, i, PROPS.BOMB) && isCell(map, i, PROPS.FLAG)
 }
 
 // not a bomb, but has a mask; it's miserable inside
 function _cellVoid (map:Map, i:number) {
   const p = indexToPoint(map, i)
-  return !isCell(map, p, PROPS.BOMB) && isCell(map, p, PROPS.MASK)
+  return !isCell(map, i, PROPS.BOMB) && isCell(map, i, PROPS.MASK)
 }
 
 export function find (map:Map, prop:PROPS) {
   return times(map.w*map.h, Number).reduce(
     (result:Neighbors, i) => {
-      if (isCell(map, indexToPoint(map, i), prop)) {
+      if (isCell(map, i, prop)) {
         result.push(indexToPoint(map, i))
       }
       return result
@@ -270,43 +268,43 @@ export function neighbors (map:Map, p:MapPoint) {
 export function countNeighbors (map:Map, offset:number, prop:PROPS) {
   const p = indexToPoint(map, offset)
   return neighbors(map, p)
-    .map((pair) => isCell(map, pair, prop) ? 1 : 0)
+    .map((pair) => isCell(map, pointToIndex(map, pair), prop) ? 1 : 0)
     .reduce((m:number, n:number) => m + n, 0)
 }
 
 // TODO: convert to offset to unbind datamodel from rectangular grids
 export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {
   const offset = pointToIndex(map, p)
-  if (!isCell(map, p, PROPS.FLAG)) um.push(p)
-  if (isCell(map, p, PROPS.BOMB) || countNeighbors(map, offset, PROPS.BOMB) > 0) return um
-  return um.concat(unmaskCrawl(map, p, um))
+  if (!isCell(map, offset, PROPS.FLAG)) um.push(p)
+  if (isCell(map, offset, PROPS.BOMB) || countNeighbors(map, offset, PROPS.BOMB) > 0) return um
+  return um.concat(unmaskCrawl(map, offset, um))
 }
 
 // TODO: convert to offset to unbind datamodel from rectangular grids
 export function unmaskAroundFlags (map:Map, p:MapPoint) {
   const offset = pointToIndex(map, p)
-  if (!isCell(map, p, PROPS.MASK) && countNeighbors(map, offset, PROPS.FLAG) >= countNeighbors(map, offset, PROPS.BOMB)) {
-    return unmaskCrawl(map, p, [], true)
+  if (!isCell(map, offset, PROPS.MASK) && countNeighbors(map, offset, PROPS.FLAG) >= countNeighbors(map, offset, PROPS.BOMB)) {
+    return unmaskCrawl(map, offset, [], true)
   } else {
     return []
   }
 }
 
-// TODO: convert to offset to unbind datamodel from rectangular grids
-export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs = false):Neighbors {
-  if (isCell(map, p, PROPS.FLAG)) return []
+export function unmaskCrawl (map:Map, offset:number, um:Neighbors = [], unmaskBombs = false):Neighbors {
+  const p = indexToPoint(map, offset)
+  if (isCell(map, offset, PROPS.FLAG)) return []
 
   return neighbors(map, p)
     .reduce((memo:Neighbors, pair:MapPoint) => {
       const offset = pointToIndex(map, pair)
 
       const previouslyUnmasked = um.concat(memo).some((pair0) => pair0.r === pair.r && pair0.c === pair.c)
-      if (isCell(map, pair, PROPS.FLAG) || previouslyUnmasked) return memo
+      if (isCell(map, offset, PROPS.FLAG) || previouslyUnmasked) return memo
 
       const hasBombNeighbors = countNeighbors(map, offset, PROPS.BOMB) > 0
       if (!hasBombNeighbors) return difference(unmask(map, pair, um.concat(memo)), um)
 
-      const isNotBomb = !isCell(map, pair, PROPS.BOMB)
+      const isNotBomb = !isCell(map, offset, PROPS.BOMB)
       if (unmaskBombs || isNotBomb) return [...memo, pair]
 
       return memo
@@ -314,7 +312,5 @@ export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs
 }
 
 export function validFirstPlay (map:Map, offset:number) {
-  const p = indexToPoint(map, offset)
-
-  return !(countNeighbors(map, offset, PROPS.BOMB) > 0) && !isCell(map, p, PROPS.BOMB)
+  return !(countNeighbors(map, offset, PROPS.BOMB) > 0) && !isCell(map, offset, PROPS.BOMB)
 }
