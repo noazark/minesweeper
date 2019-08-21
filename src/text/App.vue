@@ -95,7 +95,7 @@ export default {
 
         if (!isComplete(this.matrix) && !isPlayable(this.matrix)) {
           const unmasked = findBombs(this.matrix)
-          unmasked.forEach((p) => this.doUnmask(p))
+          unmasked.forEach((offset) => this.doUnmask(offset))
         }
       },
       deep: true
@@ -309,8 +309,7 @@ export default {
       return ''
     },
 
-    doUnmask (p) {
-      const offset = pointToIndex(this.matrix, p)
+    doUnmask (offset) {
       toggle(this.matrix, offset, PROPS.MASK, false)
       return true
     }

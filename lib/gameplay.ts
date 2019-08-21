@@ -13,7 +13,7 @@ interface MapPoint {
   c: number
 }
 
-type Neighbors = Array<MapPoint>
+type Neighbors = Array<number>
 
 export interface Map {
   [PROPS.BOMB]: Uint32Array
@@ -184,13 +184,11 @@ function _cellBoom (map:Map, i:number) {
 
 // not a bomb, but has a flag; liar
 function _cellFalseFlag (map:Map, i:number) {
-  const p = indexToPoint(map, i)
   return !isCell(map, i, PROPS.BOMB) && isCell(map, i, PROPS.FLAG)
 }
 
 // not a bomb, but has a mask; it's miserable inside
 function _cellVoid (map:Map, i:number) {
-  const p = indexToPoint(map, i)
   return !isCell(map, i, PROPS.BOMB) && isCell(map, i, PROPS.MASK)
 }
 
@@ -198,7 +196,7 @@ export function find (map:Map, prop:PROPS) {
   return times(map.w*map.h, Number).reduce(
     (result:Neighbors, i) => {
       if (isCell(map, i, prop)) {
-        result.push(indexToPoint(map, i))
+        result.push(i)
       }
       return result
     }, []);
@@ -258,7 +256,7 @@ export function neighbors (map:Map, offset:number) {
     const point = {r: p.r + rd, c: p.c + cd}
 
     if (isValidPoint(map, point)) {
-      neighbors = [...neighbors, point]
+      neighbors = [...neighbors, pointToIndex(map, point)]
     }
 
     return neighbors
@@ -267,13 +265,12 @@ export function neighbors (map:Map, offset:number) {
 
 export function countNeighbors (map:Map, offset:number, prop:PROPS) {
   return neighbors(map, offset)
-    .map((pair) => isCell(map, pointToIndex(map, pair), prop) ? 1 : 0)
+    .map((offset) => isCell(map, offset, prop) ? 1 : 0)
     .reduce((m:number, n:number) => m + n, 0)
 }
 
 export function unmask (map:Map, offset:number, um:Neighbors = []) {
-  const p = indexToPoint(map, offset)
-  if (!isCell(map, offset, PROPS.FLAG)) um.push(p)
+  if (!isCell(map, offset, PROPS.FLAG)) um.push(offset)
   if (isCell(map, offset, PROPS.BOMB) || countNeighbors(map, offset, PROPS.BOMB) > 0) return um
   return um.concat(unmaskCrawl(map, offset, um))
 }
@@ -290,17 +287,15 @@ export function unmaskCrawl (map:Map, offset:number, um:Neighbors = [], unmaskBo
   if (isCell(map, offset, PROPS.FLAG)) return []
 
   return neighbors(map, offset)
-    .reduce((memo:Neighbors, pair:MapPoint) => {
-      const offset = pointToIndex(map, pair)
-
-      const previouslyUnmasked = um.concat(memo).some((pair0) => pair0.r === pair.r && pair0.c === pair.c)
+    .reduce((memo:Neighbors, offset:number) => {
+      const previouslyUnmasked = um.concat(memo).some((o0) => offset == o0)
       if (isCell(map, offset, PROPS.FLAG) || previouslyUnmasked) return memo
 
       const hasBombNeighbors = countNeighbors(map, offset, PROPS.BOMB) > 0
       if (!hasBombNeighbors) return difference(unmask(map, offset, um.concat(memo)), um)
 
       const isNotBomb = !isCell(map, offset, PROPS.BOMB)
-      if (unmaskBombs || isNotBomb) return [...memo, pair]
+      if (unmaskBombs || isNotBomb) return [...memo, offset]
 
       return memo
     }, [])

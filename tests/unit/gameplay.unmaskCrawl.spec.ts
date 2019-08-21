@@ -1,4 +1,4 @@
-import { unmaskCrawl } from '../../lib/gameplay'
+import { unmaskCrawl, pointToIndex } from '../../lib/gameplay'
 import { createMap, _, f, b } from './util'
 
 describe('unmaskCrawl', () => {
@@ -27,16 +27,17 @@ describe('unmaskCrawl', () => {
       [_, _, _],
       [_, _, f]
     ])
-    expect(unmaskCrawl(matrix, 7)).not.toContainEqual({r: 2, c: 2})
+    const unmasked = pointToIndex(matrix, {r: 2, c: 2})
+    expect(unmaskCrawl(matrix, 7)).not.toContainEqual(unmasked)
   })
 
   it('does not repeat previously unmasked neighbors', () => {
-    const unmasked = {r: 2, c: 0}
     const matrix = createMap([
       [_, _, b],
       [_, _, _],
       [_, _, f]
     ])
+    const unmasked = pointToIndex(matrix, {r: 2, c: 0})
     expect(unmaskCrawl(matrix, 7, [unmasked])).not.toContainEqual(unmasked)
   })
 
@@ -49,13 +50,13 @@ describe('unmaskCrawl', () => {
 
     const plan = unmaskCrawl(matrix, 6)
 
-    expect(plan).not.toContainEqual({r: 2, c: 2})
-    expect(plan).toContainEqual({r: 0, c: 0})
-    expect(plan).toContainEqual({r: 0, c: 1})
-    expect(plan).toContainEqual({r: 1, c: 0})
-    expect(plan).toContainEqual({r: 1, c: 1})
-    expect(plan).toContainEqual({r: 1, c: 2})
-    expect(plan).toContainEqual({r: 2, c: 1})
+    expect(plan).not.toContainEqual(pointToIndex(matrix, {r: 2, c: 2}))
+    expect(plan).toContainEqual(pointToIndex(matrix, {r: 0, c: 0}))
+    expect(plan).toContainEqual(pointToIndex(matrix, {r: 0, c: 1}))
+    expect(plan).toContainEqual(pointToIndex(matrix, {r: 1, c: 0}))
+    expect(plan).toContainEqual(pointToIndex(matrix, {r: 1, c: 1}))
+    expect(plan).toContainEqual(pointToIndex(matrix, {r: 1, c: 2}))
+    expect(plan).toContainEqual(pointToIndex(matrix, {r: 2, c: 1}))
   })
 
   it('includes bombs if bombs should be unmasked', () => {
@@ -65,7 +66,7 @@ describe('unmaskCrawl', () => {
       [_, _, _]
     ])
 
-    expect(unmaskCrawl(matrix, 4, [], true)).toContainEqual({r: 0, c: 2})
+    expect(unmaskCrawl(matrix, 4, [], true)).toContainEqual(pointToIndex(matrix, {r: 0, c: 2}))
   })
 
   it('does not unmask distant bombs', () => {
@@ -75,7 +76,7 @@ describe('unmaskCrawl', () => {
       [_, _, _]
     ])
 
-    expect(unmaskCrawl(matrix, 6, [], true)).not.toContainEqual({r: 0, c: 2})
+    expect(unmaskCrawl(matrix, 6, [], true)).not.toContainEqual(pointToIndex(matrix, {r: 0, c: 2}))
   })
 
   it('returns neighbor if it is not a bomb, but neighbor has bombs', () => {
@@ -85,8 +86,8 @@ describe('unmaskCrawl', () => {
       [b, b, b]
     ])
 
-    expect(unmaskCrawl(matrix, 0)).toContainEqual({r: 0, c: 1})
-    expect(unmaskCrawl(matrix, 0)).toContainEqual({r: 1, c: 0})
-    expect(unmaskCrawl(matrix, 0)).toContainEqual({r: 1, c: 1})
+    expect(unmaskCrawl(matrix, 0)).toContainEqual(pointToIndex(matrix, {r: 0, c: 1}))
+    expect(unmaskCrawl(matrix, 0)).toContainEqual(pointToIndex(matrix, {r: 1, c: 0}))
+    expect(unmaskCrawl(matrix, 0)).toContainEqual(pointToIndex(matrix, {r: 1, c: 1}))
   })
 })

@@ -1,4 +1,4 @@
-import { unmaskAroundFlags } from '../../lib/gameplay'
+import { unmaskAroundFlags, pointToIndex } from '../../lib/gameplay'
 import { createMap, _, f, o, b } from './util'
 
 describe('unmaskAroundFlags', () => {
@@ -12,19 +12,19 @@ describe('unmaskAroundFlags', () => {
     const unmasked = unmaskAroundFlags(matrix, 5)
 
     it('does not unmask flags', () => {
-      expect(unmasked).not.toContainEqual({r: 2, c: 2})
+      expect(unmasked).not.toContainEqual(pointToIndex(matrix, {r: 2, c: 2}))
     })
 
     it('unmasks bombs', () => {
-      expect(unmasked).toContainEqual({r: 0, c: 2})
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 0, c: 2}))
     })
 
     it('unmasks adjacent titles', () => {
-      expect(unmasked).toContainEqual({r: 0, c: 0})
-      expect(unmasked).toContainEqual({r: 0, c: 1})
-      expect(unmasked).toContainEqual({r: 1, c: 0})
-      expect(unmasked).toContainEqual({r: 1, c: 1})
-      expect(unmasked).toContainEqual({r: 2, c: 1})
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 0, c: 0}))
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 0, c: 1}))
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 1, c: 0}))
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 1, c: 1}))
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 2, c: 1}))
     })
   })
 
@@ -37,19 +37,19 @@ describe('unmaskAroundFlags', () => {
     const unmasked = unmaskAroundFlags(matrix, 4)
 
     it('does not unmask flags', () => {
-      expect(unmasked).not.toContainEqual({r: 2, c: 1})
-      expect(unmasked).not.toContainEqual({r: 2, c: 2})
+      expect(unmasked).not.toContainEqual(pointToIndex(matrix, {r: 2, c: 1}))
+      expect(unmasked).not.toContainEqual(pointToIndex(matrix, {r: 2, c: 2}))
     })
 
     it('unmasks bombs', () => {
-      expect(unmasked).toContainEqual({r: 0, c: 2})
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 0, c: 2}))
     })
 
     it('unmasks adjacent titles', () => {
-      expect(unmasked).toContainEqual({r: 0, c: 0})
-      expect(unmasked).toContainEqual({r: 0, c: 1})
-      expect(unmasked).toContainEqual({r: 1, c: 0})
-      expect(unmasked).toContainEqual({r: 1, c: 2})
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 0, c: 0}))
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 0, c: 1}))
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 1, c: 0}))
+      expect(unmasked).toContainEqual(pointToIndex(matrix, {r: 1, c: 2}))
     })
   })
 
