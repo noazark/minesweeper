@@ -31,10 +31,9 @@ import {
   isComplete,
   isPlayable,
   isCell,
-  neighboringBombs,
   toggleFlag,
-  unmask,
-  unmaskAroundFlags,
+  // unmask,
+  // unmaskAroundFlags,
   validFirstPlay,
   PROPS,
 } from '../../lib/gameplay';
@@ -100,7 +99,6 @@ export default {
   },
 
   methods: {
-    neighboringBombs,
     isCell,
 
     start(r, c) {
@@ -129,17 +127,25 @@ export default {
       toggleFlag(this.matrix, {r, c})
     },
 
-    unmaskAroundFlags(r, c) {
-      if (!isPlayable(this.matrix)) return
-      const unmasked = unmaskAroundFlags(this.matrix, {r, c})
-      unmasked.forEach((p) => isCell(this.matrix, p, PROPS.MASK) = false)
+    //
+    // These are broken, need to update
+    //
+
+    neighboringBombs() {
+
     },
 
-    unmask(r, c) {
-      if (!isPlayable(this.matrix)) return
-      if (!this.startedAt) this.start(r, c)
-      const unmasked = unmask(this.matrix, {r, c})
-      unmasked.forEach((p) => isCell(this.matrix, p, PROPS.MASK) = false)
+    unmaskAroundFlags() {
+    //   if (!isPlayable(this.matrix)) return
+    //   const unmasked = unmaskAroundFlags(this.matrix, {r, c})
+    //   unmasked.forEach((p) => isCell(this.matrix, p, PROPS.MASK) = false)
+    },
+
+    unmask() {
+    //   if (!isPlayable(this.matrix)) return
+    //   if (!this.startedAt) this.start(r, c)
+    //   const unmasked = unmask(this.matrix, {r, c})
+    //   unmasked.forEach((p) => isCell(this.matrix, p, PROPS.MASK) = false)
     },
   }
 }

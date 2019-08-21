@@ -33,8 +33,8 @@ import {
   isComplete,
   isPlayable,
   isCell,
-  neighboringBombs,
-  safeGet,
+  isValidPoint,
+  countNeighbors,
   toggleFlag,
   unmask,
   unmaskAroundFlags,
@@ -220,7 +220,7 @@ export default {
         if (dir === 'left' || dir === 'l') c -= 1
         if (dir === 'right' || dir === 'r') c += 1
 
-        if (safeGet(this.matrix, {r, c})) {
+        if (isValidPoint(this.matrix, {r, c})) {
           this.cursor = {r, c}
           const unmasked = unmask(this.matrix, {r, c}).filter(this.doUnmask)
           return unmasked.length
@@ -239,7 +239,7 @@ export default {
       if (dir === 'left' || dir === 'l') c -= step
       if (dir === 'right' || dir === 'r') c += step
 
-      if (safeGet(this.matrix, {r, c})) {
+      if (isValidPoint(this.matrix, {r, c})) {
         this.preview = {r, c}
       } else {
         this.preview = {r: null, c: null}
@@ -263,7 +263,7 @@ export default {
       if (dir === 'left' || dir === 'l') c -= step
       if (dir === 'right' || dir === 'r') c += step
 
-      if (safeGet(this.matrix, {r, c})) {
+      if (isValidPoint(this.matrix, {r, c})) {
         return toggleFlag(this.matrix, {r, c}) ? 'OK' : 'Flag removed'
       }
     },

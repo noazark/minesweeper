@@ -73,7 +73,7 @@ export function toggleBit(num:Uint32Array, bit:number, val?:boolean){
   }
 }
 
-function countNeighbors (map:Map, p:MapPoint, prop:PROPS) {
+export function countNeighbors (map:Map, p:MapPoint, prop:PROPS) {
   return neighbors(map, p)
     .map((pair) => isCell(map, pair, prop) ? 1 : 0)
     .reduce((m:number, n:number) => m + n, 0)
@@ -149,14 +149,6 @@ export function findBombs (map:Map) {
       }
       return result
     }, []);
-}
-
-export function neighboringBombs (map:Map, p:MapPoint) {
-  return countNeighbors(map, p, PROPS.BOMB)
-}
-
-export function neighboringFlags (map:Map, p:MapPoint) {
-  return countNeighbors(map, p, PROPS.FLAG)
 }
 
 export function neighbors (map:Map, p:MapPoint) {
@@ -242,13 +234,13 @@ export function toggleFlag (map:Map, p:MapPoint) {
 export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {
   const el = isValidPoint(map, p)
   if (!isCell(map, p, PROPS.FLAG)) um.push(p)
-  if (isCell(map, p, PROPS.BOMB) || neighboringBombs(map, p) > 0) return um
+  if (isCell(map, p, PROPS.BOMB) || countNeighbors(map, p, PROPS.BOMB) > 0) return um
   return um.concat(unmaskCrawl(map, p, um))
 }
 
 export function unmaskAroundFlags (map:Map, p:MapPoint) {
   const el = isValidPoint(map, p)
-  if (!isCell(map, p, PROPS.MASK) && neighboringFlags(map, p) >= neighboringBombs(map, p)) {
+  if (!isCell(map, p, PROPS.MASK) && countNeighbors(map, p, PROPS.FLAG) >= countNeighbors(map, p, PROPS.BOMB)) {
     return unmaskCrawl(map, p, [], true)
   } else {
     return []
@@ -265,7 +257,7 @@ export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs
       const previouslyUnmasked = um.concat(memo).some((pair0) => pair0.r === pair.r && pair0.c === pair.c)
       if (isCell(map, pair, PROPS.FLAG) || previouslyUnmasked) return memo
 
-      const hasBombNeighbors = neighboringBombs(map, pair) > 0
+      const hasBombNeighbors = countNeighbors(map, pair, PROPS.BOMB) > 0
       if (!hasBombNeighbors) return difference(unmask(map, pair, um.concat(memo)), um)
 
       const isNotBomb = !isCell(map, pair, PROPS.BOMB)
@@ -277,5 +269,5 @@ export function unmaskCrawl (map:Map, p:MapPoint, um:Neighbors = [], unmaskBombs
 
 export function validFirstPlay (map:Map, p:MapPoint) {
   const el = isValidPoint(map, p)
-  return !(neighboringBombs(map, p) > 0) && !isCell(map, p, PROPS.BOMB)
+  return !(countNeighbors(map, p, PROPS.BOMB) > 0) && !isCell(map, p, PROPS.BOMB)
 }
