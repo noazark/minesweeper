@@ -15,12 +15,6 @@ interface MapPoint {
 
 type Neighbors = Array<MapPoint>
 
-export interface Cell {
-  [PROPS.BOMB]: boolean,
-  [PROPS.FLAG]: boolean,
-  [PROPS.MASK]: boolean
-}
-
 export interface Map {
   [PROPS.BOMB]: Uint32Array
   [PROPS.FLAG]: Uint32Array
@@ -29,6 +23,13 @@ export interface Map {
   readonly h: number
 }
 
+/**
+ * Creates a new map based on the size and bomb count set.
+ *
+ * @param w Map width
+ * @param h Map height
+ * @param bc Number of bombs to place in map.
+ */
 export function initializeMap (w:number, h:number, bc:number) {
   const map = buildField(w, h)
   const bombs = placeBombs(map, bc)
@@ -39,6 +40,7 @@ export function initializeMap (w:number, h:number, bc:number) {
 
   return map
 }
+
 
 export function buildField (w:number, h:number) {
   const map:Map = {
@@ -76,44 +78,80 @@ function placeBombs (map:Map, bc:number) {
   return bombs
 }
 
-export function testBit(num:Uint32Array, bit:number) {
-  const chunk = Math.floor(bit / HUNK_SIZE)
-  const bitPos = bit % HUNK_SIZE
-  return ((num[chunk]>>bitPos) % 2 != 0)
+/**
+ * Returns `true` if bit is high, `false` if bit is low.
+ *
+ * @param buff The integer buffer storing the bits
+ * @param offset Offset of the bit to test
+ */
+export function testBit(buff:Uint32Array, offset:number) {
+  const chunk = Math.floor(offset / HUNK_SIZE)
+  const chunkOffset = offset % HUNK_SIZE
+  return ((buff[chunk]>>chunkOffset) % 2 != 0)
 }
 
-export function setBit(num:Uint32Array, bit:number) {
-  const chunk = Math.floor(bit / HUNK_SIZE)
-  const bitPos = bit % HUNK_SIZE
-  return num[chunk] = num[chunk] | 1<<bitPos;
+/**
+ * Sets the specified bit in the buffer to high.
+ *
+ * @param buff The integer buffer storing the bits
+ * @param offset Offset of the bit to set high
+ */
+export function setBit(buff:Uint32Array, offset:number) {
+  const chunk = Math.floor(offset / HUNK_SIZE)
+  const chunkOffset = offset % HUNK_SIZE
+  return buff[chunk] = buff[chunk] | 1<<chunkOffset;
 }
 
-export function clearBit(num:Uint32Array, bit:number) {
-  const chunk = Math.floor(bit / HUNK_SIZE)
-  const bitPos = bit % HUNK_SIZE
-  return num[chunk] = num[chunk] & ~(1<<bitPos);
+/**
+ * Sets the specified bit in the buffer to low.
+ *
+ * @param buff The integer buffer storing the bits
+ * @param offset Offset of the bit to set low
+ */
+export function clearBit(buff:Uint32Array, offset:number) {
+  const chunk = Math.floor(offset / HUNK_SIZE)
+  const chunkOffset = offset % HUNK_SIZE
+  return buff[chunk] = buff[chunk] & ~(1<<chunkOffset);
 }
 
-export function toggleBit(num:Uint32Array, bit:number, val?:boolean){
+/**
+ * Toggles the specified bit between high and low. If a `val` is passed in, the
+ * value will be set `true = high` or `false = low`.
+ *
+ * @param buff The integer buffer storing the bits
+ * @param offset Offset of the bit to set low
+ */
+export function toggleBit(num:Uint32Array, offset:number, val?:boolean){
   if (val != null) {
-    return val ? setBit(num, bit) : clearBit(num, bit);
+    return val ? setBit(num, offset) : clearBit(num, offset);
   } else {
-    return !testBit(num, bit) ? setBit(num, bit) : clearBit(num, bit);
+    return !testBit(num, offset) ? setBit(num, offset) : clearBit(num, offset);
   }
 }
 
-export function countNeighbors (map:Map, p:MapPoint, prop:PROPS) {
-  return neighbors(map, p)
-    .map((pair) => isCell(map, pair, prop) ? 1 : 0)
-    .reduce((m:number, n:number) => m + n, 0)
+export function toggle (map:Map, p:MapPoint, prop:PROPS, val?:boolean) {
+  const i = pointToIndex(map, p)
+
+  toggleBit(map[prop], i, val)
+  return testBit(map[prop], i)
+}
+
+export function toggleFlag (map:Map, p:MapPoint) {
+  const i = pointToIndex(map, p)
+
+  if (testBit(map[PROPS.MASK], i)) {
+    toggleBit(map[PROPS.FLAG], i)
+  }
+
+  return testBit(map[PROPS.FLAG], i)
 }
 
 export function isCell (map:Map, p:MapPoint, prop:PROPS) {
   return testBit(map[prop], pointToIndex(map, p))
 }
 
-export function countFlags (map:Map) {
-  return times(map.w*map.h, Number).map((i) => isCell(map, indexToPoint(map, i), PROPS.FLAG) ? 1 : 0).reduce((m:number, n) => m + n, 0)
+export function isValidPoint (map:Map, p:MapPoint) {
+  return p.r >= 0 && p.c >= 0  && p.r < map.h && p.c < map.w
 }
 
 export function isComplete (map:Map) {
@@ -126,35 +164,22 @@ export function isPlayable (map:Map) {
   return !times(map.w*map.h, Number).some((i) => isCell(map, indexToPoint(map, i), PROPS.BOMB) && !isCell(map, indexToPoint(map, i), PROPS.MASK))
 }
 
-export function findBombs (map:Map) {
+export function find (map:Map, prop:PROPS) {
   return times(map.w*map.h, Number).reduce(
     (result:Neighbors, i) => {
-      if (isCell(map, indexToPoint(map, i), PROPS.BOMB)) {
+      if (isCell(map, indexToPoint(map, i), prop)) {
         result.push(indexToPoint(map, i))
       }
       return result
     }, []);
 }
 
-export function neighbors (map:Map, p:MapPoint) {
-  /* eslint-disable standard/array-bracket-even-spacing */
-  const neighbors = [
-    [-1, -1], [-1, 0], [-1, +1],
-    [ 0, -1], /* me */ [ 0, +1],
-    [+1, -1], [+1, 0], [+1, +1]
-  ]
-  /* eslint-enable standard/array-bracket-even-spacing */
+export function findBombs (map:Map) {
+  return find(map, PROPS.BOMB)
+}
 
-  return neighbors.reduce((neighbors:Neighbors, neighbor) => {
-    const [rd, cd] = neighbor
-    const point = {r: p.r + rd, c: p.c + cd}
-
-    if (isValidPoint(map, point)) {
-      neighbors = [...neighbors, point]
-    }
-
-    return neighbors
-  }, [])
+export function countFlags (map:Map) {
+  return find(map, PROPS.FLAG).length
 }
 
 /**
@@ -188,25 +213,31 @@ export function pointToIndex(map:Map, p:MapPoint) {
   return (p.r*map.w)+p.c
 }
 
-export function isValidPoint (map:Map, p:MapPoint) {
-  return p.r >= 0 && p.c >= 0  && p.r < map.h && p.c < map.w
+export function neighbors (map:Map, p:MapPoint) {
+  /* eslint-disable standard/array-bracket-even-spacing */
+  const neighbors = [
+    [-1, -1], [-1, 0], [-1, +1],
+    [ 0, -1], /* me */ [ 0, +1],
+    [+1, -1], [+1, 0], [+1, +1]
+  ]
+  /* eslint-enable standard/array-bracket-even-spacing */
+
+  return neighbors.reduce((neighbors:Neighbors, neighbor) => {
+    const [rd, cd] = neighbor
+    const point = {r: p.r + rd, c: p.c + cd}
+
+    if (isValidPoint(map, point)) {
+      neighbors = [...neighbors, point]
+    }
+
+    return neighbors
+  }, [])
 }
 
-export function toggle (map:Map, p:MapPoint, prop:PROPS, val?:boolean) {
-  const i = pointToIndex(map, p)
-
-  toggleBit(map[prop], i, val)
-  return testBit(map[prop], i)
-}
-
-export function toggleFlag (map:Map, p:MapPoint) {
-  const i = pointToIndex(map, p)
-
-  if (testBit(map[PROPS.MASK], i)) {
-    toggleBit(map[PROPS.FLAG], i)
-  }
-
-  return testBit(map[PROPS.FLAG], i)
+export function countNeighbors (map:Map, p:MapPoint, prop:PROPS) {
+  return neighbors(map, p)
+    .map((pair) => isCell(map, pair, prop) ? 1 : 0)
+    .reduce((m:number, n:number) => m + n, 0)
 }
 
 export function unmask (map:Map, p:MapPoint, um:Neighbors = []) {

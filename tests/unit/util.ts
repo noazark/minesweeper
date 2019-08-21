@@ -1,11 +1,16 @@
 import { flatten } from 'lodash'
 import {
-  Cell,
   Map,
   buildField,
   toggleBit,
   PROPS
 } from '../../lib/gameplay'
+
+export interface Cell {
+  [PROPS.BOMB]: boolean,
+  [PROPS.FLAG]: boolean,
+  [PROPS.MASK]: boolean
+}
 
 /**
  * Creates a map from a 2D array.
