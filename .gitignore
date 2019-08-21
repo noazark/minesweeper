@@ -4,3 +4,4 @@ dist/build.js
 dist/build.css
 npm-debug.log
 dist/
+coverage/

@@ -150,18 +150,38 @@ export function isCell (map:Map, p:MapPoint, prop:PROPS) {
   return testBit(map[prop], pointToIndex(map, p))
 }
 
-export function isValidPoint (map:Map, p:MapPoint) {
-  return p.r >= 0 && p.c >= 0  && p.r < map.h && p.c < map.w
+export function isValidPoint ({w, h}:Map, {r, c}:MapPoint) {
+  return r >= 0 && c >= 0 && r < h && c < w
 }
 
 export function isComplete (map:Map) {
-  return !times(map.w*map.h, Number).some((i) => {
-    return !isPlayable(map) || !isCell(map, indexToPoint(map, i), PROPS.BOMB) && isCell(map, indexToPoint(map, i), PROPS.FLAG) || !isCell(map, indexToPoint(map, i), PROPS.BOMB) && isCell(map, indexToPoint(map, i), PROPS.MASK)
-  })
+  // map must be playable, but only contain flagged or masked bombs
+  return isPlayable(map)
+    && !times(map.w*map.h, Number)
+      .some((i) => _cellFalseFlag(map, i) || _cellVoid(map, i))
 }
 
 export function isPlayable (map:Map) {
-  return !times(map.w*map.h, Number).some((i) => isCell(map, indexToPoint(map, i), PROPS.BOMB) && !isCell(map, indexToPoint(map, i), PROPS.MASK))
+  // map must not have any exposed bombs
+  return !times(map.w*map.h, Number).some((i) => _cellBoom(map, i))
+}
+
+// not an unmasked bomb; BOOM
+function _cellBoom (map:Map, i:number) {
+  const p = indexToPoint(map, i)
+  return isCell(map, p, PROPS.BOMB) && !isCell(map, p, PROPS.MASK)
+}
+
+// not a bomb, but has a flag; liar
+function _cellFalseFlag (map:Map, i:number) {
+  const p = indexToPoint(map, i)
+  return !isCell(map, p, PROPS.BOMB) && isCell(map, p, PROPS.FLAG)
+}
+
+// not a bomb, but has a mask; it's miserable inside
+function _cellVoid (map:Map, i:number) {
+  const p = indexToPoint(map, i)
+  return !isCell(map, p, PROPS.BOMB) && isCell(map, p, PROPS.MASK)
 }
 
 export function find (map:Map, prop:PROPS) {
