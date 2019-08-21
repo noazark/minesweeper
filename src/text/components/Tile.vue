@@ -1,5 +1,5 @@
 <template>
-  <pre
+  <div
     class="tile"
     :class="{
       [`val-${bombCount}`]: !isMasked,
@@ -10,7 +10,7 @@
       active: isActive,
       preview: isPreview
     }" v-html="display">
-  </pre>
+  </div>
 </template>
 
 <script>

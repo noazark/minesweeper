@@ -1,15 +1,15 @@
-import { validFirstPlay } from '../../lib/gameplay'
+import { validFirstPlay, createMap } from '../../lib/gameplay'
 
 describe('validFirstPlay', function () {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }
-  const f = { isMasked: true, isFlagged: true, isBomb: false }
-  const b = { isMasked: true, isFlagged: false, isBomb: true }
+  const f = { ..._, isFlagged: true }
+  const b = { ..._, isBomb: true }
 
-  const matrix = [
+  const matrix = createMap([
     [_, _, b],
     [_, _, _],
     [_, _, f]
-  ]
+  ])
 
   it('returns true if tile is alone', function () {
     expect(validFirstPlay(matrix, {r: 0, c: 0})).toBe(true)

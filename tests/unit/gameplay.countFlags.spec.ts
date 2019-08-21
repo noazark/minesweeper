@@ -1,4 +1,4 @@
-import { Map, countFlags } from '../../lib/gameplay'
+import { createMap, Map, countFlags } from '../../lib/gameplay'
 
 
 describe('countFlags', function () {
@@ -11,27 +11,27 @@ describe('countFlags', function () {
   const f = { ..._, isFlagged: true }
   const b = { ..._, isBomb: true }
 
-  function expectFlags (expected:number, ...field:Map) {
-    expect(countFlags([...field])).toEqual(expected)
+  function expectFlags (expected:number, map:Map) {
+    expect(countFlags(map)).toEqual(expected)
   }
 
   it('returns the number of flags on the field', function () {
-    expectFlags(3,
+    expectFlags(3, createMap([
       [f, o, b],
       [f, f, o],
       [o, o, o]
-    )
+    ]))
 
-    expectFlags(1,
+    expectFlags(1, createMap([
       [_, o, f],
       [_, _, o],
       [o, o, o]
-    )
+    ]))
 
-    expectFlags(9,
+    expectFlags(9, createMap([
       [f, f, f],
       [f, f, f],
       [f, f, f]
-    )
+    ]))
   })
 })

@@ -1,16 +1,16 @@
-import { unmaskAroundFlags } from '../../lib/gameplay'
+import { unmaskAroundFlags, createMap } from '../../lib/gameplay'
 
 describe('unmaskAroundFlags', function () {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }
-  const o = { isMasked: false, isFlagged: false, isBomb: false }
-  const f = { isMasked: true, isFlagged: true, isBomb: false }
-  const b = { isMasked: true, isFlagged: false, isBomb: true }
+  const o = { ..._, isMasked: false }
+  const f = { ..._, isFlagged: true }
+  const b = { ..._, isBomb: true }
 
-  const matrix = [
+  const matrix = createMap([
     [_, o, b],
     [_, _, o],
     [_, _, f]
-  ]
+  ])
 
   describe('on unmasked tile w/ equal flags', function () {
     const unmasked = unmaskAroundFlags(matrix, {r: 1, c: 2})
@@ -33,11 +33,11 @@ describe('unmaskAroundFlags', function () {
   })
 
   describe('on unmasked tile w/ greater than equal flags', function () {
-    const matrix = [
+    const matrix = createMap([
       [_, o, b],
       [_, o, _],
       [_, f, f]
-    ]
+    ])
     const unmasked = unmaskAroundFlags(matrix, {r: 1, c: 1})
 
     it('does not unmask flags', function () {

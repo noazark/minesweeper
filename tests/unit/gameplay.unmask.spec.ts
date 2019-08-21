@@ -1,22 +1,22 @@
-import { unmask} from '../../lib/gameplay'
+import { unmask, createMap} from '../../lib/gameplay'
 
 describe('unmask', function () {
   const _ = { isMasked: true, isFlagged: false, isBomb: false }
-  const f = { isMasked: true, isFlagged: true, isBomb: false }
-  const b = { isMasked: true, isFlagged: false, isBomb: true }
+  const f = { ..._, isFlagged: true }
+  const b = { ..._, isBomb: true }
 
-  const matrix = [
+  const matrix = createMap([
     [_, _, b],
     [_, _, _],
     [_, _, f]
-  ]
+  ])
 
   it('is not pathological', function () {
-    const matrix = [
+    const matrix = createMap([
       [_, _, _],
       [_, _, _],
       [_, _, _]
-    ]
+    ])
 
     expect(unmask(matrix, {r: 1, c: 1}).length).toEqual(9)
   })

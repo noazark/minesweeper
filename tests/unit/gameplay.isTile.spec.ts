@@ -1,4 +1,4 @@
-import { isTile, safeGet, PROPS } from '../../lib/gameplay'
+import { isTile, safeGet, PROPS, createMap } from '../../lib/gameplay'
 
 describe('isTile', function () {
   const _ = {
@@ -18,7 +18,7 @@ describe('isTile', function () {
   })
 
   it('returns false if the tile is undefined', function () {
-    const matrix = [[]]
+    const matrix = createMap([[]])
     const el = safeGet(matrix, {r: 0, c: 0})
     expect(isTile(PROPS.BOMB, el)).toBe(false)
   })

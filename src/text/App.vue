@@ -1,17 +1,15 @@
 <template>
   <div class="txt-app">
     <code class="map">
-      <template v-for="(row, r) in matrix">
-        <template v-for="(col, c) in row">
-          <tile
-            :key="`${r}-${c}`"
-            :isBomb="isBomb(col)"
-            :isMasked="isMasked(col)"
-            :isFlagged="isFlagged(col)"
-            :bombCount="neighboringBombs(matrix, {r, c})"
-            :isActive="(cursor.r == r && cursor.c == c)"
-            :isPreview="(preview.r == r && preview.c == c)"></tile>
-        </template><br :key="`${r}`">
+      <template v-for="(el, i) in matrix.data" >
+        <tile
+          :key="i"
+          :isBomb="isBomb(el)"
+          :isMasked="isMasked(el)"
+          :isFlagged="isFlagged(el)"
+          :bombCount="neighboringBombs(matrix, indexToPoint(matrix, i))"
+          :isActive="(cursor.r == indexToPoint(matrix, i).r && cursor.c == indexToPoint(matrix, i).c)"
+          :isPreview="(preview.r == indexToPoint(matrix, i).r && preview.c == indexToPoint(matrix, i).c)"></tile>
       </template>
     </code>
 
@@ -27,6 +25,7 @@
 
 <script>
 import {
+  indexToPoint,
   getCell,
   countFlags,
   findBombs,
@@ -59,7 +58,7 @@ export default {
       preview: {r: 0, c: 0},
       gameSize: [30, 16],
       bombCount: 99,
-      matrix: [],
+      matrix: null,
       playing: true,
       score: 0,
       output: '',
@@ -104,6 +103,7 @@ export default {
   },
 
   methods: {
+    indexToPoint,
     neighboringBombs,
 
     isBomb(tile) {
@@ -322,7 +322,10 @@ export default {
 }
 
 .map {
-  letter-spacing: .5rem;
+  // letter-spacing: .5rem;
+  display: grid;
+  grid-template-columns: repeat(30, 20px [col-start]);
+  grid-template-rows: repeat(16, 20px [col-start]);
 }
 
 .history {

@@ -1,4 +1,4 @@
-import { findBombs } from '../../lib/gameplay'
+import { findBombs, createMap } from '../../lib/gameplay'
 
 describe('findBombs', function () {
   const _ = {
@@ -9,11 +9,11 @@ describe('findBombs', function () {
   const b = { ..._, isBomb: true }
 
   it('returns all bomb coords', function () {
-    const matrix = [
+    const matrix = createMap([
       [_, _, b],
       [_, b, _],
       [b, _, _]
-    ]
+    ])
 
     expect(findBombs(matrix)).toEqual([
       {r: 0, c: 2},

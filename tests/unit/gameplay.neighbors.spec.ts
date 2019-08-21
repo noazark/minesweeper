@@ -1,4 +1,4 @@
-import { neighbors } from '../../lib/gameplay'
+import { neighbors, createMap } from '../../lib/gameplay'
 
 describe('neighbors', function () {
   const _ = {
@@ -7,11 +7,11 @@ describe('neighbors', function () {
     isFlagged:  false
   }
   /* eslint-disable standard/array-bracket-even-spacing */
-  const matrix = [
+  const matrix = createMap([
     [_, _, _],
     [_, _, _],
     [_, _, _]
-  ]
+  ])
   /* eslint-enable standard/array-bracket-even-spacing */
 
   it('iterates over all adjacent tiles', function () {
