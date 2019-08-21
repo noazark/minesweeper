@@ -11,7 +11,7 @@ describe('neighbors', () => {
   /* eslint-enable standard/array-bracket-even-spacing */
 
   it('iterates over all adjacent tiles', () => {
-    const iterated = neighbors(matrix, {r: 1, c: 1})
+    const iterated = neighbors(matrix, 4)
     expect(iterated).toContainEqual({r: 0, c: 0})
     expect(iterated).toContainEqual({r: 0, c: 1})
     expect(iterated).toContainEqual({r: 0, c: 2})
@@ -24,7 +24,7 @@ describe('neighbors', () => {
   })
 
   it('iterates over all adjacent tiles on corners', () => {
-    const iterated = neighbors(matrix, {r: 0, c: 0})
+    const iterated = neighbors(matrix, 0)
     expect(iterated).not.toContainEqual({r: 0, c: 0})
     expect(iterated).toContainEqual({r: 0, c: 1})
     expect(iterated).toContainEqual({r: 1, c: 0})
@@ -32,7 +32,7 @@ describe('neighbors', () => {
   })
 
   it('iterates over all adjacent tiles on sides', () => {
-    const iterated = neighbors(matrix, {r: 1, c: 0})
+    const iterated = neighbors(matrix, 3)
     expect(iterated).toContainEqual({r: 0, c: 0})
     expect(iterated).toContainEqual({r: 0, c: 1})
     expect(iterated).not.toContainEqual({r: 1, c: 0})

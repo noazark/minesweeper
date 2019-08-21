@@ -243,8 +243,7 @@ export function pointToIndex(map:Map, p:MapPoint) {
   return (p.r*map.w)+p.c
 }
 
-// TODO: convert to offset to unbind datamodel from rectangular grids
-export function neighbors (map:Map, p:MapPoint) {
+export function neighbors (map:Map, offset:number) {
   /* eslint-disable standard/array-bracket-even-spacing */
   const neighbors = [
     [-1, -1], [-1, 0], [-1, +1],
@@ -253,6 +252,7 @@ export function neighbors (map:Map, p:MapPoint) {
   ]
   /* eslint-enable standard/array-bracket-even-spacing */
 
+  const p = indexToPoint(map,  offset)
   return neighbors.reduce((neighbors:Neighbors, neighbor) => {
     const [rd, cd] = neighbor
     const point = {r: p.r + rd, c: p.c + cd}
@@ -266,8 +266,7 @@ export function neighbors (map:Map, p:MapPoint) {
 }
 
 export function countNeighbors (map:Map, offset:number, prop:PROPS) {
-  const p = indexToPoint(map, offset)
-  return neighbors(map, p)
+  return neighbors(map, offset)
     .map((pair) => isCell(map, pointToIndex(map, pair), prop) ? 1 : 0)
     .reduce((m:number, n:number) => m + n, 0)
 }
@@ -288,10 +287,9 @@ export function unmaskAroundFlags (map:Map, offset:number) {
 }
 
 export function unmaskCrawl (map:Map, offset:number, um:Neighbors = [], unmaskBombs = false):Neighbors {
-  const p = indexToPoint(map, offset)
   if (isCell(map, offset, PROPS.FLAG)) return []
 
-  return neighbors(map, p)
+  return neighbors(map, offset)
     .reduce((memo:Neighbors, pair:MapPoint) => {
       const offset = pointToIndex(map, pair)
 
