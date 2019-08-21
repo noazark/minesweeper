@@ -11,10 +11,10 @@ describe('countNeighbors bombs', () => {
     ])
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(countNeighbors(matrix, {r: 1, c: 1}, PROPS.BOMB)).toEqual(3)
-    expect(countNeighbors(matrix, {r: 0, c: 1}, PROPS.BOMB)).toEqual(2)
-    expect(countNeighbors(matrix, {r: 2, c: 1}, PROPS.BOMB)).toEqual(1)
-    expect(countNeighbors(matrix, {r: 2, c: 0}, PROPS.BOMB)).toEqual(0)
+    expect(countNeighbors(matrix, 4, PROPS.BOMB)).toEqual(3)
+    expect(countNeighbors(matrix, 1, PROPS.BOMB)).toEqual(2)
+    expect(countNeighbors(matrix, 7, PROPS.BOMB)).toEqual(1)
+    expect(countNeighbors(matrix, 6, PROPS.BOMB)).toEqual(0)
   })
 
   it('returns just the flag count of the siblings, not including self', () => {
@@ -26,7 +26,7 @@ describe('countNeighbors bombs', () => {
     ])
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(countNeighbors(matrix, {r: 1, c: 1}, PROPS.BOMB)).toEqual(1)
+    expect(countNeighbors(matrix, 4, PROPS.BOMB)).toEqual(1)
   })
 })
 
@@ -43,7 +43,7 @@ describe('countNeighbors flags', () => {
     ])
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(countNeighbors(matrix, {r: 1, c: 1}, PROPS.FLAG)).toEqual(3)
+    expect(countNeighbors(matrix, 4, PROPS.FLAG)).toEqual(3)
   })
 
   it('returns just the flag count of the siblings, not including self', () => {
@@ -55,6 +55,6 @@ describe('countNeighbors flags', () => {
     ])
     /* eslint-enable standard/array-bracket-even-spacing */
 
-    expect(countNeighbors(matrix, {r: 1, c: 1}, PROPS.FLAG)).toEqual(1)
+    expect(countNeighbors(matrix, 4, PROPS.FLAG)).toEqual(1)
   })
 })

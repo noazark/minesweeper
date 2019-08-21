@@ -107,8 +107,7 @@ export default {
     indexToPoint,
 
     neighboringBombs(map, i) {
-      const p = indexToPoint(map, i)
-      return countNeighbors(map, p, PROPS.BOMB)
+      return countNeighbors(map, i, PROPS.BOMB)
     },
 
     isBomb(map, i) {
