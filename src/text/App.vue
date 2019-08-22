@@ -327,7 +327,7 @@ export default {
 
 .map {
   display: grid;
-  grid-template-columns: repeat(var(--columns), 20px [col-start]);
+  grid-template-columns: repeat(var(--columns), 1.5rem [col-start]);
 }
 
 .history {

@@ -42,6 +42,8 @@ export default {
 <style lang="scss" scoped>
 .tile {
   display: inline;
+  border-bottom: 2px solid transparent;
+  text-align: center;
 }
 
 .unmasked {
@@ -66,6 +68,6 @@ export default {
 }
 
 .preview {
-  border-bottom: 2px solid #454545;
+  border-bottom-color: #454545;
 }
 </style>
