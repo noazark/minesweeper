@@ -75,11 +75,11 @@ $tile-text-color: white;
   background: $mask-background-color;
   display: flex;
   flex-direction: column;
-  height: 20px;
   justify-content: center;
   text-align: center;
-  width: 20px;
-  font-size:50%;
+  height: 1.5rem;
+  width: 1.5rem;
+  font-size:70%;
 }
 
 .masked:hover {

@@ -1,29 +1,30 @@
 <template>
   <div class="classic-app">
-    <span class='right'>{{flagCount}}</span>
-    :
-    <timer class="left" :time="time"></timer>
-    :
-    <a href="" @click.prevent="restart">restart</a>
-    <template v-for="(row, r) in matrix">
-      <div class="row" :key="r">
-        <div class="col" v-for="(el, c) in row" :key="c">
-          <tile
-            :isBomb="isCell(PROPS.BOMB, el)"
-            :isMasked="isCell(PROPS.MASK, el)"
-            :isFlagged="isCell(PROPS.FLAG, el)"
-            :bombCount="neighboringBombs(matrix, {r, c})"
-            @flag="flag(r, c)"
-            @unmaskAroundFlags="unmaskAroundFlags(r, c)"
-            @unmask="unmask(r, c)">
-          </tile>
-        </div>
-      </div>
-    </template>
+    <div class="timer">
+      <span class='right'>{{flagCount}}</span>
+      :
+      <timer class="left" :time="time"></timer>
+      :
+      <a href="" @click.prevent="restart">restart</a>
+    </div>
+
+    <div class="map" :style="{ '--columns': gameSize[0] }">
+      <template v-for="(el, i) in times(matrix.w*matrix.h, Number)" >
+        <tile
+          :isBomb="isCell(matrix, i, PROPS.BOMB)"
+          :isMasked="isCell(matrix, i, PROPS.MASK)"
+          :isFlagged="isCell(matrix, i, PROPS.FLAG)"
+          :bombCount="countNeighbors(matrix, i, PROPS.BOMB)"
+          @flag="flag(i)"
+          @unmaskAroundFlags="unmaskAroundFlags(i)"
+          @unmask="unmask(i)" />
+      </template>
+    </div>
   </div>
 </template>
 
 <script>
+import { times } from 'lodash'
 import {
   countFlags,
   findBombs,
@@ -32,8 +33,10 @@ import {
   isPlayable,
   isCell,
   toggleFlag,
-  // unmask,
-  // unmaskAroundFlags,
+  toggle,
+  unmask,
+  unmaskAroundFlags,
+  countNeighbors,
   validFirstPlay,
   PROPS,
 } from '../../lib/gameplay';
@@ -85,7 +88,7 @@ export default {
 
         if (!isComplete(this.matrix) && !isPlayable(this.matrix)) {
           const unmasked = findBombs(this.matrix)
-          unmasked.forEach((p) => isCell(this.matrix, p).isMasked = false)
+          unmasked.forEach((i) => isCell(this.matrix, i).isMasked = false)
         }
       },
       deep: true
@@ -99,10 +102,12 @@ export default {
   },
 
   methods: {
+    times,
     isCell,
+    countNeighbors,
 
-    start(r, c) {
-      while (!validFirstPlay(this.matrix, {r, c})) {
+    start(i) {
+      while (!validFirstPlay(this.matrix, i)) {
         this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], this.bombCount)
       }
 
@@ -121,32 +126,31 @@ export default {
       this.playing = false
     },
 
-    flag(r, c) {
+    flag(i) {
       if (!isPlayable(this.matrix)) return
-      if (!this.startedAt) this.start(r, c)
-      toggleFlag(this.matrix, {r, c})
+      if (!this.startedAt) this.start(i)
+      toggleFlag(this.matrix, i)
     },
 
-    //
-    // These are broken, need to update
-    //
-
-    neighboringBombs() {
+    unmaskAroundFlags(i) {
+      if (!isPlayable(this.matrix)) return
+      const unmasked = unmaskAroundFlags(this.matrix, i)
+      unmasked.forEach((i) => isCell(this.matrix, i, PROPS.MASK))
+      unmasked.forEach((offset) => this.doUnmask(offset))
 
     },
 
-    unmaskAroundFlags() {
-    //   if (!isPlayable(this.matrix)) return
-    //   const unmasked = unmaskAroundFlags(this.matrix, {r, c})
-    //   unmasked.forEach((p) => isCell(this.matrix, p, PROPS.MASK) = false)
+    unmask(i) {
+      if (!isPlayable(this.matrix)) return
+      if (!this.startedAt) this.start(i)
+      const unmasked = unmask(this.matrix, i)
+      unmasked.forEach((offset) => this.doUnmask(offset))
     },
 
-    unmask() {
-    //   if (!isPlayable(this.matrix)) return
-    //   if (!this.startedAt) this.start(r, c)
-    //   const unmasked = unmask(this.matrix, {r, c})
-    //   unmasked.forEach((p) => isCell(this.matrix, p, PROPS.MASK) = false)
-    },
+    doUnmask (offset) {
+      toggle(this.matrix, offset, PROPS.MASK, false)
+      return true
+    }
   }
 }
 </script>
@@ -155,15 +159,17 @@ export default {
 .classic-app {
   font-family: -apple-system, sans-serif;
   background: white;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.row {
-  line-height: 0;
+.timer {
+  margin-bottom: .5rem;
 }
 
-.col {
-  display: inline-block;
-  vertical-align: middle;
+.map {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1.5rem [col-start]);
 }
 </style>
