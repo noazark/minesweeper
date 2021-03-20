@@ -1,7 +1,7 @@
 <template>
   <div class="txt-app">
     <code class="map" :style="{ '--columns': gameSize[0] }">
-      <template v-for="(el, i) in times(matrix.w*matrix.h, Number)" >
+      <template v-for="(el, i) in times(matrix.size, Number)" >
         <tile
           :key="i"
           :isBomb="isBomb(matrix, i)"
