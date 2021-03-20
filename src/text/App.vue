@@ -26,7 +26,7 @@
 <script>
 import {
   toggle,
-  indexToPoint,
+  offsetToPoint,
   countFlags,
   findBombs,
   initializeMap,
@@ -40,7 +40,7 @@ import {
   unmaskAroundFlags,
   validFirstPlay,
   PROPS,
-  pointToIndex
+  pointToOffset
 } from '../../lib/gameplay';
 import Terminal from './components/Terminal.vue'
 import Tile from './components/Tile.vue'
@@ -104,7 +104,7 @@ export default {
 
   methods: {
     times,
-    indexToPoint,
+    offsetToPoint,
 
     neighboringBombs(map, i) {
       return countNeighbors(map, i, PROPS.BOMB)
@@ -209,7 +209,7 @@ export default {
       step = parseInt(step)
 
       const moves = times(step, () => {
-        let {r, c} = indexToPoint(this.matrix, this.cursor)
+        let {r, c} = offsetToPoint(this.matrix, this.cursor)
 
         if (dir === 'up' || dir === 'u') r -= 1
         if (dir === 'down' || dir === 'd') r += 1
@@ -217,7 +217,7 @@ export default {
         if (dir === 'right' || dir === 'r') c += 1
 
         if (isValidPoint(this.matrix, {r, c})) {
-          this.cursor = pointToIndex(this.matrix, {r, c})
+          this.cursor = pointToOffset(this.matrix, {r, c})
           const unmasked = unmask(this.matrix, this.cursor).filter(this.doUnmask)
           return unmasked.length
         }
@@ -228,7 +228,7 @@ export default {
 
     cmdPreview(cmd, dir, step=1) {
       step = parseInt(step)
-      let {r, c} = indexToPoint(this.matrix, this.cursor)
+      let {r, c} = offsetToPoint(this.matrix, this.cursor)
 
       if (dir === 'up' || dir === 'u') r -= step
       if (dir === 'down' || dir === 'd') r += step
@@ -236,7 +236,7 @@ export default {
       if (dir === 'right' || dir === 'r') c += step
 
       if (isValidPoint(this.matrix, {r, c})) {
-        this.preview = pointToIndex(this.matrix, {r, c})
+        this.preview = pointToOffset(this.matrix, {r, c})
       } else {
         this.preview = null
       }
@@ -252,7 +252,7 @@ export default {
 
     flag (cmd, dir, step=1) {
       step = parseInt(step)
-      let {r, c} = indexToPoint(this.matrix, this.cursor)
+      let {r, c} = offsetToPoint(this.matrix, this.cursor)
 
       if (dir === 'up' || dir === 'u') r -= step
       if (dir === 'down' || dir === 'd') r += step
@@ -260,7 +260,7 @@ export default {
       if (dir === 'right' || dir === 'r') c += step
 
       const flagP = {r, c}
-      const flagOffset = pointToIndex(this.matrix, flagP)
+      const flagOffset = pointToOffset(this.matrix, flagP)
 
       if (isValidPoint(this.matrix, flagP)) {
         return toggleFlag(this.matrix, flagOffset) ? 'OK' : 'Flag removed'

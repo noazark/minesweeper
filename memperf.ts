@@ -13,12 +13,12 @@ console.log(`size, bomb count, ${times(runCount, Number).map(i => `m${i+1}`).joi
 for (let i=1; i <= maxSize; i++) {
   const size = i
   const memory = new Array(runCount)
-  const bc = Math.floor(size * .2)
+  const bombCount = Math.floor(size * .2)
   const timeStart = performance.now()
 
   for (let j=0; j < runCount; j++) {
     const before = process.memoryUsage().heapUsed
-    const map = initializeMap(size, size, bc)
+    const map = initializeMap(size, size, bombCount)
     const after = process.memoryUsage().heapUsed
 
     const diff = after - before
@@ -32,7 +32,7 @@ for (let i=1; i <= maxSize; i++) {
 
   const timeEnd = performance.now()
   const timeDiff = timeEnd - timeStart
-  console.log(`${size}, ${bc}, ${memory.join(', ')}, ${timeDiff}`);
+  console.log(`${size}, ${bombCount}, ${memory.join(', ')}, ${timeDiff}`);
 }
 
 const afterAll = process.memoryUsage().heapUsed

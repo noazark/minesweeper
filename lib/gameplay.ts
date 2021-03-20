@@ -28,20 +28,21 @@ export interface Map {
  *
  * @param w Map width
  * @param h Map height
- * @param bc Number of bombs to place in map. Defaults to 20% the size of the
+ * @param bombCount Number of bombs to place in map. Defaults to 20% the size of the
  *           map.
  */
-export function initializeMap (w:number, h:number, bc?:number) {
-  if (bc == null) {
-    bc = Math.floor(w * h * 0.2)
+export function initializeMap (w:number, h:number, bombCount?:number) {
+  const map = buildField(w, h)
+
+  if (bombCount == null) {
+    bombCount = Math.floor(map.size * 0.2)
   }
 
-  if (w * h <= bc || bc < 0) {
+  if (map.size <= bombCount || bombCount < 0) {
     throw new Error('invalid map')
   }
 
-  const map = buildField(w, h)
-  const bombs = _placeBombs(map, bc)
+  const bombs = _placeBombs(map, bombCount)
 
   bombs.forEach((offset) => {
     toggle(map, offset, PROPS.BOMB, true)
@@ -69,11 +70,10 @@ export function buildField (w:number, h:number) {
   return map
 }
 
-function _placeBombs (map:Map, bc:number) {
-  const {w, h} = map
+function _placeBombs (map:Map, bombCount:number) {
   const bombs:number[] = []
 
-  times(bc, () => {
+  times(bombCount, () => {
     let i:number
 
     do {
@@ -160,8 +160,9 @@ export function isCell (map:Map, offset:number, prop:PROPS) {
   return testBit(map[prop], offset)
 }
 
-// TODO: convert to offset to unbind datamodel from rectangular grids
+// TODO: update coordinate system
 export function isValidPoint ({w, h}:Map, {r, c}:MapPoint) {
+  // this requires knowledge of the boundaries (height and width in this case).
   return r >= 0 && c >= 0 && r < h && c < w
 }
 
@@ -211,16 +212,17 @@ export function countFlags (map:Map) {
 }
 
 /**
- * Converts the index of a cell on a map to it's row and column coordinates.
+ * Converts the offset of a cell on a map to it's row and column coordinates.
  *
- * The inverse of `pointToIndex`.
+ * The inverse of `pointToOffset`.
  *
  * @param map
  * @param i
  */
-export function indexToPoint(map:Map, i: number) {
-  if (i > (map.w * map.h) - 1) {
-    throw new Error('index is out of range')
+// TODO: update coordinate system
+export function offsetToPoint(map:Map, i: number) {
+  if (i > (map.size) - 1) {
+    throw new Error('offset is out of range')
   }
 
   const r = Math.floor(i / map.w)
@@ -230,15 +232,16 @@ export function indexToPoint(map:Map, i: number) {
 }
 
 /**
- * Converts a row and column coordinate pair to an index for a cell on a map.
+ * Converts a row and column coordinate pair to an offset for a cell on a map.
  *
- * The inverse of `indexToPoint`.
+ * The inverse of `offsetToPoint`.
  *
  * @param map
  * @param i
  */
-export function pointToIndex(map:Map, p:MapPoint) {
-  return (p.r*map.w)+p.c
+// TODO: update coordinate system
+export function pointToOffset(map:Map, p:MapPoint) {
+  return (p.r * map.w) + p.c
 }
 
 export function neighbors (map:Map, offset:number) {
@@ -250,13 +253,13 @@ export function neighbors (map:Map, offset:number) {
   ]
   /* eslint-enable standard/array-bracket-even-spacing */
 
-  const p = indexToPoint(map,  offset)
+  const p = offsetToPoint(map,  offset)
   return neighbors.reduce((neighbors:Neighbors, neighbor) => {
     const [rd, cd] = neighbor
     const point = {r: p.r + rd, c: p.c + cd}
 
     if (isValidPoint(map, point)) {
-      neighbors = [...neighbors, pointToIndex(map, point)]
+      neighbors = [...neighbors, pointToOffset(map, point)]
     }
 
     return neighbors

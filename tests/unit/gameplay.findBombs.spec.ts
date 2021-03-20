@@ -1,4 +1,4 @@
-import { findBombs, pointToIndex } from '../../lib/gameplay'
+import { findBombs, pointToOffset } from '../../lib/gameplay'
 import { createMap, _, b } from './util'
 
 describe('findBombs', () => {
@@ -14,6 +14,6 @@ describe('findBombs', () => {
       {r: 0, c: 2},
       {r: 1, c: 1},
       {r: 2, c: 0}
-    ].map((p) => pointToIndex(matrix,  p)))
+    ].map((p) => pointToOffset(matrix,  p)))
   })
 })
