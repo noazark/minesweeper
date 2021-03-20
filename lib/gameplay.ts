@@ -8,6 +8,12 @@ export enum PROPS {
   MASK = 'mask'
 }
 
+/**
+ * A point on a 2D cartesian grid.
+ *
+ * @member {number} r is the row
+ * @member {number} c is the column
+ */
 interface MapPoint {
   r: number,
   c: number
@@ -21,6 +27,7 @@ export interface Map {
   [PROPS.MASK]: Uint32Array
   readonly w: number
   readonly h: number
+  readonly size: number
 }
 
 /**
@@ -52,16 +59,20 @@ export function initializeMap (w:number, h:number, bombCount?:number) {
 }
 
 
+// TODO: update coordinate system
 export function buildField (w:number, h:number) {
+  const size = w * h
+
   const map:Map = {
-    [PROPS.BOMB]: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
-    [PROPS.MASK]: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
-    [PROPS.FLAG]: new Uint32Array(Math.ceil(w*h/HUNK_SIZE)),
+    [PROPS.BOMB]: new Uint32Array(Math.ceil(size/HUNK_SIZE)),
+    [PROPS.MASK]: new Uint32Array(Math.ceil(size/HUNK_SIZE)),
+    [PROPS.FLAG]: new Uint32Array(Math.ceil(size/HUNK_SIZE)),
     w,
-    h
+    h,
+    size
   }
 
-  for (let i = 0; i < w*h; i++) {
+  for (let i = 0; i < size; i++) {
     setBit(map[PROPS.MASK], i)
     clearBit(map[PROPS.BOMB], i)
     clearBit(map[PROPS.FLAG], i)
@@ -77,7 +88,7 @@ function _placeBombs (map:Map, bombCount:number) {
     let i:number
 
     do {
-      i = Math.floor(Math.random() * w * h)
+      i = Math.floor(Math.random() * map.size)
     } while (bombs.indexOf(i) >= 0)
 
     bombs.push(i)
@@ -166,16 +177,20 @@ export function isValidPoint ({w, h}:Map, {r, c}:MapPoint) {
   return r >= 0 && c >= 0 && r < h && c < w
 }
 
+/**
+ * Returns true if map is playable and only contains flagged or masked bombs
+ */
 export function isComplete (map:Map) {
-  // map must be playable, but only contain flagged or masked bombs
   return isPlayable(map)
-    && !times(map.w*map.h, Number)
+    && !times(map.size, Number)
       .some((i) => _cellFalseFlag(map, i) || _cellVoid(map, i))
 }
 
+/**
+ * Returns true if map does not contain any exposed bombs
+*/
 export function isPlayable (map:Map) {
-  // map must not have any exposed bombs
-  return !times(map.w*map.h, Number).some((i) => _cellBoom(map, i))
+  return !times(map.size, Number).some((i) => _cellBoom(map, i))
 }
 
 // not an unmasked bomb; BOOM
@@ -194,7 +209,7 @@ function _cellVoid (map:Map, i:number) {
 }
 
 export function find (map:Map, prop:PROPS) {
-  return times(map.w*map.h, Number).reduce(
+  return times(map.size, Number).reduce(
     (result:Neighbors, i) => {
       if (isCell(map, i, prop)) {
         result.push(i)
@@ -244,6 +259,7 @@ export function pointToOffset(map:Map, p:MapPoint) {
   return (p.r * map.w) + p.c
 }
 
+// TODO: update coordinate system
 export function neighbors (map:Map, offset:number) {
   /* eslint-disable standard/array-bracket-even-spacing */
   const neighbors = [
@@ -266,10 +282,12 @@ export function neighbors (map:Map, offset:number) {
   }, [])
 }
 
+const sum = (m:number, n:number) => m + n
+
 export function countNeighbors (map:Map, offset:number, prop:PROPS) {
   return neighbors(map, offset)
     .map((offset) => isCell(map, offset, prop) ? 1 : 0)
-    .reduce((m:number, n:number) => m + n, 0)
+    .reduce(sum, 0)
 }
 
 export function unmask (map:Map, offset:number, um:Neighbors = []) {
