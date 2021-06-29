@@ -208,7 +208,7 @@ export default {
         const funcPreview = func + "Preview";
         const match = val.match(trigger);
 
-        if (match && this.funcPreview) {
+        if (match && this[funcPreview]) {
           this.output = this[funcPreview](...match);
         }
 
