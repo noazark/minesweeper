@@ -1,9 +1,8 @@
 <template>
   <div class="txt-app">
     <code class="map" :style="{ '--columns': gameSize[0] }">
-      <template v-for="(el, i) in times(matrix.size, Number)">
+      <template v-for="(el, i) in times(matrix.size, Number)" :key="i">
         <tile
-          :key="i"
           :isBomb="isBomb(matrix, i)"
           :isMasked="isMasked(matrix, i)"
           :isFlagged="isFlagged(matrix, i)"

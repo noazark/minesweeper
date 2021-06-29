@@ -9,9 +9,8 @@
     </div>
 
     <div class="map" :style="{ '--columns': gameSize[0] }">
-      <template v-for="(el, i) in times(matrix.w * matrix.h, Number)">
+      <template v-for="(el, i) in times(matrix.w * matrix.h, Number)" :key="i">
         <tile
-          :key="i"
           :isBomb="isCell(matrix, i, PROPS.BOMB)"
           :isMasked="isCell(matrix, i, PROPS.MASK)"
           :isFlagged="isCell(matrix, i, PROPS.FLAG)"
