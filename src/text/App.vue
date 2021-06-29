@@ -14,7 +14,7 @@
     </code>
 
     <p>
-      <terminal @input="this.playPreview" @submit="this.play"></terminal>
+      <terminal @input="playPreview" @submit="play"></terminal>
     </p>
 
     <code class="history">
