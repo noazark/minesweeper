@@ -209,7 +209,7 @@ export default {
         const funcPreview = func + "Preview";
         const match = val.match(trigger);
 
-        if (match && this.hasOwnProperty(funcPreview)) {
+        if (match && this.funcPreview) {
           this.output = this[funcPreview](...match);
         }
 
