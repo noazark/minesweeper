@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Classic from './classic/App.vue'
-import Txt from './text/App.vue'
+import Classic from "./classic/App.vue";
+import Txt from "./text/App.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     Classic,
     Txt,
@@ -15,8 +15,8 @@ export default {
 
   data() {
     return {
-      gameMode: 'txt'
-    }
-  }
-}
+      gameMode: "txt",
+    };
+  },
+};
 </script>

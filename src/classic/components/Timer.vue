@@ -6,12 +6,12 @@
 
 <script>
 export default {
-  props: ['time'],
+  props: ["time"],
 
   computed: {
     displayTime() {
-      return (this.time / 1000).toFixed()
-    }
-  }
-}
+      return (this.time / 1000).toFixed();
+    },
+  },
+};
 </script>

@@ -7,55 +7,59 @@
       bomb: isBomb,
       masked: isMasked && !debug,
       unmasked: !isMasked || debug,
-      flagged: isFlagged
+      flagged: isFlagged,
     }"
     @contextmenu.stop.prevent=""
     @mouseup="unmask($event)"
-    @mousedown="track($event)">
-    <template v-if="debug || !isMasked && !isBomb && bombCount">
-      {{bombCount}}
+    @mousedown="track($event)"
+  >
+    <template v-if="debug || (!isMasked && !isBomb && bombCount)">
+      {{ bombCount }}
     </template>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['isBomb', 'isMasked', 'isFlagged', 'bombCount'],
+  props: ["isBomb", "isMasked", "isFlagged", "bombCount"],
 
   data() {
     return {
-      debug: false
-    }
+      debug: false,
+    };
   },
 
   methods: {
     track($event) {
-      $event.preventDefault()
-      $event.stopPropagation()
-      this.evt = $event
+      $event.preventDefault();
+      $event.stopPropagation();
+      this.evt = $event;
     },
 
     unmask($event) {
-      $event.preventDefault()
-      $event.stopPropagation()
+      $event.preventDefault();
+      $event.stopPropagation();
 
       // safely handle when the event has been cleaned up
       if (this.evt == null) {
-        this.evt = $event
+        this.evt = $event;
       }
 
       if (this.evt.buttons === 2) {
-        this.$emit('flag')
-      } else if (this.evt.buttons === (1|2) || this.evt.buttons === (1) && this.evt.metaKey) {
-        this.$emit('unmaskAroundFlags')
-      } else if(this.evt.buttons === (1)) {
-        this.$emit('unmask')
+        this.$emit("flag");
+      } else if (
+        this.evt.buttons === (1 | 2) ||
+        (this.evt.buttons === 1 && this.evt.metaKey)
+      ) {
+        this.$emit("unmaskAroundFlags");
+      } else if (this.evt.buttons === 1) {
+        this.$emit("unmask");
       }
 
-      this.evt = undefined
+      this.evt = undefined;
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -79,7 +83,7 @@ $tile-text-color: white;
   text-align: center;
   height: 1.5rem;
   width: 1.5rem;
-  font-size:70%;
+  font-size: 70%;
 }
 
 .masked:hover {

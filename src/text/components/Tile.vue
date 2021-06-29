@@ -8,35 +8,43 @@
       unmasked: !isMasked,
       flagged: isFlagged,
       active: isActive,
-      preview: isPreview
-    }" v-html="display">
-  </div>
+      preview: isPreview,
+    }"
+    v-html="display"
+  ></div>
 </template>
 
 <script>
 export default {
-  props: ['isBomb', 'isMasked', 'isFlagged', 'bombCount', 'isActive', 'isPreview'],
+  props: [
+    "isBomb",
+    "isMasked",
+    "isFlagged",
+    "bombCount",
+    "isActive",
+    "isPreview",
+  ],
 
   computed: {
     display() {
       if (this.isFlagged) {
-        return 'x'
+        return "x";
       } else if (this.isMasked) {
-        return 'o'
+        return "o";
       } else if (this.isBomb) {
-        return '*'
+        return "*";
       } else {
         if (this.bombCount > 0) {
-          return this.bombCount
+          return this.bombCount;
         } else if (this.isActive) {
-          return '#'
+          return "#";
         } else {
-          return '.'
+          return ".";
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -54,17 +62,17 @@ export default {
   }
 
   &.bomb {
-    color: red
+    color: red;
   }
 }
 
 .flagged {
-  color: blue
+  color: blue;
 }
 
 .masked.active,
 .unmasked.active {
-  color: rgb(83, 233, 52)
+  color: rgb(83, 233, 52);
 }
 
 .preview {

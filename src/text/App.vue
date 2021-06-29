@@ -1,7 +1,7 @@
 <template>
   <div class="txt-app">
     <code class="map" :style="{ '--columns': gameSize[0] }">
-      <template v-for="(el, i) in times(matrix.size, Number)" >
+      <template v-for="(el, i) in times(matrix.size, Number)">
         <tile
           :key="i"
           :isBomb="isBomb(matrix, i)"
@@ -9,7 +9,8 @@
           :isFlagged="isFlagged(matrix, i)"
           :bombCount="neighboringBombs(matrix, i)"
           :isActive="cursor === i"
-          :isPreview="preview != null && preview === i"></tile>
+          :isPreview="preview != null && preview === i"
+        ></tile>
       </template>
     </code>
 
@@ -40,17 +41,17 @@ import {
   unmaskAroundFlags,
   validFirstPlay,
   PROPS,
-  pointToOffset
-} from '../../lib/gameplay';
-import Terminal from './components/Terminal.vue'
-import Tile from './components/Tile.vue'
-import {times} from 'lodash'
-import {stripIndent} from 'common-tags'
+  pointToOffset,
+} from "../../lib/gameplay";
+import Terminal from "./components/Terminal.vue";
+import Tile from "./components/Tile.vue";
+import { times } from "lodash";
+import { stripIndent } from "common-tags";
 
 export default {
   components: {
     Terminal,
-    Tile
+    Tile,
   },
 
   data() {
@@ -61,45 +62,56 @@ export default {
       matrix: {},
       playing: true,
       score: 0,
-      output: '',
+      output: "",
       commands: [
-        [/^m(?:ove)?\s*?(u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)(?:\s*(\d+))?/i, 'move', 'move right 5'],
-        [/^f(?:lag)?\s*?(u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)(?:\s*(\d+))?/i, 'flag', 'flag down'],
-        [/^s(weep)?/i, 'sweep', 'sweep'],
-        [/^\/reset(?: (\d+) (\d+)(?: (\d+))?)?$/, 'restart', '/reset 10 10 10'],
-        [/^\/score/, 'showScore', '/score'],
-        [/^\/flags/, 'showFlagCount', '/flags'],
-        [/^\/clear/, 'clear', '/clear'],
-        [/^\/help/, 'help', '/help'],
-        [/^\/howto/, 'howto', '/howto']
-      ]
-    }
+        [
+          /^m(?:ove)?\s*?(u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)(?:\s*(\d+))?/i,
+          "move",
+          "move right 5",
+        ],
+        [
+          /^f(?:lag)?\s*?(u(?:p)?|d(?:own)?|l(?:eft)?|r(?:ight)?)(?:\s*(\d+))?/i,
+          "flag",
+          "flag down",
+        ],
+        [/^s(weep)?/i, "sweep", "sweep"],
+        [/^\/reset(?: (\d+) (\d+)(?: (\d+))?)?$/, "restart", "/reset 10 10 10"],
+        [/^\/score/, "showScore", "/score"],
+        [/^\/flags/, "showFlagCount", "/flags"],
+        [/^\/clear/, "clear", "/clear"],
+        [/^\/help/, "help", "/help"],
+        [/^\/howto/, "howto", "/howto"],
+      ],
+    };
   },
 
   mounted() {
-    this.restart()
+    this.restart();
   },
 
   watch: {
     score: {
       handler() {
         if (isComplete(this.matrix)) {
-          this.output = 'you win!\n\n/reset to play again'
+          this.output = "you win!\n\n/reset to play again";
         } else if (!isPlayable(this.matrix)) {
-          this.output = 'game over\n\n/reset to play again'
+          this.output = "game over\n\n/reset to play again";
         }
 
-        if (this.playing && isComplete(this.matrix) || !isPlayable(this.matrix)) {
-          this.stop()
+        if (
+          (this.playing && isComplete(this.matrix)) ||
+          !isPlayable(this.matrix)
+        ) {
+          this.stop();
         }
 
         if (!isComplete(this.matrix) && !isPlayable(this.matrix)) {
-          const unmasked = findBombs(this.matrix)
-          unmasked.forEach((offset) => this.doUnmask(offset))
+          const unmasked = findBombs(this.matrix);
+          unmasked.forEach((offset) => this.doUnmask(offset));
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
@@ -107,181 +119,189 @@ export default {
     offsetToPoint,
 
     neighboringBombs(map, i) {
-      return countNeighbors(map, i, PROPS.BOMB)
+      return countNeighbors(map, i, PROPS.BOMB);
     },
 
     isBomb(map, i) {
-      return isCell(map, i, PROPS.BOMB)
+      return isCell(map, i, PROPS.BOMB);
     },
 
     isMasked(map, i) {
-      return isCell(map, i, PROPS.MASK)
+      return isCell(map, i, PROPS.MASK);
     },
 
     isFlagged(map, i) {
-      return isCell(map, i, PROPS.FLAG)
+      return isCell(map, i, PROPS.FLAG);
     },
 
     start() {
-      this.playing = true
+      this.playing = true;
     },
 
     restart(cmd, width, height, bombCount) {
       if (width) {
-        this.gameSize[0] = parseInt(width)
+        this.gameSize[0] = parseInt(width);
       }
 
       if (height) {
-        this.gameSize[1] = parseInt(height)
+        this.gameSize[1] = parseInt(height);
       }
 
       if (bombCount) {
-        bombCount = parseInt(bombCount)
+        bombCount = parseInt(bombCount);
       }
 
-      this.cursor = 0
+      this.cursor = 0;
 
       do {
-        this.matrix = initializeMap(this.gameSize[0], this.gameSize[1], bombCount)
-      } while (!validFirstPlay(this.matrix, this.cursor))
+        this.matrix = initializeMap(
+          this.gameSize[0],
+          this.gameSize[1],
+          bombCount
+        );
+      } while (!validFirstPlay(this.matrix, this.cursor));
 
-      const unmasked = unmask(this.matrix, this.cursor)
-      unmasked.forEach((p) => this.doUnmask(p))
+      const unmasked = unmask(this.matrix, this.cursor);
+      unmasked.forEach((p) => this.doUnmask(p));
 
-      this.score = 0
-      this.playing = false
+      this.score = 0;
+      this.playing = false;
     },
 
     stop() {
-      this.playing = false
+      this.playing = false;
     },
 
     play(val) {
-      const isSlashCommand = val[0] === '/'
+      const isSlashCommand = val[0] === "/";
 
-      this.preview = null
+      this.preview = null;
 
       if (!isSlashCommand) {
         if (isComplete(this.matrix) || !isPlayable(this.matrix)) {
-          this.output = 'game is over, please \'/reset\''
-          return
+          this.output = "game is over, please '/reset'";
+          return;
         }
-        if (!this.playing) this.start()
+        if (!this.playing) this.start();
       }
 
       const validCommand = this.commands.some((command) => {
-        const [trigger, func] = command
-        const match = val.match(trigger)
+        const [trigger, func] = command;
+        const match = val.match(trigger);
 
         if (match) {
-          this.output = this[func](...match)
+          this.output = this[func](...match);
 
-          if (!isSlashCommand) this.score++
+          if (!isSlashCommand) this.score++;
         }
 
-        return match
-      })
+        return match;
+      });
 
       if (!validCommand) {
-        this.output = 'unknown command'
+        this.output = "unknown command";
       }
     },
 
     playPreview(val) {
       const validCommand = this.commands.some((command) => {
-        const [trigger, func] = command
-        const funcPreview = func + 'Preview'
-        const match = val.match(trigger)
+        const [trigger, func] = command;
+        const funcPreview = func + "Preview";
+        const match = val.match(trigger);
 
         if (match && this.hasOwnProperty(funcPreview)) {
-          this.output = this[funcPreview](...match)
+          this.output = this[funcPreview](...match);
         }
 
-        return match
-      })
+        return match;
+      });
 
       if (!validCommand) {
-        this.preview = null
+        this.preview = null;
       }
     },
 
-    move (cmd, dir, step=1) {
-      step = parseInt(step)
+    move(cmd, dir, step = 1) {
+      step = parseInt(step);
 
       const moves = times(step, () => {
-        let {r, c} = offsetToPoint(this.matrix, this.cursor)
+        let { r, c } = offsetToPoint(this.matrix, this.cursor);
 
-        if (dir === 'up' || dir === 'u') r -= 1
-        if (dir === 'down' || dir === 'd') r += 1
-        if (dir === 'left' || dir === 'l') c -= 1
-        if (dir === 'right' || dir === 'r') c += 1
+        if (dir === "up" || dir === "u") r -= 1;
+        if (dir === "down" || dir === "d") r += 1;
+        if (dir === "left" || dir === "l") c -= 1;
+        if (dir === "right" || dir === "r") c += 1;
 
-        if (isValidPoint(this.matrix, {r, c})) {
-          this.cursor = pointToOffset(this.matrix, {r, c})
-          const unmasked = unmask(this.matrix, this.cursor).filter(this.doUnmask)
-          return unmasked.length
+        if (isValidPoint(this.matrix, { r, c })) {
+          this.cursor = pointToOffset(this.matrix, { r, c });
+          const unmasked = unmask(this.matrix, this.cursor).filter(
+            this.doUnmask
+          );
+          return unmasked.length;
         }
-      })
+      });
 
-      return `${moves.reduce((m, c) => m + c)} cleared`
+      return `${moves.reduce((m, c) => m + c)} cleared`;
     },
 
-    cmdPreview(cmd, dir, step=1) {
-      step = parseInt(step)
-      let {r, c} = offsetToPoint(this.matrix, this.cursor)
+    cmdPreview(cmd, dir, step = 1) {
+      step = parseInt(step);
+      let { r, c } = offsetToPoint(this.matrix, this.cursor);
 
-      if (dir === 'up' || dir === 'u') r -= step
-      if (dir === 'down' || dir === 'd') r += step
-      if (dir === 'left' || dir === 'l') c -= step
-      if (dir === 'right' || dir === 'r') c += step
+      if (dir === "up" || dir === "u") r -= step;
+      if (dir === "down" || dir === "d") r += step;
+      if (dir === "left" || dir === "l") c -= step;
+      if (dir === "right" || dir === "r") c += step;
 
-      if (isValidPoint(this.matrix, {r, c})) {
-        this.preview = pointToOffset(this.matrix, {r, c})
+      if (isValidPoint(this.matrix, { r, c })) {
+        this.preview = pointToOffset(this.matrix, { r, c });
       } else {
-        this.preview = null
+        this.preview = null;
       }
     },
 
     movePreview(...args) {
-      this.cmdPreview(...args)
+      this.cmdPreview(...args);
     },
 
     flagPreview(...args) {
-      this.cmdPreview(...args)
+      this.cmdPreview(...args);
     },
 
-    flag (cmd, dir, step=1) {
-      step = parseInt(step)
-      let {r, c} = offsetToPoint(this.matrix, this.cursor)
+    flag(cmd, dir, step = 1) {
+      step = parseInt(step);
+      let { r, c } = offsetToPoint(this.matrix, this.cursor);
 
-      if (dir === 'up' || dir === 'u') r -= step
-      if (dir === 'down' || dir === 'd') r += step
-      if (dir === 'left' || dir === 'l') c -= step
-      if (dir === 'right' || dir === 'r') c += step
+      if (dir === "up" || dir === "u") r -= step;
+      if (dir === "down" || dir === "d") r += step;
+      if (dir === "left" || dir === "l") c -= step;
+      if (dir === "right" || dir === "r") c += step;
 
-      const flagP = {r, c}
-      const flagOffset = pointToOffset(this.matrix, flagP)
+      const flagP = { r, c };
+      const flagOffset = pointToOffset(this.matrix, flagP);
 
       if (isValidPoint(this.matrix, flagP)) {
-        return toggleFlag(this.matrix, flagOffset) ? 'OK' : 'Flag removed'
+        return toggleFlag(this.matrix, flagOffset) ? "OK" : "Flag removed";
       }
     },
 
     showScore() {
-      return `${this.score} (lower is better)`
+      return `${this.score} (lower is better)`;
     },
 
     showFlagCount() {
-      return `${countFlags(this.matrix)} of ${findBombs(this.matrix).length}`
+      return `${countFlags(this.matrix)} of ${findBombs(this.matrix).length}`;
     },
 
-    sweep () {
-      const unmasked = unmaskAroundFlags(this.matrix, this.cursor).filter(this.doUnmask)
-      return `${unmasked.length} cleared`
+    sweep() {
+      const unmasked = unmaskAroundFlags(this.matrix, this.cursor).filter(
+        this.doUnmask
+      );
+      return `${unmasked.length} cleared`;
     },
 
     help() {
-      return this.commands.map((command) => command[2]).join('\r\n')
+      return this.commands.map((command) => command[2]).join("\r\n");
     },
 
     howto() {
@@ -291,7 +311,10 @@ export default {
         This game is not timed, so have fun and explore. The goal is to
         uncover all the bombs, "*", hidden underneith the masked tiles, "o".
 
-        There are currently ${findBombs(this.matrix).length} bombs randomly placed underneith ${this.gameSize[0] * this.gameSize[1]}
+        There are currently ${
+          findBombs(this.matrix).length
+        } bombs randomly placed underneith ${this.gameSize[0] *
+        this.gameSize[1]}
         tiles. You are welcome to change the size of the game by typing something like:
 
           /reset 15 10 20
@@ -302,19 +325,19 @@ export default {
         commands, explore them and have fun!
 
         Oh... and if you think this game sounds a lot like another game you've played
-        before, you are correct.`
+        before, you are correct.`;
     },
 
     clear() {
-      return ''
+      return "";
     },
 
-    doUnmask (offset) {
-      toggle(this.matrix, offset, PROPS.MASK, false)
-      return true
-    }
-  }
-}
+    doUnmask(offset) {
+      toggle(this.matrix, offset, PROPS.MASK, false);
+      return true;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -336,7 +359,7 @@ export default {
   color: #aaa;
 
   pre {
-    margin: .2rem 0 .3rem;
+    margin: 0.2rem 0 0.3rem;
   }
 }
 </style>

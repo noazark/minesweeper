@@ -1,15 +1,17 @@
 <template lang="html">
   <div>
-    &gt; <input
-        class="cli"
-        @keyup.up="historyNext"
-        @keyup.down="historyPrev"
-        @keyup.enter.prevent="submit(next)"
-        @input="input($event.target.value)"
-        v-model="next"
-        placeholder="try, /howto"
-        autofocus
-        @blur="$event.target.focus()" />
+    &gt;
+    <input
+      class="cli"
+      @keyup.up="historyNext"
+      @keyup.down="historyPrev"
+      @keyup.enter.prevent="submit(next)"
+      @input="input($event.target.value)"
+      v-model="next"
+      placeholder="try, /howto"
+      autofocus
+      @blur="$event.target.focus()"
+    />
   </div>
 </template>
 
@@ -17,62 +19,62 @@
 export default {
   data() {
     return {
-      next: '',
+      next: "",
       commands: [],
       cursor: 0,
-      mem: undefined
-    }
+      mem: undefined,
+    };
   },
 
   methods: {
     reset() {
-      const index = this.cursor
+      const index = this.cursor;
 
       if (!this.mem == null) {
-        this.mem = this.next
+        this.mem = this.next;
       }
 
-      this.next = this.commands[index]
+      this.next = this.commands[index];
 
       if (this.next == null) {
-        this.next = this.mem
+        this.next = this.mem;
       }
     },
 
     historyPrev() {
-      const prev = this.cursor + 1
+      const prev = this.cursor + 1;
       if (prev > this.commands.length - 1) {
-        this.cursor = this.commands.length
+        this.cursor = this.commands.length;
       } else {
-        this.cursor = prev
+        this.cursor = prev;
       }
 
-      this.reset()
+      this.reset();
     },
 
     historyNext() {
-      const next = this.cursor - 1
+      const next = this.cursor - 1;
       if (next < 0) {
-        this.cursor = 0
+        this.cursor = 0;
       } else {
-        this.cursor = next
+        this.cursor = next;
       }
 
-      this.reset()
+      this.reset();
     },
 
     input(val) {
-      this.$emit('input', val)
+      this.$emit("input", val);
     },
 
     submit(val) {
-      this.commands.push(val)
-      this.cursor = this.commands.length
-      this.next = ''
-      this.$emit('submit', val)
-    }
+      this.commands.push(val);
+      this.cursor = this.commands.length;
+      this.next = "";
+      this.$emit("submit", val);
+    },
   },
-}
+};
 </script>
 
 <style lang="css">
