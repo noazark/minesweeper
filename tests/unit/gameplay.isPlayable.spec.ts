@@ -1,5 +1,5 @@
 import { isPlayable } from '../../lib/gameplay'
-import { createMap, _, o, b, x, I } from './util'
+import { createMap, o, b, x, I } from './util'
 
 describe('isPlayable', () => {
   it('returns true if no bombs are unmasked', () => {

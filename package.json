@@ -50,9 +50,16 @@
     },
     "extends": [
       "plugin:vue/vue3-essential",
-      "eslint:recommended"
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended"
     ],
     "rules": {},
+    "overrides": [{
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    }],
     "parserOptions": {
       "parser": "@typescript-eslint/parser"
     }

@@ -2,13 +2,13 @@ import { neighbors, pointToOffset } from '../../lib/gameplay'
 import { createMap, _ } from './util'
 
 describe('neighbors', () => {
-  /* eslint-disable standard/array-bracket-even-spacing */
+  /* eslint-disable array-bracket-spacing */
   const matrix = createMap([
     [_, _, _],
     [_, _, _],
     [_, _, _]
   ])
-  /* eslint-enable standard/array-bracket-even-spacing */
+  /* eslint-enable array-bracket-spacing */
 
   it('iterates over all adjacent tiles', () => {
     const iterated = neighbors(matrix, 4)

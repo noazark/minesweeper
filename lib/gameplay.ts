@@ -262,7 +262,7 @@ export function pointToOffset(map: Map, p: MapPoint) {
 
 // TODO: update coordinate system
 export function neighbors(map: Map, offset: number) {
-  /* eslint-disable standard/array-bracket-even-spacing */
+  /* eslint-disable array-bracket-spacing */
   const neighbors = [
     [-1, -1],
     [-1, 0],
@@ -273,7 +273,7 @@ export function neighbors(map: Map, offset: number) {
     [+1, 0],
     [+1, +1],
   ];
-  /* eslint-enable standard/array-bracket-even-spacing */
+  /* eslint-enable array-bracket-spacing */
 
   const p = offsetToPoint(map, offset);
   return neighbors.reduce((neighbors: Neighbors, neighbor) => {

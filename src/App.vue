@@ -1,5 +1,5 @@
 <template lang="html">
-  <div :is="gameMode"></div>
+  <component :is="gameMode"></component>
 </template>
 
 <script>
