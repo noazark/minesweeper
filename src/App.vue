@@ -1,22 +1,12 @@
-<template lang="html">
-  <component :is="gameMode"></component>
+<template>
+  <component :is="gameMode" />
 </template>
 
-<script>
-import Classic from "./classic/App.vue";
-import Txt from "./text/App.vue";
+<script lang="ts" setup>
+import { ref } from "vue";
 
-export default {
-  name: "app",
-  components: {
-    Classic,
-    Txt,
-  },
+// import GameMode from "./classic/App.vue";
+import GameMode from "./text/App.vue";
 
-  data() {
-    return {
-      gameMode: "txt",
-    };
-  },
-};
+const gameMode = ref(GameMode)
 </script>

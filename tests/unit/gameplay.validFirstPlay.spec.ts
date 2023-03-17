@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest'
 import { validFirstPlay } from '../../lib/gameplay'
 import { createMap, _, f, b } from './util'
 

@@ -1,9 +1,10 @@
+import { expect, describe, it } from 'vitest'
 import { Map, countFlags } from '../../lib/gameplay'
 import { createMap, _, f, o, b } from './util'
 
 
 describe('countFlags', () => {
-  function expectFlags (expected:number, map:Map) {
+  function expectFlags(expected: number, map: Map) {
     expect(countFlags(map)).toEqual(expected)
   }
 

@@ -1,30 +1,40 @@
 <template>
   <div class="txt-app">
-    <code class="map" :style="{ '--columns': gameSize[0] }">
-      <template v-for="(el, i) in times(matrix.size, Number)" :key="i">
-        <tile
-          :isBomb="isBomb(matrix, i)"
-          :isMasked="isMasked(matrix, i)"
-          :isFlagged="isFlagged(matrix, i)"
-          :bombCount="neighboringBombs(matrix, i)"
-          :isActive="cursor === i"
-          :isPreview="preview != null && preview === i"
-        ></tile>
+    <code
+      class="map"
+      :style="{ '--columns': gameSize[0] }"
+    >
+      <template
+        v-for="(el, i) in times(matrix.size, Number)"
+        :key="i"
+      >
+        <GameTile
+          :is-bomb="isBomb(matrix, i)"
+          :is-masked="isMasked(matrix, i)"
+          :is-flagged="isFlagged(matrix, i)"
+          :bomb-count="neighboringBombs(matrix, i)"
+          :is-active="cursor === i"
+          :is-preview="preview != null && preview === i.toString()"
+        />
       </template>
     </code>
 
     <p>
-      <terminal @input="playPreview" @submit="play"></terminal>
+      <GameTerminal
+        @input="playPreview"
+        @submit="play"
+      />
     </p>
 
     <code class="history">
-      <pre v-html="output"></pre>
+      <pre>{{ output }}</pre>
     </code>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {
+  Map,
   toggle,
   offsetToPoint,
   countFlags,
@@ -42,23 +52,23 @@ import {
   PROPS,
   pointToOffset,
 } from "../../lib/gameplay";
-import Terminal from "./components/Terminal.vue";
-import Tile from "./components/Tile.vue";
+import GameTerminal from "./components/GameTerminal.vue";
+import GameTile from "./components/GameTile.vue";
 import { times } from "lodash";
 import { stripIndent } from "common-tags";
 
 export default {
   components: {
-    Terminal,
-    Tile,
+    GameTerminal,
+    GameTile,
   },
 
   data() {
     return {
       cursor: 0,
-      preview: null,
+      preview: null as string | null,
       gameSize: [10, 10],
-      matrix: {},
+      matrix: {} as Map,
       playing: true,
       score: 0,
       output: "",
@@ -82,10 +92,6 @@ export default {
         [/^\/howto/, "howto", "/howto"],
       ],
     };
-  },
-
-  mounted() {
-    this.restart();
   },
 
   watch: {
@@ -113,23 +119,27 @@ export default {
     },
   },
 
+  mounted() {
+    this.restart();
+  },
+
   methods: {
     times,
     offsetToPoint,
 
-    neighboringBombs(map, i) {
+    neighboringBombs(map: Map, i: number) {
       return countNeighbors(map, i, PROPS.BOMB);
     },
 
-    isBomb(map, i) {
+    isBomb(map: Map, i: number) {
       return isCell(map, i, PROPS.BOMB);
     },
 
-    isMasked(map, i) {
+    isMasked(map: Map, i: number) {
       return isCell(map, i, PROPS.MASK);
     },
 
-    isFlagged(map, i) {
+    isFlagged(map: Map, i: number) {
       return isCell(map, i, PROPS.FLAG);
     },
 
@@ -137,7 +147,9 @@ export default {
       this.playing = true;
     },
 
-    restart(cmd, width, height, bombCount) {
+    restart(cmd?: string, width?: string, height?: string, bombCount?: string) {
+      let bc: number | undefined = undefined
+
       if (width) {
         this.gameSize[0] = parseInt(width);
       }
@@ -147,7 +159,7 @@ export default {
       }
 
       if (bombCount) {
-        bombCount = parseInt(bombCount);
+        bc = parseInt(bombCount);
       }
 
       this.cursor = 0;
@@ -156,7 +168,7 @@ export default {
         this.matrix = initializeMap(
           this.gameSize[0],
           this.gameSize[1],
-          bombCount
+          bc
         );
       } while (!validFirstPlay(this.matrix, this.cursor));
 
@@ -171,7 +183,7 @@ export default {
       this.playing = false;
     },
 
-    play(val) {
+    play(val: string) {
       const isSlashCommand = val[0] === "/";
 
       this.preview = null;
@@ -202,7 +214,9 @@ export default {
       }
     },
 
-    playPreview(val) {
+    playPreview(val: string) {
+      console.log('preview', val);
+
       const validCommand = this.commands.some((command) => {
         const [trigger, func] = command;
         const funcPreview = func + "Preview";
@@ -220,10 +234,11 @@ export default {
       }
     },
 
-    move(cmd, dir, step = 1) {
-      step = parseInt(step);
+    move(cmd: string, dir: string, step: string) {
+      let s = 1
+      s = parseInt(step);
 
-      const moves = times(step, () => {
+      const moves = times(s, () => {
         let { r, c } = offsetToPoint(this.matrix, this.cursor);
 
         if (dir === "up" || dir === "u") r -= 1;
@@ -238,43 +253,46 @@ export default {
           );
           return unmasked.length;
         }
+        return 0
       });
 
       return `${moves.reduce((m, c) => m + c)} cleared`;
     },
 
-    cmdPreview(cmd, dir, step = 1) {
-      step = parseInt(step);
+    cmdPreview(cmd: string, dir: string, step: string) {
+      let s = 1
+      s = parseInt(step);
       let { r, c } = offsetToPoint(this.matrix, this.cursor);
 
-      if (dir === "up" || dir === "u") r -= step;
-      if (dir === "down" || dir === "d") r += step;
-      if (dir === "left" || dir === "l") c -= step;
-      if (dir === "right" || dir === "r") c += step;
+      if (dir === "up" || dir === "u") r -= s;
+      if (dir === "down" || dir === "d") r += s;
+      if (dir === "left" || dir === "l") c -= s;
+      if (dir === "right" || dir === "r") c += s;
 
       if (isValidPoint(this.matrix, { r, c })) {
-        this.preview = pointToOffset(this.matrix, { r, c });
+        this.preview = pointToOffset(this.matrix, { r, c }).toString();
       } else {
         this.preview = null;
       }
     },
 
-    movePreview(...args) {
-      this.cmdPreview(...args);
+    movePreview(cmd: string, dir: string, step: string) {
+      this.cmdPreview(cmd, dir, step);
     },
 
-    flagPreview(...args) {
-      this.cmdPreview(...args);
+    flagPreview(cmd: string, dir: string, step: string) {
+      this.cmdPreview(cmd, dir, step);
     },
 
-    flag(cmd, dir, step = 1) {
-      step = parseInt(step);
+    flag(cmd: string, dir: string, step: string) {
+      let s = 1
+      s = parseInt(step);
       let { r, c } = offsetToPoint(this.matrix, this.cursor);
 
-      if (dir === "up" || dir === "u") r -= step;
-      if (dir === "down" || dir === "d") r += step;
-      if (dir === "left" || dir === "l") c -= step;
-      if (dir === "right" || dir === "r") c += step;
+      if (dir === "up" || dir === "u") r -= s;
+      if (dir === "down" || dir === "d") r += s;
+      if (dir === "left" || dir === "l") c -= s;
+      if (dir === "right" || dir === "r") c += s;
 
       const flagP = { r, c };
       const flagOffset = pointToOffset(this.matrix, flagP);
@@ -310,8 +328,7 @@ export default {
         This game is not timed, so have fun and explore. The goal is to
         uncover all the bombs, "*", hidden underneith the masked tiles, "o".
 
-        There are currently ${
-          findBombs(this.matrix).length
+        There are currently ${findBombs(this.matrix).length
         } bombs randomly placed underneith ${this.gameSize[0] *
         this.gameSize[1]}
         tiles. You are welcome to change the size of the game by typing something like:
@@ -331,7 +348,7 @@ export default {
       return "";
     },
 
-    doUnmask(offset) {
+    doUnmask(offset: number) {
       toggle(this.matrix, offset, PROPS.MASK, false);
       return true;
     },

@@ -1,5 +1,6 @@
+import { expect, describe, it } from 'vitest'
 import { toggle, PROPS, isCell } from '../../lib/gameplay'
-import { createMap, _} from './util'
+import { createMap, _ } from './util'
 
 describe('toggle', () => {
   it('toggles a tile property between true and false', () => {

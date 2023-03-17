@@ -3,71 +3,31 @@
   "description": "A Vue.js project",
   "author": "Noah H. Smith <noah@batteredoats.com>",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "test": "vue-cli-service test:unit --collectCoverage"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore --fix src",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "common-tags": "^1.8.0",
-    "core-js": "^3.6.5",
     "lodash": "^4.17.21",
-    "vue": "^3.1.2"
+    "sass": "^1.59.3",
+    "vite": "^4.2.0"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.17",
-    "@types/lodash": "^4.14.137",
-    "@types/node": "^12.7.2",
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
-    "@vue/cli-plugin-babel": "~4.5.13",
-    "@vue/cli-plugin-eslint": "~4.5.13",
-    "@vue/cli-plugin-typescript": "~4.5.13",
-    "@vue/cli-plugin-unit-jest": "~4.5.13",
-    "@vue/cli-service": "~4.5.13",
-    "@vue/compiler-sfc": "^3.1.2",
-    "@vue/eslint-config-typescript": "^7.0.0",
-    "ajv": "6.9.1",
-    "autoprefixer": "^9.6.1",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-vue": "^7.0.0",
-    "jest": ">=24 <25",
-    "postcss-loader": "^3.0.0",
-    "prettier": "^2.2.1",
-    "sass": "^1.35.1",
-    "sass-loader": "^8.0.2",
-    "ts-jest": "24.0.2",
-    "typescript": "~4.1.5"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended",
-      "plugin:@typescript-eslint/eslint-recommended"
-    ],
-    "rules": {},
-    "overrides": [{
-      "files": ["*.ts", "*.tsx"],
-      "rules": {
-        "no-unused-vars": "off"
-      }
-    }],
-    "parserOptions": {
-      "parser": "@typescript-eslint/parser"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
+    "@babel/preset-typescript": "^7.21.0",
+    "@types/common-tags": "^1.8.1",
+    "@types/lodash": "^4.14.191",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
+    "@vitejs/plugin-vue": "^4.1.0",
+    "eslint": "^8.36.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "prettier": "^2.8.4",
+    "typescript": "^4.9.5",
+    "vitest": "^0.29.3"
   },
   "browserslist": [
     "> 1%",

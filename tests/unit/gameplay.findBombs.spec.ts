@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest'
 import { findBombs, pointToOffset } from '../../lib/gameplay'
 import { createMap, _, b } from './util'
 
@@ -11,9 +12,9 @@ describe('findBombs', () => {
     ])
 
     expect(findBombs(matrix)).toEqual([
-      {r: 0, c: 2},
-      {r: 1, c: 1},
-      {r: 2, c: 0}
-    ].map((p) => pointToOffset(matrix,  p)))
+      { r: 0, c: 2 },
+      { r: 1, c: 1 },
+      { r: 2, c: 0 }
+    ].map((p) => pointToOffset(matrix, p)))
   })
 })

@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3
         with:
           lfs: 'true'
 
@@ -16,14 +16,21 @@ jobs:
         id: nodenv
 
       - name: Installing node version via .node-version
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '${{ steps.nodenv.outputs.node-version }}'
 
-      - name: Install and Build 🔧
-        run: |
-          npm install
-          npm run build
+      - name: Install 🔧
+        run: npm install
+
+      - name: Lint 🐹
+        run: npm run lint
+
+      - name: Test 📐
+        run: npm run test
+
+      - name: Build 🏠
+        run: npm run build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.3

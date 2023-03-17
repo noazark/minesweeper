@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest'
 import { countNeighbors, PROPS } from "../../lib/gameplay";
 import { createMap, _, b } from "./util";
 

@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest'
 import { isCell, toggleFlag, PROPS } from '../../lib/gameplay'
 import { createMap, _ } from './util'
 

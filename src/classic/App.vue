@@ -3,20 +3,32 @@
     <div class="timer">
       <span class="right">{{ flagCount }}</span>
       :
-      <timer class="left" :time="time"></timer>
+      <GameTimer
+        class="left"
+        :time="time"
+      />
       :
-      <a href="" @click.prevent="restart">restart</a>
+      <a
+        href=""
+        @click.prevent="restart"
+      >restart</a>
     </div>
 
-    <div class="map" :style="{ '--columns': gameSize[0] }">
-      <template v-for="(el, i) in times(matrix.w * matrix.h, Number)" :key="i">
-        <tile
-          :isBomb="isCell(matrix, i, PROPS.BOMB)"
-          :isMasked="isCell(matrix, i, PROPS.MASK)"
-          :isFlagged="isCell(matrix, i, PROPS.FLAG)"
-          :bombCount="countNeighbors(matrix, i, PROPS.BOMB)"
+    <div
+      class="map"
+      :style="{ '--columns': gameSize[0] }"
+    >
+      <template
+        v-for="(el, i) in times(matrix.w * matrix.h, Number)"
+        :key="i"
+      >
+        <GameTile
+          :is-bomb="isCell(matrix, i, PROPS.BOMB)"
+          :is-masked="isCell(matrix, i, PROPS.MASK)"
+          :is-flagged="isCell(matrix, i, PROPS.FLAG)"
+          :bomb-count="countNeighbors(matrix, i, PROPS.BOMB)"
           @flag="flag(i)"
-          @unmaskAroundFlags="unmaskAroundFlags(i)"
+          @unmask-around-flags="unmaskAroundFlags(i)"
           @unmask="unmask(i)"
         />
       </template>
@@ -41,13 +53,13 @@ import {
   validFirstPlay,
   PROPS,
 } from "../../lib/gameplay";
-import Tile from "./components/Tile.vue";
-import Timer from "./components/Timer.vue";
+import GameTile from "./components/GameTile.vue";
+import GameTimer from "./components/GameTimer.vue";
 
 export default {
   components: {
-    Tile,
-    Timer,
+    GameTile,
+    GameTimer,
   },
 
   data() {
@@ -62,12 +74,10 @@ export default {
     };
   },
 
-  mounted() {
-    this.matrix = initializeMap(
-      this.gameSize[0],
-      this.gameSize[1],
-      this.bombCount
-    );
+  computed: {
+    flagCount() {
+      return this.bombCount - countFlags(this.matrix);
+    },
   },
 
   watch: {
@@ -102,10 +112,12 @@ export default {
     },
   },
 
-  computed: {
-    flagCount() {
-      return this.bombCount - countFlags(this.matrix);
-    },
+  mounted() {
+    this.matrix = initializeMap(
+      this.gameSize[0],
+      this.gameSize[1],
+      this.bombCount
+    );
   },
 
   methods: {

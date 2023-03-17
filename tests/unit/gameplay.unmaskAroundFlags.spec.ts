@@ -1,3 +1,4 @@
+import { expect, describe, it } from 'vitest'
 import { unmaskAroundFlags, pointToOffset } from '../../lib/gameplay'
 import { createMap, _, f, o, b } from './util'
 
@@ -12,19 +13,19 @@ describe('unmaskAroundFlags', () => {
     const unmasked = unmaskAroundFlags(matrix, 5)
 
     it('does not unmask flags', () => {
-      expect(unmasked).not.toContainEqual(pointToOffset(matrix, {r: 2, c: 2}))
+      expect(unmasked).not.toContainEqual(pointToOffset(matrix, { r: 2, c: 2 }))
     })
 
     it('unmasks bombs', () => {
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 0, c: 2}))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 0, c: 2 }))
     })
 
     it('unmasks adjacent titles', () => {
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 0, c: 0}))
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 0, c: 1}))
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 1, c: 0}))
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 1, c: 1}))
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 2, c: 1}))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 0, c: 0 }))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 0, c: 1 }))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 1, c: 0 }))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 1, c: 1 }))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 2, c: 1 }))
     })
   })
 
@@ -37,19 +38,19 @@ describe('unmaskAroundFlags', () => {
     const unmasked = unmaskAroundFlags(matrix, 4)
 
     it('does not unmask flags', () => {
-      expect(unmasked).not.toContainEqual(pointToOffset(matrix, {r: 2, c: 1}))
-      expect(unmasked).not.toContainEqual(pointToOffset(matrix, {r: 2, c: 2}))
+      expect(unmasked).not.toContainEqual(pointToOffset(matrix, { r: 2, c: 1 }))
+      expect(unmasked).not.toContainEqual(pointToOffset(matrix, { r: 2, c: 2 }))
     })
 
     it('unmasks bombs', () => {
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 0, c: 2}))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 0, c: 2 }))
     })
 
     it('unmasks adjacent titles', () => {
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 0, c: 0}))
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 0, c: 1}))
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 1, c: 0}))
-      expect(unmasked).toContainEqual(pointToOffset(matrix, {r: 1, c: 2}))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 0, c: 0 }))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 0, c: 1 }))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 1, c: 0 }))
+      expect(unmasked).toContainEqual(pointToOffset(matrix, { r: 1, c: 2 }))
     })
   })
 
